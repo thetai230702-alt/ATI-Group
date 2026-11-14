@@ -100,7 +100,7 @@ const cardStyle: React.CSSProperties = {
   padding: 20,
 };
 
-function MyVocabulary() {
+function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
   const user = auth.currentUser;
 
   const [topics, setTopics] = useState<VocabularyTopic[]>([]);
@@ -607,9 +607,9 @@ function MyVocabulary() {
     return (
       <div style={{ ...cardStyle, textAlign: "center", margin: 20 }}>
         <BookPlus size={36} color={COLORS.primary} />
-        <h2>Vui lòng đăng nhập</h2>
+        <h2>{language === "en" ? 'Please sign in' : 'Vui lòng đăng nhập'}</h2>
         <p style={{ color: COLORS.muted }}>
-          Bạn cần đăng nhập để sử dụng không gian từ vựng cá nhân.
+          {language === "en" ? 'Sign in to use your personal vocabulary space.' : 'Bạn cần đăng nhập để sử dụng không gian từ vựng cá nhân.'}
         </p>
       </div>
     );
@@ -649,10 +649,10 @@ function MyVocabulary() {
 
         <div>
           <h1 style={{ margin: 0, fontSize: 25 }}>
-            Từ vựng của tôi
+            {language === "en" ? 'My Vocabulary' : 'Từ vựng của tôi'}
           </h1>
           <p style={{ margin: "5px 0 0", color: COLORS.muted }}>
-            Tạo bộ từ vựng riêng và học theo cách của bạn.
+            {language === "en" ? 'Create your own vocabulary sets and study your way.' : 'Tạo bộ từ vựng riêng và học theo cách của bạn.'}
           </p>
         </div>
       </div>
@@ -698,7 +698,7 @@ function MyVocabulary() {
           >
             <div>
               <h2 style={{ margin: 0, fontSize: 19 }}>
-                Chủ đề của bạn
+                {language === "en" ? 'Your topics' : 'Chủ đề của bạn'}
               </h2>
               <p style={{ color: COLORS.muted, fontSize: 13 }}>
                 {topics.length} chủ đề từ vựng
@@ -713,7 +713,7 @@ function MyVocabulary() {
               }}
             >
               <Plus size={17} />
-              Tạo chủ đề mới
+              {language === "en" ? 'Create a topic' : 'Tạo chủ đề mới'}
             </button>
           </div>
 
@@ -733,7 +733,7 @@ function MyVocabulary() {
 
                 <textarea
                   style={{ ...inputStyle, minHeight: 85, resize: "vertical" }}
-                  placeholder="Mô tả chủ đề (không bắt buộc)"
+                  placeholder={language === "en" ? 'Topic description (optional)' : 'Mô tả chủ đề (không bắt buộc)'}
                   value={topicDescription}
                   onChange={(e) => setTopicDescription(e.target.value)}
                 />
@@ -752,7 +752,7 @@ function MyVocabulary() {
                     style={buttonStyle("#eef0f5", COLORS.text)}
                     onClick={resetTopicForm}
                   >
-                    Hủy
+                    {language === "en" ? 'Cancel' : 'Hủy'}
                   </button>
                 </div>
               </div>
@@ -761,7 +761,7 @@ function MyVocabulary() {
 
           {loading ? (
             <div style={{ ...cardStyle, textAlign: "center", color: COLORS.muted }}>
-              Đang tải chủ đề...
+              {language === "en" ? 'Loading topics...' : 'Đang tải chủ đề...'}
             </div>
           ) : topics.length === 0 ? (
             <div
@@ -772,7 +772,7 @@ function MyVocabulary() {
               }}
             >
               <BookOpen size={42} color={COLORS.primary} />
-              <h3>Chưa có chủ đề nào</h3>
+              <h3>{language === "en" ? 'No topics yet' : 'Chưa có chủ đề nào'}</h3>
               <p style={{ color: COLORS.muted }}>
                 Hãy tạo chủ đề đầu tiên, ví dụ: English for Banking.
               </p>
@@ -781,7 +781,7 @@ function MyVocabulary() {
                 onClick={() => setShowTopicForm(true)}
               >
                 <Plus size={17} />
-                Tạo chủ đề đầu tiên
+                {language === "en" ? 'Create your first topic' : 'Tạo chủ đề đầu tiên'}
               </button>
             </div>
           ) : (
@@ -825,7 +825,7 @@ function MyVocabulary() {
 
                     <div style={{ display: "flex", gap: 5 }}>
                       <button
-                        title="Sửa chủ đề"
+                        title={language === "en" ? 'Edit topic' : 'Sửa chủ đề'}
                         onClick={(e) => {
                           e.stopPropagation();
                           editTopic(topic);
@@ -936,7 +936,7 @@ function MyVocabulary() {
                   <strong style={{ fontSize: 21, color: COLORS.green }}>
                     {rememberedCount}
                   </strong>
-                  <div style={{ fontSize: 11, color: COLORS.muted }}>Đã nhớ</div>
+                  <div style={{ fontSize: 11, color: COLORS.muted }}>{language === "en" ? 'Memorized' : 'Đã nhớ'}</div>
                 </div>
               </div>
             </div>
@@ -1436,9 +1436,9 @@ function MyVocabulary() {
                 }}
                 style={{ ...inputStyle, width: "auto", minWidth: 145 }}
               >
-                <option value="all">Tất cả từ</option>
-                <option value="learning">Chưa nhớ</option>
-                <option value="remembered">Đã nhớ</option>
+                <option value="all">{language === "en" ? 'All words' : 'Tất cả từ'}</option>
+                <option value="learning">{language === "en" ? 'Not memorized' : 'Chưa nhớ'}</option>
+                <option value="remembered">{language === "en" ? 'Memorized' : 'Đã nhớ'}</option>
               </select>
 
               <select
@@ -1583,7 +1583,7 @@ function MyVocabulary() {
                               borderRadius: 20,
                             }}
                           >
-                            Đã nhớ
+                            {language === "en" ? 'Memorized' : 'Đã nhớ'}
                           </span>
                         )}
                       </div>

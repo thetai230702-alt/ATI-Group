@@ -2523,3 +2523,204 @@ body { background: var(--ati-bg); color: var(--ati-ink); }
     border-color:#8fc5e8 !important;
   }
 }
+
+
+/* V54 — ATI notification center */
+.ati-notification-wrap { position:relative;display:flex;align-items:center; }
+.ati-notification-trigger {
+  position:relative;display:grid;place-items:center;width:38px;height:38px;
+  color:#55758f;background:#f3f8fc;border:1px solid #dce8f2;border-radius:11px;
+  cursor:pointer;transition:color .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.ati-notification-trigger:hover,.ati-notification-trigger.is-open {
+  color:#0878c9;background:#eaf4fb;border-color:#b8d7eb;
+  box-shadow:0 4px 12px rgba(8,65,110,.06);
+}
+.ati-notification-badge {
+  position:absolute;top:-5px;right:-5px;display:grid;place-items:center;
+  min-width:17px;height:17px;padding:0 4px;color:#fff;
+  background:#ed8733;border:2px solid #fff;border-radius:20px;
+  font-size:8px;font-weight:900;line-height:1;
+}
+.ati-notification-panel {
+  position:absolute;z-index:1250;top:calc(100% + 12px);right:-8px;
+  width:min(390px,calc(100vw - 24px));overflow:hidden;
+  color:#183b5d;background:#fff;border:1px solid #e0eaf2;border-radius:16px;
+  box-shadow:0 22px 60px rgba(8,42,72,.20);
+  animation:ati-account-in .16s ease-out both;
+}
+.ati-notification-panel-head {
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:16px 16px 13px;border-bottom:1px solid #edf2f6;
+}
+.ati-notification-panel-head>div { display:flex;flex-direction:column;gap:4px; }
+.ati-notification-panel-head strong { color:#173b5c;font-size:14px;font-weight:900; }
+.ati-notification-panel-head span { color:#8a9eaf;font-size:9px; }
+.ati-notification-panel-head>button {
+  display:grid;place-items:center;width:31px;height:31px;color:#0878c9;
+  background:#eef7fd;border:1px solid #dcecf7;border-radius:8px;cursor:pointer;
+}
+.ati-notification-panel-head>button:disabled { color:#b8c5cf;background:#f7f9fb;border-color:#edf1f4;cursor:not-allowed; }
+.ati-notification-list { max-height:min(430px,60vh);overflow-y:auto;padding:5px 8px; }
+.ati-notification-item {
+  position:relative;display:flex;align-items:flex-start;gap:10px;
+  margin:4px 0;padding:11px 9px;border-radius:11px;
+  transition:background .15s ease;
+}
+.ati-notification-item.is-unread { background:#f2f8fd; }
+.ati-notification-item:hover { background:#eef6fc; }
+.ati-notification-kind {
+  display:grid;place-items:center;flex:0 0 33px;width:33px;height:33px;
+  border-radius:10px;
+}
+.ati-notification-kind.kind-success { color:#168568;background:#e9f7f1; }
+.ati-notification-kind.kind-warning { color:#c45d45;background:#fff0ec; }
+.ati-notification-kind.kind-info { color:#0878c9;background:#eaf4fc; }
+.ati-notification-content {
+  display:flex;flex:1;flex-direction:column;gap:4px;min-width:0;padding:0;
+  color:#526d83;background:transparent;border:0;text-align:left;cursor:pointer;
+}
+.ati-notification-content strong { color:#254761;font-size:10px;font-weight:850; }
+.ati-notification-content span { color:#758b9e;font-size:9px;line-height:1.55; }
+.ati-notification-content small { color:#a0afbb;font-size:8px; }
+.ati-notification-unread-dot {
+  flex:0 0 7px;width:7px;height:7px;margin-top:5px;
+  background:#0878c9;border-radius:50%;
+}
+.ati-notification-panel-foot {
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 14px;border-top:1px solid #edf2f6;
+}
+.ati-notification-panel-foot span { color:#9aabba;font-size:8px; }
+.ati-notification-panel-foot button {
+  display:flex;align-items:center;gap:5px;padding:6px 8px;
+  color:#b65a4a;background:#fff5f2;border:1px solid #f4e1dc;
+  border-radius:7px;font-size:8px;font-weight:800;cursor:pointer;
+}
+.ati-notification-panel-foot button:hover { background:#ffebe6; }
+.ati-notification-empty {
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:34px 24px 38px;text-align:center;
+}
+.ati-notification-empty>span {
+  display:grid;place-items:center;width:48px;height:48px;color:#0878c9;
+  background:#eef7fd;border:1px solid #dcecf7;border-radius:15px;
+}
+.ati-notification-empty strong { color:#254761;font-size:12px;font-weight:900; }
+.ati-notification-empty p { max-width:245px;margin:0;color:#8a9eaf;font-size:9px;line-height:1.6; }
+@media(max-width:600px) {
+  .ati-notification-trigger { width:34px;height:34px;border-radius:10px; }
+  .ati-notification-panel { right:-52px;width:min(370px,calc(100vw - 18px)); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .ati-notification-panel { animation:none; }
+  .ati-notification-trigger,.ati-notification-item { transition:none; }
+}
+
+
+/* V55 — optional ATI dark workspace theme */
+.app-container.ati-theme-dark { background:#101d2a;color:#dce8f2; }
+.ati-theme-dark .main-content,.ati-theme-dark .page-content { background:#101d2a;color:#dce8f2; }
+.ati-theme-dark .topbar {
+  background:#17293a!important;color:#e7f1f8!important;
+  border-bottom-color:#0878c9!important;box-shadow:0 5px 18px rgba(0,0,0,.18)!important;
+}
+.ati-theme-dark .topbar-page-info h1 { color:#e4f1fa; }
+.ati-theme-dark .topbar-right { border-left-color:#30485c; }
+.ati-theme-dark .ati-global-search { color:#9bcdf0!important;background:#20364a!important;border-color:#35536b!important; }
+.ati-theme-dark .ati-global-search>svg { color:#8bc8f1!important; }
+.ati-theme-dark .ati-global-search input { color:#f1f7fb!important; }
+.ati-theme-dark .ati-global-search input::placeholder { color:#a1b4c4!important; }
+.ati-theme-dark .ati-global-search kbd { color:#c2d5e4!important;background:#294258!important;border-color:#45647d!important; }
+.ati-theme-dark .ati-account-trigger { color:#e6f1f8!important;background:#20364a!important;border-color:#35536b!important; }
+.ati-theme-dark .ati-account-trigger-copy strong { color:#e6f1f8!important; }
+.ati-theme-dark .ati-account-trigger-copy small,.ati-theme-dark .ati-account-chevron { color:#a7bdce!important; }
+.ati-theme-dark .ati-notification-trigger { color:#c2d9e9;background:#20364a;border-color:#35536b; }
+.ati-theme-dark .ati-notification-trigger:hover,.ati-theme-dark .ati-notification-trigger.is-open { color:#8bc8f1;background:#29465f;border-color:#4b7798; }
+.ati-theme-dark .sidebar { background:#142638;border-right-color:#294257;color:#d8e6f0; }
+.ati-theme-dark .sidebar .menu-heading,.ati-theme-dark .sidebar .menu-item-text small { color:#8fa7ba; }
+.ati-theme-dark .sidebar .menu-item,.ati-theme-dark .sidebar .module-heading { color:#c7d8e5;background:transparent; }
+.ati-theme-dark .sidebar .menu-item:hover,.ati-theme-dark .sidebar .module-heading:hover { background:#20384d;color:#eaf5fc; }
+.ati-theme-dark .sidebar .menu-item.active,.ati-theme-dark .sidebar .module-heading.module-active { color:#8bc8f1;background:#203d55;border-color:#315b79; }
+.ati-theme-dark .sidebar .sidebar-brand-row,.ati-theme-dark .sidebar .sidebar-footer,.ati-theme-dark .sidebar .sidebar-account-section,.ati-theme-dark .sidebar .sidebar-platform-section,.ati-theme-dark .sidebar .sidebar-settings-section { border-color:#294257; }
+.ati-theme-dark .sidebar .logo-text strong,.ati-theme-dark .sidebar .sidebar-footer-text strong { color:#e4f1fa; }
+.ati-theme-dark .sidebar .logo-text small,.ati-theme-dark .sidebar .sidebar-footer-text p { color:#8fa7ba; }
+.ati-theme-dark .ati-overview-section,.ati-theme-dark .ati-quick-access,.ati-theme-dark .ati-favorites-section,
+.ati-theme-dark .ati-settings-section,.ati-theme-dark .ati-settings-hero {
+  color:#dce8f2;background:#1a2d3f;border-color:#30495e;box-shadow:none;
+}
+.ati-theme-dark .ati-settings-hero { background:radial-gradient(ellipse at 95% 10%,rgba(8,120,201,.18),transparent 42%),linear-gradient(120deg,#1a2d3f,#1d3549); }
+.ati-theme-dark .ati-settings-hero h2,.ati-theme-dark .ati-settings-section-title h3,
+.ati-theme-dark .ati-theme-option-copy strong,.ati-theme-dark .ati-settings-row-copy strong,
+.ati-theme-dark .ati-quick-access-heading h3,.ati-theme-dark .ati-favorites-heading h3 { color:#e5f1f9; }
+.ati-theme-dark .ati-settings-hero p,.ati-theme-dark .ati-settings-section-title p,
+.ati-theme-dark .ati-theme-option-copy small,.ati-theme-dark .ati-settings-row-copy small,
+.ati-theme-dark .ati-settings-footnote { color:#9bb0c1; }
+.ati-theme-dark .ati-theme-option,.ati-theme-dark .ati-settings-row,
+.ati-theme-dark .ati-quick-card,.ati-theme-dark .ati-favorite-card { background:#20364a;border-color:#35516a; }
+.ati-theme-dark .ati-theme-option.selected { background:#24435d;border-color:#4b91bd; }
+.ati-theme-dark .ati-settings-row:hover { background:#28445b;border-color:#4b7798; }
+.ati-theme-dark .ati-quick-open strong,.ati-theme-dark .ati-favorite-open strong { color:#e0edf6; }
+.ati-theme-dark .ati-quick-open small,.ati-theme-dark .ati-favorite-open small { color:#9bb0c1; }
+.ati-theme-dark .ati-quick-icon { background:#294a64;color:#8bc8f1; }
+.ati-theme-dark .ati-search-results,.ati-theme-dark .ati-account-popover,.ati-theme-dark .ati-notification-panel {
+  color:#dce8f2;background:#1a2d3f;border-color:#35516a;box-shadow:0 22px 60px rgba(0,0,0,.38);
+}
+.ati-theme-dark .ati-search-results-label,.ati-theme-dark .ati-search-hint,
+.ati-theme-dark .ati-account-popover-head span:not(.ati-account-avatar),
+.ati-theme-dark .ati-account-popover-foot,.ati-theme-dark .ati-notification-panel-head span,
+.ati-theme-dark .ati-notification-panel-foot span { color:#91a8ba; }
+.ati-theme-dark .ati-search-results>button,.ati-theme-dark .ati-account-popover>button { color:#d2e2ed;background:transparent; }
+.ati-theme-dark .ati-search-results>button:hover,.ati-theme-dark .ati-account-popover>button:hover { color:#8bc8f1;background:#28445b; }
+.ati-theme-dark .ati-account-popover-head strong,.ati-theme-dark .ati-notification-panel-head strong,
+.ati-theme-dark .ati-notification-content strong { color:#e5f1f9; }
+.ati-theme-dark .ati-account-popover::before { background:#1a2d3f;border-color:#35516a; }
+.ati-theme-dark .ati-account-divider,.ati-theme-dark .ati-notification-panel-head,.ati-theme-dark .ati-notification-panel-foot { border-color:#30495e; }
+.ati-theme-dark .ati-notification-item.is-unread { background:#203b52; }
+.ati-theme-dark .ati-notification-item:hover { background:#28445b; }
+.ati-theme-dark .ati-notification-content span,.ati-theme-dark .ati-notification-empty p { color:#a6bac9; }
+.ati-theme-dark .ati-notification-empty strong { color:#e5f1f9; }
+.ati-theme-dark .ati-notification-list { scrollbar-color:#46647b #1a2d3f; }
+.ati-theme-dark .ati-notification-panel-foot button { background:#402f30;border-color:#634344; }
+
+
+/* V58 — keyboard-first quick command navigation */
+.ati-search-results>button.is-selected {
+  color:#0878c9;
+  background:linear-gradient(90deg,#edf7fd 0%,#f6fbff 100%);
+  box-shadow:inset 3px 0 0 #0b83ce;
+}
+.ati-search-results>button.is-selected svg { color:#0878c9; }
+.ati-search-results>button:active { transform:translateY(1px); }
+.ati-search-hint { display:flex;align-items:center;justify-content:center;gap:7px; }
+@media(max-width:650px) {
+  .ati-search-results {
+    max-height:min(62vh,420px);overflow-y:auto;
+    box-shadow:0 18px 44px rgba(8,42,72,.24);
+  }
+  .ati-search-results>button { min-height:42px; }
+}
+
+
+/* V61 — compact horizontal language switch */
+.ati-language-switch {
+  display:inline-flex;align-items:center;gap:3px;padding:3px;
+  background:#f1f6fa;border:1px solid #dce8f1;border-radius:10px;
+}
+.ati-language-switch button {
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;
+  min-width:48px;height:30px;padding:0 7px;color:#647c90;background:transparent;
+  border:0;border-radius:7px;font:800 9px 'Be Vietnam Pro',sans-serif;cursor:pointer;
+  transition:background .16s ease,color .16s ease,box-shadow .16s ease;
+}
+.ati-language-switch button span:first-child {font-size:15px;line-height:1}
+.ati-language-switch button.is-active {
+  color:#075f9f;background:#fff;box-shadow:0 2px 7px rgba(18,61,94,.12);
+}
+.ati-language-switch button:focus-visible {outline:2px solid #1684ca;outline-offset:2px}
+@media(max-width:520px) {
+  .topbar-right {gap:5px}
+  .ati-language-switch {gap:1px;padding:2px;border-radius:9px}
+  .ati-language-switch button {min-width:34px;height:29px;padding:0 5px;gap:0}
+  .ati-language-code {display:none}
+}

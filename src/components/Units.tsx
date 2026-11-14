@@ -48,7 +48,7 @@ function readUnitProgress(unitNumber: number): { attempted: number; correct: num
   } catch { return { attempted: 0, correct: 0 }; }
 }
 
-function Units() {
+function Units({ language = "vi" }: { language?: "vi" | "en" }) {
   const [units, setUnits] = useState<Unit[]>([]);
   const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
   const [loading, setLoading] = useState(true);
@@ -100,11 +100,11 @@ function Units() {
   }, [units, search, statusFilter, studyStatuses]);
 
   if (loading) {
-    return <div className="units-message"><span className="units-loading-dot" />Đang tải dữ liệu bài học...</div>;
+    return <div className="units-message"><span className="units-loading-dot" />{language === "en" ? 'Loading lesson data...' : 'Đang tải dữ liệu bài học...'}</div>;
   }
 
   if (error) {
-    return <div className="units-error"><strong>Không thể tải danh sách Unit</strong><p>{error}</p><button type="button" onClick={() => window.location.reload()}>Thử tải lại</button></div>;
+    return <div className="units-error"><strong>{language === "en" ? 'Unable to load units' : 'Không thể tải danh sách Unit'}</strong><p>{error}</p><button type="button" onClick={() => window.location.reload()}>{language === "en" ? 'Try again' : 'Thử tải lại'}</button></div>;
   }
 
   if (selectedUnit) {
@@ -126,8 +126,8 @@ function Units() {
       <section className="units-hero">
         <div className="units-hero-copy">
           <span className="units-hero-eyebrow"><GraduationCap size={14}/> ATI LEARNING / PRACTICE LIBRARY</span>
-          <h2>Kho bài học tiếng Anh</h2>
-          <p>Chinh phục 1.500 câu qua 50 chủ đề. Học theo lộ trình của bạn, từng Unit một.</p>
+          <h2>{language === "en" ? 'English Learning Library' : 'Kho bài học tiếng Anh'}</h2>
+          <p>{language === "en" ? 'Master 1,500 sentences across 50 topics, one unit at a time.' : 'Chinh phục 1.500 câu qua 50 chủ đề. Học theo lộ trình của bạn, từng Unit một.'}</p>
           <div className="units-hero-actions">
             <span><BookOpen size={14}/> {units.length} chủ đề</span>
             <span><Headphones size={14}/> Nghe câu mẫu</span>
@@ -135,35 +135,35 @@ function Units() {
         </div>
         <div className="units-hero-progress">
           <div className="units-hero-progress-ring" style={{ "--units-progress": `${completion}%` } as CSSProperties}>
-            <div><strong>{completion}%</strong><small>Hoàn thành</small></div>
+            <div><strong>{completion}%</strong><small>{language === "en" ? 'Completed' : 'Hoàn thành'}</small></div>
           </div>
           <span>{completedCount} / {units.length} Unit</span>
         </div>
       </section>
 
       <section className="units-summary units-summary-premium">
-        <article className="units-summary-card"><span className="units-summary-icon blue"><BookOpen size={17}/></span><div><span>Tổng số câu</span><strong>{totalSentences.toLocaleString("vi-VN")}</strong><small>Trong toàn bộ chương trình</small></div></article>
-        <article className="units-summary-card"><span className="units-summary-icon green"><CheckCircle2 size={17}/></span><div><span>Đã hoàn thành</span><strong>{completedCount}</strong><small>Unit đã học xong</small></div></article>
-        <article className="units-summary-card"><span className="units-summary-icon amber"><Clock3 size={17}/></span><div><span>Đang học</span><strong>{studyingCount}</strong><small>Unit đang thực hiện</small></div></article>
-        <article className="units-summary-card"><span className="units-summary-icon slate"><CircleDashed size={17}/></span><div><span>Chưa bắt đầu</span><strong>{notStartedCount}</strong><small>Unit đang chờ khám phá</small></div></article>
+        <article className="units-summary-card"><span className="units-summary-icon blue"><BookOpen size={17}/></span><div><span>{language === "en" ? 'Total sentences' : 'Tổng số câu'}</span><strong>{totalSentences.toLocaleString("vi-VN")}</strong><small>Trong toàn bộ chương trình</small></div></article>
+        <article className="units-summary-card"><span className="units-summary-icon green"><CheckCircle2 size={17}/></span><div><span>{language === "en" ? 'Completed' : 'Đã hoàn thành'}</span><strong>{completedCount}</strong><small>Unit đã học xong</small></div></article>
+        <article className="units-summary-card"><span className="units-summary-icon amber"><Clock3 size={17}/></span><div><span>{language === "en" ? 'In progress' : 'Đang học'}</span><strong>{studyingCount}</strong><small>Unit đang thực hiện</small></div></article>
+        <article className="units-summary-card"><span className="units-summary-icon slate"><CircleDashed size={17}/></span><div><span>{language === "en" ? 'Not started' : 'Chưa bắt đầu'}</span><strong>{notStartedCount}</strong><small>Unit đang chờ khám phá</small></div></article>
       </section>
 
       <section className="units-library-panel">
         <div className="units-toolbar units-toolbar-premium">
           <div className="units-toolbar-title">
             <span className="units-section-eyebrow">LEARNING PATH</span>
-            <h2>Danh sách bài học</h2>
-            <p>Chọn chủ đề muốn luyện tập hoặc lọc theo tiến độ của bạn.</p>
+            <h2>{language === "en" ? 'Lesson List' : 'Danh sách bài học'}</h2>
+            <p>{language === "en" ? 'Choose a topic to practice or filter by your progress.' : 'Chọn chủ đề muốn luyện tập hoặc lọc theo tiến độ của bạn.'}</p>
           </div>
           <label className="units-search units-search-premium">
             <Search size={17}/>
-            <input type="search" placeholder="Tìm Unit hoặc chủ đề..." value={search} onChange={(event) => setSearch(event.target.value)} />
+            <input type="search" placeholder={language === "en" ? 'Search units or topics...' : 'Tìm Unit hoặc chủ đề...'} value={search} onChange={(event) => setSearch(event.target.value)} />
             {search && <button type="button" onClick={() => setSearch("")} aria-label="Xóa tìm kiếm"><X size={15}/></button>}
           </label>
         </div>
 
         <div className="units-filter-row">
-          <span><Filter size={14}/> Lọc tiến độ</span>
+          <span><Filter size={14}/> {language === "en" ? 'Filter by progress' : 'Lọc tiến độ'}</span>
           <div className="units-status-filters">
             {(["Tất cả", "Chưa học", "Đang học", "Đã học"] as StatusFilter[]).map((status) => (
               <button key={status} type="button" className={statusFilter === status ? "active" : ""} onClick={() => setStatusFilter(status)}>

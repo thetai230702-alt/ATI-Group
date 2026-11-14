@@ -11,7 +11,7 @@ const areas = [
 export default function PublicHome({ onLogin, onExplore }: PublicHomeProps) {
   return <main className="public-home">
     <header className="public-header">
-      <a className="public-brand" href="/" aria-label="ATI Group"><img src="/ati-approved-logo.png" alt="ATI Group"/><span><strong>ATI GROUP</strong><small>TECHNOLOGY · AI · MANUFACTURING</small></span></a>
+      <a className="public-brand" href="/" aria-label="ATI Group"><img src="/ati-approved-logo.png" alt="ATI Group"/><span><strong>ATI GROUP</strong><small>TECHNOLOGY - AI</small></span></a>
       <nav className="public-nav"><a href="#about">Về ATI</a><a href="#ecosystem">Hệ sinh thái</a><a href="#principles">Giá trị</a></nav>
       <button className="public-login-button" onClick={onLogin}>Đăng nhập <ArrowRight size={16}/></button>
     </header>
@@ -31,6 +31,6 @@ export default function PublicHome({ onLogin, onExplore }: PublicHomeProps) {
     <section className="public-ecosystem" id="ecosystem"><div className="public-section-heading"><div><span className="public-section-kicker">OUR ECOSYSTEM</span><h2>Các lĩnh vực trọng tâm</h2></div><span className="public-section-index">01 — 04</span></div><div className="public-area-grid">{areas.map(({icon:Icon,number,title,text})=><article className="public-area-card" key={number}><div className="public-area-top"><span>{number}</span><Icon size={24}/></div><h3>{title}</h3><p>{text}</p><span className="public-area-line"/></article>)}</div></section>
     <section className="public-principles" id="principles"><div className="public-principle-mark"><Layers3 size={27}/></div><div><span className="public-section-kicker">OUR APPROACH</span><h2>Không ngừng học hỏi.<br/>Không ngừng cải tiến.</h2></div><p>Tập trung vào tính ứng dụng, trải nghiệm người dùng và khả năng phát triển lâu dài — đó là nền tảng trong cách ATI xây dựng sản phẩm.</p></section>
     <section className="public-access"><div><span className="public-section-kicker">READY TO EXPLORE?</span><h2>Bắt đầu hành trình cùng ATI.</h2><p>Đăng nhập để truy cập các công cụ và không gian làm việc trong hệ sinh thái ATI Group.</p></div><button className="public-primary-cta" onClick={onLogin}>Đăng nhập hệ thống <ArrowRight size={18}/></button><Sparkles className="public-access-sparkle" size={90}/></section>
-    <footer className="public-footer"><a className="public-brand" href="/"><img src="/ati-approved-logo.png" alt="ATI"/><span><strong>ATI GROUP</strong><small>TECHNOLOGY · AI · MANUFACTURING</small></span></a><span>© 2026 ATI Group. All rights reserved.</span><span>BUILD · CONNECT · GROW</span></footer>
+    <footer className="public-footer"><a className="public-brand" href="/"><img src="/ati-approved-logo.png" alt="ATI"/><span><strong>ATI GROUP</strong><small>TECHNOLOGY - AI</small></span></a><span>© 2026 ATI Group. All rights reserved.</span><span>BUILD · CONNECT · GROW</span></footer>
   </main>;
 }

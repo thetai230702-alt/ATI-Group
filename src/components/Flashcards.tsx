@@ -90,7 +90,7 @@ function speakWord(
   window.speechSynthesis.speak(utterance);
 }
 
-function Flashcards() {
+function Flashcards({ language = "vi" }: { language?: "vi" | "en" }) {
   const [units, setUnits] = useState<FlashcardUnit[]>([]);
   const [selectedUnit, setSelectedUnit] = useState("all");
   const [search, setSearch] = useState("");
@@ -297,7 +297,7 @@ function Flashcards() {
             <Check size={22} />
           </div>
           <div>
-            <span>Đã nhớ</span>
+            <span>{language === "en" ? 'Memorized' : 'Đã nhớ'}</span>
             <strong>{rememberedCount}</strong>
           </div>
         </div>
@@ -307,7 +307,7 @@ function Flashcards() {
             <BookOpen size={22} />
           </div>
           <div>
-            <span>Chưa nhớ</span>
+            <span>{language === "en" ? 'Not memorized' : 'Chưa nhớ'}</span>
             <strong>{learningCount}</strong>
           </div>
         </div>
@@ -363,9 +363,9 @@ function Flashcards() {
               setIsFlipped(false);
             }}
           >
-            <option value="all">Tất cả từ</option>
-            <option value="learning">Chưa nhớ</option>
-            <option value="remembered">Đã nhớ</option>
+            <option value="all">{language === "en" ? 'All words' : 'Tất cả từ'}</option>
+            <option value="learning">{language === "en" ? 'Not memorized' : 'Chưa nhớ'}</option>
+            <option value="remembered">{language === "en" ? 'Memorized' : 'Đã nhớ'}</option>
           </select>
         </div>
 
@@ -405,7 +405,7 @@ function Flashcards() {
       {/* Tiến độ */}
       <div className="flashcards-progress">
         <div className="flashcards-progress-heading">
-          <span>Tiến độ ghi nhớ</span>
+          <span>{language === "en" ? 'Memorization progress' : 'Tiến độ ghi nhớ'}</span>
           <strong>{progressPercent}%</strong>
         </div>
 
@@ -428,11 +428,11 @@ function Flashcards() {
 
               {progress[currentCard.id] === "remembered" ? (
                 <span className="flashcard-status remembered">
-                  <Check size={14} /> Đã nhớ
+                  <Check size={14} /> {language === "en" ? 'Memorized' : 'Đã nhớ'}
                 </span>
               ) : (
                 <span className="flashcard-status learning">
-                  Chưa nhớ
+                  {language === "en" ? 'Not memorized' : 'Chưa nhớ'}
                 </span>
               )}
             </div>
@@ -467,7 +467,7 @@ function Flashcards() {
                   )}
 
                   <span className="flashcard-hint">
-                    Nhấn vào thẻ để xem nghĩa
+                    {language === "en" ? 'Tap the card to reveal the meaning' : 'Nhấn vào thẻ để xem nghĩa'}
                   </span>
                 </div>
               ) : (
@@ -549,7 +549,7 @@ function Flashcards() {
                 onClick={markLearning}
               >
                 <X size={18} />
-                Chưa nhớ
+                {language === "en" ? 'Not memorized' : 'Chưa nhớ'}
               </button>
 
               <button
@@ -557,7 +557,7 @@ function Flashcards() {
                 onClick={markRemembered}
               >
                 <Check size={18} />
-                Đã nhớ
+                {language === "en" ? 'Memorized' : 'Đã nhớ'}
               </button>
             </div>
           </div>

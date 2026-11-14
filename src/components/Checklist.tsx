@@ -96,9 +96,9 @@ const initialUnits: Unit[] = topics.map((topic, index) => ({
 
 const STORAGE_KEY = "english-master-checklist";
 
-type ChecklistProps = { onNavigate?: (tab: TabType) => void };
+type ChecklistProps = { onNavigate?: (tab: TabType) => void; language?: "vi" | "en" };
 
-export default function Checklist({ onNavigate }: ChecklistProps) {
+export default function Checklist({ onNavigate, language = "vi" }: ChecklistProps) {
   const [units, setUnits] = useState<Unit[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -255,8 +255,8 @@ export default function Checklist({ onNavigate }: ChecklistProps) {
     <div className="checklist-page">
       <div className="checklist-heading">
         <div>
-          <h2>Checklist học tập</h2>
-          <p>Theo dõi tiến độ học tiếng Anh qua 50 Unit.</p>
+          <h2>{language === "en" ? 'Learning Checklist' : 'Checklist học tập'}</h2>
+          <p>{language === "en" ? 'Track your English learning progress across 50 units.' : 'Theo dõi tiến độ học tiếng Anh qua 50 Unit.'}</p>
         </div>
         <div className="unit-total">
           <BookOpen size={20} />
@@ -281,7 +281,7 @@ export default function Checklist({ onNavigate }: ChecklistProps) {
         <div className="learning-hero-side">
           <span className="learning-hero-date"><CalendarDays size={14} /> {today}</span>
           <div className="learning-hero-ring" style={{ "--learning-progress": `${progress}%` } as CSSProperties}>
-            <div><strong>{progress}%</strong><small>Hoàn thành</small></div>
+            <div><strong>{progress}%</strong><small>{language === "en" ? 'Completed' : 'Hoàn thành'}</small></div>
           </div>
           <span className="learning-hero-counter">{completed} / {units.length} Unit</span>
         </div>
@@ -340,7 +340,7 @@ export default function Checklist({ onNavigate }: ChecklistProps) {
             <CheckCircle2 size={21} />
           </div>
           <div>
-            <span>Đã học</span>
+            <span>{language === "en" ? 'Completed' : 'Đã học'}</span>
             <strong>{completed}</strong>
           </div>
         </div>
@@ -350,7 +350,7 @@ export default function Checklist({ onNavigate }: ChecklistProps) {
             <Clock3 size={21} />
           </div>
           <div>
-            <span>Đang học</span>
+            <span>{language === "en" ? 'In progress' : 'Đang học'}</span>
             <strong>{studying}</strong>
           </div>
         </div>
@@ -471,9 +471,9 @@ export default function Checklist({ onNavigate }: ChecklistProps) {
                         })
                       }
                     >
-                      <option>Chưa học</option>
-                      <option>Đang học</option>
-                      <option>Đã học</option>
+                      <option>{language === "en" ? 'Not started' : 'Chưa học'}</option>
+                      <option>{language === "en" ? 'In progress' : 'Đang học'}</option>
+                      <option>{language === "en" ? 'Completed' : 'Đã học'}</option>
                     </select>
                   </td>
 

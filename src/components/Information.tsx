@@ -56,7 +56,7 @@ const principles = [
   { icon: ShieldCheck, title: "Đáng tin cậy", text: "An toàn dữ liệu và ổn định" },
 ];
 
-function Information() {
+function Information({ language = "vi" }: { language?: "vi" | "en" }) {
   return (
     <main className="information-page">
       <section className="information-hero">
@@ -66,21 +66,21 @@ function Information() {
             <img src="/ati-approved-logo.png" alt="ATI" />
             <div>
               <span>ATI GROUP</span>
-              <small>TECHNOLOGY · AI · MANUFACTURING</small>
+              <small>TECHNOLOGY - AI</small>
             </div>
           </div>
           <p className="information-eyebrow">ABOUT OUR ECOSYSTEM</p>
-          <h1>Công nghệ tạo nên<br /><span>những khả năng mới.</span></h1>
+          <h1>{language === "en" ? 'Technology creates' : 'Công nghệ tạo nên'}<br /><span>{language === "en" ? 'new possibilities.' : 'những khả năng mới.'}</span></h1>
           <p className="information-hero-description">
             Nền tảng công nghệ hỗ trợ học tập, làm việc và phát triển các giải pháp kỹ thuật,
             tự động hóa và chế tạo máy.
           </p>
           <div className="information-hero-actions">
             <a href="#information-about" className="information-primary-link">
-              Khám phá hệ sinh thái <ArrowRight size={16} />
+              {language === "en" ? 'Explore the ecosystem' : 'Khám phá hệ sinh thái'} <ArrowRight size={16} />
             </a>
             <a href="#information-details" className="information-secondary-link">
-              Thông tin ứng dụng
+              {language === "en" ? 'Application Information' : 'Thông tin ứng dụng'}
             </a>
           </div>
         </div>
@@ -115,7 +115,7 @@ function Information() {
             <span className="information-panel-icon"><Code2 size={20} /></span>
             <div>
               <p>WHO WE ARE</p>
-              <h2>Giới thiệu về ATI Group</h2>
+              <h2>{language === "en" ? 'About ATI Group' : 'Giới thiệu về ATI Group'}</h2>
             </div>
           </div>
           <p className="information-about-copy">
@@ -134,7 +134,7 @@ function Information() {
           </div>
           <div className="information-about-note">
             <span className="information-note-dot" />
-            <span>Phát triển từng bước – kết nối nhiều lĩnh vực – hướng đến giá trị thực tiễn.</span>
+            <span>Kết nối công nghệ - Kiến tạo tương lai.</span>
           </div>
         </section>
 
@@ -143,7 +143,7 @@ function Information() {
             <span className="information-panel-icon"><Layers3 size={20} /></span>
             <div>
               <p>APPLICATION PROFILE</p>
-              <h2>Thông tin ứng dụng</h2>
+              <h2>{language === "en" ? 'Application Information' : 'Thông tin ứng dụng'}</h2>
             </div>
           </div>
           <div className="information-details-list">

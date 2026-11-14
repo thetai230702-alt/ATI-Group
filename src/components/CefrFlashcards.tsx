@@ -67,7 +67,7 @@ function readRemembered(): string[] {
   }
 }
 
-function CefrFlashcards() {
+function CefrFlashcards({ language = "vi" }: { language?: "vi" | "en" }) {
   const [data, setData] = useState<VocabularyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -273,9 +273,9 @@ function CefrFlashcards() {
         </div>
         <div className="cefr-intro-copy">
           <span className="cefr-eyebrow">OXFORD 3000 · BRITISH ENGLISH</span>
-          <h2>Học từ vựng theo cấp độ CEFR</h2>
+          <h2>{language === "en" ? 'Learn vocabulary by CEFR level' : 'Học từ vựng theo cấp độ CEFR'}</h2>
           <p>
-            Chọn cấp độ, chọn chủ đề và luyện nhớ từng từ bằng flashcard.
+            {language === "en" ? 'Choose a level and topic, then memorize words with flashcards.' : 'Chọn cấp độ, chọn chủ đề và luyện nhớ từng từ bằng flashcard.'}
           </p>
         </div>
       </section>
@@ -326,7 +326,7 @@ function CefrFlashcards() {
             }`}
             onClick={() => setSelectedTopic("all")}
           >
-            <span>Tất cả chủ đề</span>
+            <span>{language === "en" ? 'All topics' : 'Tất cả chủ đề'}</span>
             <small>{levelCardCount} từ</small>
           </button>
 
@@ -366,14 +366,14 @@ function CefrFlashcards() {
           </label>
 
           <label className="cefr-status-filter">
-            <span>Trạng thái học</span>
+            <span>{language === "en" ? 'Learning status' : 'Trạng thái học'}</span>
             <select
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value as "all" | "learning" | "remembered")}
             >
-              <option value="all">Tất cả từ</option>
-              <option value="learning">Chưa nhớ</option>
-              <option value="remembered">Đã nhớ</option>
+              <option value="all">{language === "en" ? 'All words' : 'Tất cả từ'}</option>
+              <option value="learning">{language === "en" ? 'Not memorized' : 'Chưa nhớ'}</option>
+              <option value="remembered">{language === "en" ? 'Memorized' : 'Đã nhớ'}</option>
             </select>
           </label>
 
@@ -392,7 +392,7 @@ function CefrFlashcards() {
       <section className="cefr-progress-card">
         <div className="cefr-progress-info">
           <div>
-            <strong>Tiến độ ghi nhớ</strong>
+            <strong>{language === "en" ? 'Memorization progress' : 'Tiến độ ghi nhớ'}</strong>
             <span>
               Đã nhớ {rememberedCount}/{filteredCards.length} từ trong danh sách
               hiện tại
@@ -453,7 +453,7 @@ function CefrFlashcards() {
                 </span>
                 <h2>{currentCard.word}</h2>
                 <p className="cefr-card-ipa">{currentCard.ipa || "Chưa có IPA"}</p>
-                <span className="cefr-card-hint">Nhấn vào thẻ để xem nghĩa</span>
+                <span className="cefr-card-hint">{language === "en" ? 'Tap the card to reveal the meaning' : 'Nhấn vào thẻ để xem nghĩa'}</span>
               </div>
             ) : (
               <div className="cefr-card-back">

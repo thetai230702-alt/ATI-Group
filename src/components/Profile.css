@@ -196,3 +196,62 @@
 @media(max-width:420px) {
   .profile-hero-sync { margin-left:0; }
 }
+
+
+/* V56 — profile avatar and completion experience */
+.profile-avatar-wrap{position:relative;flex:0 0 62px;width:62px;height:62px}
+.profile-avatar-wrap .profile-avatar{width:62px;height:62px;overflow:hidden}
+.profile-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-avatar-edit{position:absolute;right:-5px;bottom:-5px;display:grid;place-items:center;width:27px;height:27px;color:#075f9f;background:#fff;border:2px solid #dcecf8;border-radius:50%;box-shadow:0 3px 9px rgba(4,25,54,.18);cursor:pointer;transition:transform .15s,background .15s}
+.profile-avatar-edit:hover{background:#eaf5fd;transform:scale(1.06)}
+.profile-avatar-input{display:none}
+.profile-completion-card{position:relative;padding:17px 20px;background:#fff;border:1px solid #dfeaf3;border-radius:13px;box-shadow:0 6px 20px rgba(8,65,110,.035)}
+.profile-completion-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.profile-completion-top>div{display:flex;flex-direction:column;gap:4px}
+.profile-completion-top span{color:#8ba0b2;font-size:8px;font-weight:900;letter-spacing:1.2px}
+.profile-completion-top strong{color:#234d79;font-size:12px;font-weight:850}
+.profile-completion-top>b{color:#0878c9;font-size:20px;font-weight:900;font-variant-numeric:tabular-nums}
+.profile-completion-track{height:7px;margin:12px 0 8px;overflow:hidden;background:#eaf1f6;border-radius:20px}
+.profile-completion-track i{display:block;height:100%;background:linear-gradient(90deg,#0878c9,#49a2dc,#f29a42);border-radius:20px;transition:width .25s ease}
+.profile-completion-card>p{margin:0;color:#8a9eaf;font-size:9px;line-height:1.55}
+.profile-avatar-error{margin-top:9px;padding:8px 10px;color:#b84b40;background:#fff3f1;border:1px solid #f3d9d5;border-radius:8px;font-size:9px}
+.profile-avatar-remove{display:inline-flex;align-items:center;gap:5px;margin-top:9px;padding:5px 8px;color:#9b5b50;background:#fff7f5;border:1px solid #f1e0dc;border-radius:7px;font-size:8px;font-weight:800;cursor:pointer}
+.profile-avatar-remove:hover{background:#ffefeb}
+@media(max-width:650px){
+ .profile-avatar-wrap{flex-basis:48px;width:48px;height:48px}
+ .profile-avatar-wrap .profile-avatar{width:48px;height:48px}
+ .profile-avatar-edit{width:24px;height:24px;right:-4px;bottom:-4px}
+ .profile-completion-card{padding:14px}
+}
+.app-container.ati-theme-dark .profile-completion-card{background:#1a2d3f;border-color:#30495e;box-shadow:none}
+.app-container.ati-theme-dark .profile-completion-top strong{color:#e5f1f9}
+.app-container.ati-theme-dark .profile-completion-top span,.app-container.ati-theme-dark .profile-completion-card>p{color:#9bb0c1}
+.app-container.ati-theme-dark .profile-completion-track{background:#30495e}
+.app-container.ati-theme-dark .profile-card{background:#1a2d3f;border-color:#30495e;box-shadow:none}
+.app-container.ati-theme-dark .profile-card-heading h3,.app-container.ati-theme-dark .profile-section-title{color:#e5f1f9}
+.app-container.ati-theme-dark .profile-card-heading p,.app-container.ati-theme-dark .profile-card-footer{color:#9bb0c1;background:#17293a;border-color:#30495e}
+.app-container.ati-theme-dark .profile-tabs{border-color:#30495e}
+.app-container.ati-theme-dark .profile-tab{color:#a8bdcd}
+.app-container.ati-theme-dark .profile-tab:hover{color:#8bc8f1;background:#20384d}
+.app-container.ati-theme-dark .profile-tab.active{color:#8bc8f1}
+.app-container.ati-theme-dark .profile-field>span{color:#c1d3e0}
+.app-container.ati-theme-dark .profile-field input,.app-container.ati-theme-dark .profile-field select{color:#e2edf5;background:#20364a;border-color:#35516a}
+.app-container.ati-theme-dark .profile-field input[readonly]{color:#9bb0c1;background:#1b2e40}
+.app-container.ati-theme-dark .profile-field input::placeholder{color:#8199ac}
+
+
+/* V57 — ATI Cloud Profile status */
+.profile-cloud-card{display:flex;align-items:center;gap:12px;padding:14px 17px;background:#f4f9fd;border:1px solid #d8e9f5;border-radius:13px}
+.profile-cloud-icon{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;color:#0878c9;background:#e4f2fc;border-radius:11px}
+.profile-cloud-card>div{flex:1;min-width:0}
+.profile-cloud-card>div strong{display:block;margin-bottom:4px;color:#234d79;font-size:11px;font-weight:900}
+.profile-cloud-card>div p{margin:0;color:#8298aa;font-size:9px;line-height:1.5}
+.profile-cloud-pill{flex:0 0 auto;padding:6px 9px;color:#647d90;background:#fff;border:1px solid #e0eaf1;border-radius:20px;font-size:8px;font-weight:850;white-space:nowrap}
+.profile-cloud-pill.is-synced{color:#087b65;background:#effaf5;border-color:#d1eee3}
+.profile-cloud-pill.is-saving,.profile-cloud-pill.is-loading{color:#0878c9;background:#eff8fe;border-color:#d5eaf8}
+.profile-cloud-pill.is-error{color:#b94e43;background:#fff4f2;border-color:#f0d9d5}
+.app-container.ati-theme-dark .profile-cloud-card{background:#20364a;border-color:#35516a}
+.app-container.ati-theme-dark .profile-cloud-card>div strong{color:#e5f1f9}
+.app-container.ati-theme-dark .profile-cloud-card>div p{color:#9bb0c1}
+.app-container.ati-theme-dark .profile-cloud-pill{background:#172b3d;border-color:#35516a;color:#b8ccdb}
+@media(max-width:600px){.profile-cloud-card{align-items:flex-start;gap:9px;padding:12px}.profile-cloud-icon{flex-basis:34px;width:34px;height:34px}.profile-cloud-pill{font-size:7px;padding:5px 7px}}

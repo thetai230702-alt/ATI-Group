@@ -2,6 +2,7 @@ import {
   ArrowRight,
   BookOpen,
   ClipboardCheck,
+  ChartNoAxesCombined,
   Headphones,
   Layers,
   Bot,
@@ -19,12 +20,19 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { auth } from "../firebase";
+import {
+  getStudyActivity,
+  getStudyStreak,
+  getLastSevenDays,
+  STUDY_ACTIVITY_EVENT,
+} from "../services/studyGoals";
 import type { TabType } from "./Sidebar";
 import "./Dashboard.css";
 
 type DashboardProps = {
   displayName: string;
   onNavigate: (tab: TabType) => void;
+  language?: "vi" | "en";
 };
 
 const modules = [
@@ -89,10 +97,38 @@ const quickLinks: { id: string; title: string; description: string; tab: TabType
   { id: "checklist", title: "Checklist học tập", description: "Theo dõi mục tiêu", tab: "checklist", icon: ClipboardCheck },
 ];
 
-function Dashboard({ displayName, onNavigate }: DashboardProps) {
+function Dashboard({ displayName, onNavigate, language = "vi" }: DashboardProps) {
   const favoriteStorageKey = `ati-favorites-${auth.currentUser?.uid ?? "guest"}`;
   const [favorites, setFavorites] = useState<string[]>([]);
   const [favoritesReady, setFavoritesReady] = useState(false);
+  const [activityRefresh, setActivityRefresh] = useState(0);
+
+  useEffect(() => {
+    const refreshActivity = () => setActivityRefresh((value) => value + 1);
+    window.addEventListener("storage", refreshActivity);
+    window.addEventListener(STUDY_ACTIVITY_EVENT, refreshActivity);
+    window.addEventListener("focus", refreshActivity);
+    return () => {
+      window.removeEventListener("storage", refreshActivity);
+      window.removeEventListener(STUDY_ACTIVITY_EVENT, refreshActivity);
+      window.removeEventListener("focus", refreshActivity);
+    };
+  }, []);
+
+  const activitySummary = (() => {
+    void activityRefresh;
+    const activity = getStudyActivity();
+    const today = new Date();
+    const todayKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+    const days = getLastSevenDays(activity);
+    return {
+      today: activity[todayKey] ?? 0,
+      streak: getStudyStreak(activity),
+      days,
+      week: days.reduce((sum, day) => sum + day.count, 0),
+      max: Math.max(1, ...days.map((day) => day.count)),
+    };
+  })();
 
   useEffect(() => {
     try {
@@ -130,11 +166,12 @@ function Dashboard({ displayName, onNavigate }: DashboardProps) {
     <div className="ati-group-overview">
       <section className="ati-overview-hero">
         <div className="ati-overview-hero-copy">
-          <span className="ati-overview-eyebrow"><Sparkles size={13} /> ATI GROUP · INTEGRATED PLATFORM</span>
-          <h2>Xin chào, {firstName}!</h2>
+          <span className="ati-overview-eyebrow"><Sparkles size={13} /> ATI GROUP · TECHNOLOGY - AI</span>
+          <h2>{language === "en" ? `Hello, ${firstName}!` : `Xin chào, ${firstName}!`}</h2>
           <p>
-            Chào mừng bạn đến với hệ sinh thái ATI Group — nơi kết nối công nghệ,
-            trí tuệ nhân tạo, chế tạo máy và các giải pháp phát triển năng lực.
+            {language === "en"
+              ? "Welcome to ATI Group — Kết nối công nghệ - Kiến tạo tương lai."
+              : "Chào mừng bạn đến với ATI Group — Kết nối công nghệ - Kiến tạo tương lai."}
           </p>
           <div className="ati-overview-hero-meta">
             <span><Network size={14} /> Một nền tảng · Nhiều hệ sinh thái</span>
@@ -145,7 +182,7 @@ function Dashboard({ displayName, onNavigate }: DashboardProps) {
             className="ati-hero-primary-action"
             onClick={() => onNavigate("learning-dashboard")}
           >
-            Khám phá không gian học tập <ArrowRight size={15} />
+            {language === "en" ? "Explore learning space" : "Khám phá không gian học tập"} <ArrowRight size={15} />
           </button>
         </div>
         <div className="ati-overview-hero-art" aria-hidden="true">
@@ -156,6 +193,33 @@ function Dashboard({ displayName, onNavigate }: DashboardProps) {
           <span className="ati-node node-ai"><Bot size={21} /></span>
           <span className="ati-node node-tech"><Cpu size={20} /></span>
           <span className="ati-node node-build"><Workflow size={20} /></span>
+        </div>
+      </section>
+
+      <section className="ati-command-activity" aria-label="Hoạt động gần đây">
+        <div className="ati-command-activity-main">
+          <div className="ati-command-activity-heading">
+            <span>ATI ACTIVITY</span>
+            <strong>{language === "en" ? "Your activity pulse" : "Nhịp độ hoạt động của bạn"}</strong>
+            <small>{language === "en" ? "Practice activity recorded on this device" : "Dữ liệu luyện tập được ghi nhận trên thiết bị này"}</small>
+          </div>
+          <div className="ati-command-metrics">
+            <article><span className="activity-metric-icon"><ClipboardCheck size={17} /></span><div><small>{language === "en" ? "Today" : "Hôm nay"}</small><strong>{activitySummary.today.toLocaleString("vi-VN")}</strong><em>{language === "en" ? "sentence checks" : "lượt kiểm tra câu"}</em></div></article>
+            <article><span className="activity-metric-icon streak"><Sparkles size={17} /></span><div><small>{language === "en" ? "Study streak" : "Chuỗi học tập"}</small><strong>{activitySummary.streak}</strong><em>{language === "en" ? "consecutive days" : "ngày liên tiếp"}</em></div></article>
+            <article><span className="activity-metric-icon week"><ChartNoAxesCombined size={17} /></span><div><small>{language === "en" ? "Last 7 days" : "7 ngày qua"}</small><strong>{activitySummary.week.toLocaleString("vi-VN")}</strong><em>lượt kiểm tra câu</em></div></article>
+          </div>
+        </div>
+        <div className="ati-command-week" aria-label="Biểu đồ hoạt động 7 ngày">
+          <div className="ati-command-week-head"><strong>{language === "en" ? "Last 7 days" : "7 ngày gần nhất"}</strong><span>{language === "en" ? "PRACTICE" : "LUYỆN TẬP"}</span></div>
+          <div className="ati-command-bars">
+            {activitySummary.days.map((day) => (
+              <div className="ati-command-bar-day" key={day.date} title={`${day.date}: ${day.count} lượt`}>
+                <strong>{day.count || ""}</strong>
+                <div><i style={{ height: `${day.count ? Math.max(8, Math.round(day.count / activitySummary.max * 100)) : 0}%` }} /></div>
+                <small>{day.label}</small>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -170,7 +234,7 @@ function Dashboard({ displayName, onNavigate }: DashboardProps) {
         </article>
         <article>
           <span className="ati-summary-icon"><Settings2 size={19} /></span>
-          <div><small>Định hướng</small><strong>Technology · AI</strong><em>Manufacturing · Business</em></div>
+          <div><small>Định hướng</small><strong>Technology - AI</strong><em>Kết nối công nghệ - Kiến tạo tương lai</em></div>
         </article>
       </section>
 
@@ -282,8 +346,8 @@ function Dashboard({ displayName, onNavigate }: DashboardProps) {
 
       <footer className="ati-overview-footer">
         <div className="ati-footer-mark"><img src="/ati-approved-logo.png" alt="ATI" /></div>
-        <div><strong>ATI Group</strong><p>Technology · AI · Manufacturing</p></div>
-        <span>Phát triển không giới hạn.</span>
+        <div><strong>ATI Group</strong><p>Technology - AI</p></div>
+        <span>Kết nối công nghệ - Kiến tạo tương lai</span>
       </footer>
     </div>
   );

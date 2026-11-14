@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "English Master - ATI Group",
-  "short_name": "English Master",
-  "description": "ATI Group English learning platform",
+  "name": "ATI Group | Technology - AI",
+  "short_name": "ATI Group",
+  "description": "ATI Group – Technology - AI. Kết nối công nghệ - Kiến tạo tương lai.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

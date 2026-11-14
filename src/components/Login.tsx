@@ -105,7 +105,7 @@ function Login({ onSwitch, onBack }: LoginProps) {
           <img src="/ati-approved-logo.png" alt="ATI Group" />
           <span className="auth-brand-divider" />
           <div className="auth-brand-caption">
-            <strong>TECHNOLOGY PLATFORM</strong>
+            <strong>TECHNOLOGY - AI</strong>
             <span>INNOVATION · ENGINEERING · LEARNING</span>
           </div>
         </div>

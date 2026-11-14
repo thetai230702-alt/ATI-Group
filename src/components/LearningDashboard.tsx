@@ -30,6 +30,7 @@ import "./LearningDashboard.css";
 type DashboardProps = {
   displayName: string;
   onNavigate: (tab: TabType) => void;
+  language?: "vi" | "en";
 };
 
 type ChecklistItem = {
@@ -72,7 +73,7 @@ function readJson<T,>(key: string, fallback: T): T {
   }
 }
 
-function LearningDashboard({ displayName, onNavigate }: DashboardProps) {
+function LearningDashboard({ displayName, onNavigate, language = "vi" }: DashboardProps) {
   const firstName = displayName.trim().split(/\s+/).slice(-1)[0] || "bạn";
   const [moduleSearch, setModuleSearch] = useState("");
   const [refresh, setRefresh] = useState(0);
@@ -236,8 +237,8 @@ function LearningDashboard({ displayName, onNavigate }: DashboardProps) {
               <div><strong>{progressPercent}%</strong><span>{completed}/50 Unit</span></div>
             </div>
             <div className="dashboard-progress-legend">
-              <div><i className="legend-dot legend-done" /><span>Đã hoàn thành</span><strong>{completed}</strong></div>
-              <div><i className="legend-dot legend-active" /><span>Đang học</span><strong>{studying}</strong></div>
+              <div><i className="legend-dot legend-done" /><span>{language === "en" ? 'Completed' : 'Đã hoàn thành'}</span><strong>{completed}</strong></div>
+              <div><i className="legend-dot legend-active" /><span>{language === "en" ? 'In progress' : 'Đang học'}</span><strong>{studying}</strong></div>
               <div><i className="legend-dot legend-pending" /><span>Còn lại</span><strong>{remaining}</strong></div>
             </div>
           </div>

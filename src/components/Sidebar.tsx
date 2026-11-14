@@ -112,6 +112,18 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
   const renderLearningItem = (item: LearningItem) => {
     const Icon = item.icon;
     const isActive = activeTab === item.id;
+    const vietnameseLabels: Partial<Record<TabType, string>> = {
+      "learning-dashboard": "Tổng quan học tập",
+      checklist: "Danh sách học tập",
+      statistics: "Thống kê học tập",
+      units: "Luyện tập 1.500 câu",
+      listening: "Luyện nghe",
+      tenses: "12 thì tiếng Anh",
+      flashcards: "Flashcard từ vựng",
+      cefr: "Từ vựng CEFR",
+      "my-vocabulary": "Từ vựng của tôi",
+    };
+    const label = isEnglish ? item.label : (vietnameseLabels[item.id] ?? item.label);
     return (
       <button
         key={item.id}
@@ -124,7 +136,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
         <span className="menu-icon"><Icon size={18} strokeWidth={2} /></span>
         {!collapsed && (
           <span className="menu-item-text">
-            <span>{item.label}</span>
+            <span>{label}</span>
           </span>
         )}
         {isActive && <span className="active-indicator" />}
@@ -163,7 +175,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
       </div>
 
       <div className="sidebar-scroll">
-        {!collapsed && <p className="menu-heading">KHÔNG GIAN LÀM VIỆC</p>}
+        {!collapsed && <p className="menu-heading">{isEnglish ? "WORKSPACE" : "KHÔNG GIAN LÀM VIỆC"}</p>}
         <button
           type="button"
           className={`menu-item dashboard-nav-item ${activeTab === "dashboard" ? "active" : ""}`}
@@ -174,14 +186,14 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
           <span className="menu-icon"><LayoutDashboard size={18} strokeWidth={2} /></span>
           {!collapsed && (
             <span className="menu-item-text">
-              <span>Trang chủ ATI Group</span>
-              <small>Mở trang chủ hệ sinh thái</small>
+              <span>{isEnglish ? "ATI Group Overview" : "Trang chủ ATI Group"}</span>
+              <small>{isEnglish ? "Open the ecosystem home" : "Mở trang chủ hệ sinh thái"}</small>
             </span>
           )}
           {activeTab === "dashboard" && <span className="active-indicator" />}
         </button>
 
-        {!collapsed && <p className="menu-heading module-menu-heading">PHÂN HỆ</p>}
+        {!collapsed && <p className="menu-heading module-menu-heading">{isEnglish ? "MODULES" : "PHÂN HỆ"}</p>}
         <div className={`module-tree ${learningOpen ? "module-tree-open" : ""}`}>
           <button
             type="button"
@@ -191,7 +203,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
             aria-expanded={learningOpen}
           >
             <span className="module-heading-icon"><GraduationCap size={19} /></span>
-            {!collapsed && <span className="module-heading-label">ENGLISH MASTER</span>}
+            {!collapsed && <span className="module-heading-label">{isEnglish ? "ENGLISH MASTER" : "HỌC TIẾNG ANH"}</span>}
             {!collapsed && <ChevronDown size={16} className={`module-chevron ${learningOpen ? "open" : ""}`} />}
           </button>
 
@@ -209,7 +221,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
                       onClick={() => toggleGroup(group.id)}
                       aria-expanded={groupIsOpen}
                     >
-                      <span>{group.label}</span>
+                      <span>{isEnglish ? ({ overview: "OVERVIEW", practice: "PRACTICE", vocabulary: "VOCABULARY" } as const)[group.id] : group.label}</span>
                       <ChevronDown size={13} className={groupIsOpen ? "group-chevron open" : "group-chevron"} />
                     </button>
                   )}
@@ -226,7 +238,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
         </div>
 
         <div className="sidebar-account-section">
-          {!collapsed && <p className="menu-heading account-heading">TÀI KHOẢN</p>}
+          {!collapsed && <p className="menu-heading account-heading">{isEnglish ? "ACCOUNT" : "TÀI KHOẢN"}</p>}
           <button
             type="button"
             className={`menu-item ${activeTab === "profile" ? "active" : ""}`}
@@ -237,8 +249,8 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
             <span className="menu-icon"><UserRound size={18} strokeWidth={2} /></span>
             {!collapsed && (
               <span className="menu-item-text">
-                <span>Hồ sơ tài khoản</span>
-                <small>Thông tin cá nhân & cài đặt</small>
+                <span>{isEnglish ? "My Profile" : "Hồ sơ tài khoản"}</span>
+                <small>{isEnglish ? "Personal details & settings" : "Thông tin cá nhân & cài đặt"}</small>
               </span>
             )}
             {activeTab === "profile" && <span className="active-indicator" />}
@@ -273,8 +285,8 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
             <span className="menu-icon"><Info size={18} strokeWidth={2} /></span>
             {!collapsed && (
               <span className="menu-item-text">
-                <span>Giới thiệu ATI Group</span>
-                <small>Thông tin hệ sinh thái</small>
+                <span>{isEnglish ? "About ATI Group" : "Giới thiệu ATI Group"}</span>
+                <small>{isEnglish ? "Ecosystem information" : "Thông tin hệ sinh thái"}</small>
               </span>
             )}
             {activeTab === "information" && <span className="active-indicator" />}
@@ -289,7 +301,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
           <img className="sidebar-footer-mark" src="/ati-approved-logo.png" alt="ATI" />
           <div className="sidebar-footer-text">
             <strong>ATI Group</strong>
-            <p>Phát triển không giới hạn.</p>
+            <p>{isEnglish ? "Develop without limits." : "Phát triển không giới hạn."}</p>
           </div>
         </div>
       )}

@@ -251,3 +251,47 @@ a { color:var(--ati-blue); }
 @media(prefers-reduced-motion:reduce) {
   .ati-favorite-card,.ati-quick-card,.ati-favorite-remove,.ati-quick-favorite { transition:none; }
 }
+
+
+/* V59 — cross-ecosystem activity pulse */
+.ati-command-activity {
+  display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);
+  gap:18px;padding:18px 20px;background:#fff;border:1px solid #dfe9f1;
+  border-radius:16px;box-shadow:0 7px 22px rgba(8,65,110,.045);
+}
+.ati-command-activity-main {display:flex;flex-direction:column;justify-content:space-between;gap:17px;min-width:0}
+.ati-command-activity-heading {display:flex;flex-direction:column;gap:4px}
+.ati-command-activity-heading>span {color:#0b80c8;font-size:8px;font-weight:900;letter-spacing:1.2px}
+.ati-command-activity-heading>strong {color:#183b5d;font-size:15px;font-weight:900}
+.ati-command-activity-heading>small {color:#8b9eae;font-size:9px}
+.ati-command-metrics {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.ati-command-metrics article {display:flex;align-items:center;gap:9px;min-width:0;padding:10px;background:#f8fbfd;border:1px solid #edf2f6;border-radius:10px}
+.activity-metric-icon {display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;color:#0878c9;background:#eaf5fc;border-radius:10px}
+.activity-metric-icon.streak {color:#dc7b27;background:#fff2e7}
+.activity-metric-icon.week {color:#188b78;background:#eaf8f4}
+.ati-command-metrics article>div {display:flex;flex-direction:column;gap:2px;min-width:0}
+.ati-command-metrics small {color:#8195a7;font-size:8px;font-weight:750}
+.ati-command-metrics strong {color:#183b5d;font-size:18px;font-weight:900;line-height:1.1}
+.ati-command-metrics em {color:#9aabba;font-size:7px;font-style:normal}
+.ati-command-week {display:flex;flex-direction:column;justify-content:space-between;min-width:0;padding:12px 14px;background:linear-gradient(145deg,#f8fbfe,#f3f8fc);border:1px solid #e8f0f6;border-radius:12px}
+.ati-command-week-head {display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ati-command-week-head strong {color:#34536d;font-size:9px;font-weight:900}
+.ati-command-week-head span {color:#9aabba;font-size:7px;font-weight:900;letter-spacing:.8px}
+.ati-command-bars {display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:9px;height:92px;padding-top:8px}
+.ati-command-bar-day {display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%;min-width:0}
+.ati-command-bar-day>strong {height:10px;color:#7790a4;font-size:7px;font-weight:800}
+.ati-command-bar-day>div {display:flex;align-items:flex-end;justify-content:center;width:100%;height:57px;overflow:hidden;background:#e7eff5;border-radius:5px 5px 3px 3px}
+.ati-command-bar-day i {display:block;width:100%;min-height:0;background:linear-gradient(180deg,#24a0df,#0878c9);border-radius:5px 5px 2px 2px;transition:height .25s ease}
+.ati-command-bar-day small {color:#91a4b4;font-size:7px;font-weight:750}
+@media(max-width:850px) {
+  .ati-command-activity {grid-template-columns:1fr}
+  .ati-command-week {min-height:140px}
+}
+@media(max-width:520px) {
+  .ati-command-activity {padding:14px;gap:12px}
+  .ati-command-metrics {gap:6px}
+  .ati-command-metrics article {flex-direction:column;align-items:flex-start;padding:9px 7px}
+  .ati-command-metrics strong {font-size:16px}
+  .ati-command-metrics em {font-size:6px}
+  .ati-command-bars {gap:6px}
+}

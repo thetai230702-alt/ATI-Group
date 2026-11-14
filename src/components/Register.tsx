@@ -88,7 +88,7 @@ function Register({ onSwitch, onBack }: RegisterProps) {
           {onBack && <button type="button" className="auth-back-home" onClick={onBack}>← Quay lại trang ATI</button>}
           <span className="auth-heading-kicker">JOIN THE ATI ECOSYSTEM</span>
           <h1>Tạo tài khoản</h1>
-          <p>Tạo tài khoản để bắt đầu sử dụng các không gian làm việc của ATI Group.</p>
+          <p>Tạo tài khoản để bắt đầu hành trình cùng ATI Group — Kết nối công nghệ - Kiến tạo tương lai.</p>
         </div>
 
         <form onSubmit={handleRegister} className="auth-form">

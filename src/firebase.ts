@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -33,6 +34,9 @@ export const authPersistence = setPersistence(
 
 // Cloud Firestore Database
 export const db = getFirestore(app);
+
+// Firebase Storage for user-owned profile images
+export const storage = getStorage(app);
 
 // Export Firebase app
 export default app;

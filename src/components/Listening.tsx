@@ -41,7 +41,7 @@ const START_DELAY = 700;
 const SENTENCE_DELAY = 600;
 const RETRY_DELAY = 150;
 
-function Listening() {
+function Listening({ language = "vi" }: { language?: "vi" | "en" }) {
   const [units, setUnits] = useState<Unit[]>([]);
   const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -689,9 +689,9 @@ function Listening() {
         </div>
 
         <div>
-          <h2>Luyện nghe theo Unit</h2>
+          <h2>{language === "en" ? 'Listening by Unit' : 'Luyện nghe theo Unit'}</h2>
           <p>
-            Nghe tự động toàn bộ câu trong Unit và luyện phát âm.
+            {language === "en" ? 'Listen to every sentence in a unit and practice pronunciation.' : 'Nghe tự động toàn bộ câu trong Unit và luyện phát âm.'}
           </p>
         </div>
       </div>
@@ -701,7 +701,7 @@ function Listening() {
         <div className="listening-setting">
           <label htmlFor="listening-unit">
             <BookOpen size={16} />
-            <span>NỘI DUNG HỌC</span>
+            <span>{language === "en" ? 'LESSON CONTENT' : 'NỘI DUNG HỌC'}</span>
           </label>
 
           <div className="listening-select-wrap">
@@ -728,13 +728,13 @@ function Listening() {
             />
           </div>
 
-          <small>Chọn bài học muốn luyện nghe</small>
+          <small>{language === "en" ? 'Choose a lesson to practice listening' : 'Chọn bài học muốn luyện nghe'}</small>
         </div>
 
         <div className="listening-setting">
           <label htmlFor="listening-repeat">
             <Repeat size={16} />
-            <span>CHẾ ĐỘ LẶP LẠI</span>
+            <span>{language === "en" ? 'REPEAT MODE' : 'CHẾ ĐỘ LẶP LẠI'}</span>
           </label>
 
           <div className="listening-select-wrap">
@@ -747,10 +747,10 @@ function Listening() {
                 )
               }
             >
-              <option value="1">Nghe 1 lần</option>
-              <option value="2">Lặp lại 2 lần</option>
-              <option value="3">Lặp lại 3 lần</option>
-              <option value="infinite">Lặp vô hạn</option>
+              <option value="1">{language === "en" ? 'Play once' : 'Nghe 1 lần'}</option>
+              <option value="2">{language === "en" ? 'Repeat twice' : 'Lặp lại 2 lần'}</option>
+              <option value="3">{language === "en" ? 'Repeat 3 times' : 'Lặp lại 3 lần'}</option>
+              <option value="infinite">{language === "en" ? 'Repeat continuously' : 'Lặp vô hạn'}</option>
             </select>
 
             <ChevronDown
@@ -759,13 +759,13 @@ function Listening() {
             />
           </div>
 
-          <small>Tự động phát lại toàn bộ Unit</small>
+          <small>{language === "en" ? 'Automatically replay the entire unit' : 'Tự động phát lại toàn bộ Unit'}</small>
         </div>
 
         <div className="listening-setting">
           <label htmlFor="listening-voice">
             <Languages size={16} />
-            <span>GIỌNG ĐỌC</span>
+            <span>{language === "en" ? 'VOICE' : 'GIỌNG ĐỌC'}</span>
           </label>
 
           <div className="listening-select-wrap">
@@ -792,13 +792,13 @@ function Listening() {
             />
           </div>
 
-          <small>Chọn giọng Anh - Anh hoặc Anh - Mỹ</small>
+          <small>{language === "en" ? 'Choose a British or American English voice' : 'Chọn giọng Anh - Anh hoặc Anh - Mỹ'}</small>
         </div>
 
         <div className="listening-setting">
           <label htmlFor="listening-speed">
             <Gauge size={16} />
-            <span>TỐC ĐỘ ĐỌC</span>
+            <span>{language === "en" ? 'PLAYBACK SPEED' : 'TỐC ĐỘ ĐỌC'}</span>
           </label>
 
           <div className="listening-select-wrap">
@@ -825,7 +825,7 @@ function Listening() {
             />
           </div>
 
-          <small>Điều chỉnh tốc độ phát âm</small>
+          <small>{language === "en" ? 'Adjust speech speed' : 'Điều chỉnh tốc độ phát âm'}</small>
         </div>
       </div>
 
@@ -873,7 +873,7 @@ function Listening() {
 
       <div className="listening-player-card">
         <div className="listening-player-left">
-          <div className="listening-player-title">Nghe bài học</div>
+          <div className="listening-player-title">{language === "en" ? 'Listen to lesson' : 'Nghe bài học'}</div>
           <div className="listening-controls">
             <button
               className="listening-control-button secondary"

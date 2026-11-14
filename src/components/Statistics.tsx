@@ -30,7 +30,7 @@ function getLastSevenDays(items: ChecklistItem[]) {
   });
 }
 
-export default function Statistics() {
+export default function Statistics({ language = "vi" }: { language?: "vi" | "en" }) {
   const [refresh, setRefresh] = useState(0);
   useEffect(() => {
     const update = () => setRefresh(value => value + 1);
@@ -61,8 +61,8 @@ export default function Statistics() {
     <div className="statistics-page">
       <section className="statistics-hero">
         <div><span className="statistics-eyebrow"><Activity size={14}/> ATI LEARNING · PERFORMANCE</span>
-          <h2>Báo cáo học tập</h2>
-          <p>Tổng hợp tiến độ Checklist và kết quả luyện câu; dữ liệu được lưu trên thiết bị và đồng bộ theo tài khoản khi đăng nhập.</p>
+          <h2>{language === "en" ? 'Learning Report' : 'Báo cáo học tập'}</h2>
+          <p>{language === "en" ? 'A summary of checklist progress and sentence-practice results. Data is saved on this device and synced to your account when signed in.' : 'Tổng hợp tiến độ Checklist và kết quả luyện câu; dữ liệu được lưu trên thiết bị và đồng bộ theo tài khoản khi đăng nhập.'}</p>
         </div>
         <div className="statistics-hero-mark"><TrendingUp size={28}/><strong>{accuracy}%</strong><small>Độ chính xác</small></div>
       </section>
@@ -87,8 +87,8 @@ export default function Statistics() {
 
         <section className="statistics-panel statistics-breakdown">
           <div className="statistics-panel-heading"><div><span>UNIT OVERVIEW</span><h3>Phân bổ trạng thái</h3></div></div>
-          <div className="statistics-donut" style={{"--done":`${completed/50*100}%`,"--learning":`${studying/50*100}%`} as React.CSSProperties}><div><strong>{Math.round(completed/50*100)}%</strong><small>Hoàn thành</small></div></div>
-          <div className="statistics-legend"><span><i className="done"/>Đã học <b>{completed}</b></span><span><i className="learning"/>Đang học <b>{studying}</b></span><span><i className="pending"/>Chưa học <b>{Math.max(0,50-completed-studying)}</b></span></div>
+          <div className="statistics-donut" style={{"--done":`${completed/50*100}%`,"--learning":`${studying/50*100}%`} as React.CSSProperties}><div><strong>{Math.round(completed/50*100)}%</strong><small>{language === "en" ? 'Completed' : 'Hoàn thành'}</small></div></div>
+          <div className="statistics-legend"><span><i className="done"/>{language === "en" ? 'Completed' : 'Đã học'} <b>{completed}</b></span><span><i className="learning"/>{language === "en" ? 'In progress' : 'Đang học'} <b>{studying}</b></span><span><i className="pending"/>{language === "en" ? 'Not started' : 'Chưa học'} <b>{Math.max(0,50-completed-studying)}</b></span></div>
         </section>
       </div>
 

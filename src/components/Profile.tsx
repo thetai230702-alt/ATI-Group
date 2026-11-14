@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BriefcaseBusiness,
   GraduationCap,
@@ -9,8 +9,12 @@ import {
   CloudCheck,
   CloudOff,
   LoaderCircle,
+  Camera,
+  X,
 } from "lucide-react";
-import { auth } from "../firebase";
+import { auth, db, storage } from "../firebase";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { getDownloadURL, ref as storageRef, uploadBytes, deleteObject } from "firebase/storage";
 import "./Profile.css";
 
 type ProfileTab = "personal" | "work" | "education" | "family";
@@ -33,13 +37,14 @@ type ProfileData = {
   maritalStatus: string;
   emergencyContact: string;
   emergencyPhone: string;
+  avatarData: string;
 };
 
 const emptyProfile: ProfileData = {
   fullName: "", displayName: "", email: "", phone: "", birthday: "",
   gender: "", address: "", jobTitle: "", company: "", department: "",
   workAddress: "", school: "", major: "", degree: "", graduationYear: "",
-  maritalStatus: "", emergencyContact: "", emergencyPhone: "",
+  maritalStatus: "", emergencyContact: "", emergencyPhone: "", avatarData: "",
 };
 
 const tabs: { id: ProfileTab; label: string; icon: typeof UserRound }[] = [
@@ -68,6 +73,17 @@ function Profile({ syncStatus }: ProfileProps) {
     }
   });
   const [savedMessage, setSavedMessage] = useState("");
+  const [avatarError, setAvatarError] = useState("");
+  const [cloudStatus, setCloudStatus] = useState<"loading" | "ready" | "saving" | "synced" | "error">("loading");
+  const [cloudMessage, setCloudMessage] = useState("Đang tải hồ sơ từ tài khoản ATI...");
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  const completionFields: (keyof ProfileData)[] = [
+    "fullName", "displayName", "phone", "birthday", "gender", "address",
+    "jobTitle", "company", "department", "school", "major", "degree",
+  ];
+  const completedFields = completionFields.filter((key) => Boolean(profile[key].trim())).length;
+  const completionPercent = Math.round((completedFields / completionFields.length) * 100);
 
   useEffect(() => {
     setProfile((current) => ({
@@ -77,6 +93,38 @@ function Profile({ syncStatus }: ProfileProps) {
       email: current.email || user?.email || "",
     }));
   }, [user]);
+
+  useEffect(() => {
+    let active = true;
+    const loadCloudProfile = async () => {
+      if (!user) {
+        setCloudStatus("error");
+        setCloudMessage("Bạn cần đăng nhập để đồng bộ hồ sơ.");
+        return;
+      }
+      setCloudStatus("loading");
+      try {
+        const snapshot = await getDoc(doc(db, "users", user.uid, "private", "profile"));
+        if (!active) return;
+        if (snapshot.exists()) {
+          const cloudData = snapshot.data() as Partial<ProfileData> & { avatarUrl?: string };
+          const merged = { ...emptyProfile, ...cloudData, email: user.email || cloudData.email || "" };
+          if (cloudData.avatarUrl) merged.avatarData = cloudData.avatarUrl;
+          setProfile((current) => ({ ...current, ...merged }));
+          try { localStorage.setItem(storageKey, JSON.stringify(merged)); } catch { /* local cache is optional */ }
+        }
+        setCloudStatus("ready");
+        setCloudMessage(snapshot.exists() ? "Hồ sơ đã được tải từ tài khoản ATI." : "Chưa có hồ sơ trên cloud. Hãy lưu để tạo hồ sơ.");
+      } catch (error) {
+        console.error("ATI cloud profile load failed:", error);
+        if (!active) return;
+        setCloudStatus("error");
+        setCloudMessage("Không thể tải hồ sơ cloud. Kiểm tra Firestore Rules và kết nối.");
+      }
+    };
+    void loadCloudProfile();
+    return () => { active = false; };
+  }, [user, storageKey]);
 
   const initials = useMemo(() => {
     const name = profile.fullName || user?.displayName || user?.email || "ATI";
@@ -88,12 +136,103 @@ function Profile({ syncStatus }: ProfileProps) {
     setSavedMessage("");
   };
 
-  const saveProfile = () => {
+  const saveProfile = async () => {
+    if (!user) {
+      setSavedMessage("Vui lòng đăng nhập để lưu hồ sơ.");
+      return;
+    }
+    setCloudStatus("saving");
+    setCloudMessage("Đang lưu hồ sơ lên cloud...");
     try {
-      localStorage.setItem(storageKey, JSON.stringify(profile));
-      setSavedMessage("Thông tin đã được lưu trên thiết bị này.");
+      const { avatarData, ...profileFields } = profile;
+      let avatarUrl = avatarData;
+      if (avatarData.startsWith("data:image/")) {
+        const response = await fetch(avatarData);
+        const blob = await response.blob();
+        const imageRef = storageRef(storage, `avatars/${user.uid}/profile.jpg`);
+        await uploadBytes(imageRef, blob, { contentType: "image/jpeg" });
+        avatarUrl = await getDownloadURL(imageRef);
+      }
+      const cloudProfile = {
+        ...profileFields,
+        avatarUrl: avatarUrl.startsWith("http") ? avatarUrl : "",
+        uid: user.uid,
+        email: user.email || profile.email,
+        updatedAt: serverTimestamp(),
+      };
+      await setDoc(doc(db, "users", user.uid, "private", "profile"), cloudProfile, { merge: true });
+      const localProfile = { ...profile, avatarData: avatarUrl };
+      setProfile(localProfile);
+      localStorage.setItem(storageKey, JSON.stringify(localProfile));
+      setCloudStatus("synced");
+      setCloudMessage("Hồ sơ đã được đồng bộ với tài khoản ATI.");
+      setSavedMessage("Đã lưu hồ sơ lên cloud thành công.");
+    } catch (error) {
+      console.error("ATI cloud profile save failed:", error);
+      setCloudStatus("error");
+      setCloudMessage("Lưu cloud thất bại. Kiểm tra Firestore/Storage Rules và cấu hình Firebase Storage.");
+      setSavedMessage("Không thể đồng bộ cloud. Dữ liệu trên biểu mẫu vẫn được giữ lại.");
+    }
+  };
+
+  const handleAvatarUpload = (file?: File) => {
+    setAvatarError("");
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setAvatarError("Vui lòng chọn tệp hình ảnh.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setAvatarError("Ảnh vượt quá 5 MB. Vui lòng chọn ảnh nhỏ hơn.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onerror = () => setAvatarError("Không thể đọc ảnh. Vui lòng thử lại.");
+    reader.onload = () => {
+      const image = new Image();
+      image.onerror = () => setAvatarError("Tệp ảnh không hợp lệ.");
+      image.onload = () => {
+        const canvas = document.createElement("canvas");
+        const size = 320;
+        canvas.width = size;
+        canvas.height = size;
+        const context = canvas.getContext("2d");
+        if (!context) {
+          setAvatarError("Trình duyệt không hỗ trợ xử lý ảnh.");
+          return;
+        }
+        const cropSize = Math.min(image.width, image.height);
+        const sx = (image.width - cropSize) / 2;
+        const sy = (image.height - cropSize) / 2;
+        context.drawImage(image, sx, sy, cropSize, cropSize, 0, 0, size, size);
+        const avatarData = canvas.toDataURL("image/jpeg", 0.84);
+        const nextProfile = { ...profile, avatarData };
+        setProfile(nextProfile);
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(nextProfile));
+          setSavedMessage("Ảnh đại diện đã được lưu trên thiết bị này.");
+        } catch {
+          setAvatarError("Không đủ dung lượng để lưu ảnh. Hãy chọn ảnh khác.");
+        }
+      };
+      image.src = String(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const removeAvatar = () => {
+    const nextProfile = { ...profile, avatarData: "" };
+    setProfile(nextProfile);
+    setAvatarError("");
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(nextProfile));
+      setSavedMessage("Đã xóa ảnh trên thiết bị. Nhấn Lưu thay đổi để đồng bộ cloud.");
+      if (user) {
+        void deleteObject(storageRef(storage, `avatars/${user.uid}/profile.jpg`)).catch(() => undefined);
+      }
     } catch {
-      setSavedMessage("Không thể lưu thông tin. Vui lòng thử lại.");
+      setAvatarError("Không thể lưu thay đổi. Vui lòng thử lại.");
     }
   };
 
@@ -129,7 +268,24 @@ function Profile({ syncStatus }: ProfileProps) {
   return (
     <div className="profile-page">
       <section className="profile-hero">
-        <div className="profile-avatar">{initials}</div>
+        <div className="profile-avatar-wrap">
+          <div className="profile-avatar">
+            {profile.avatarData ? <img src={profile.avatarData} alt="Ảnh đại diện" /> : initials}
+          </div>
+          <button type="button" className="profile-avatar-edit" onClick={() => avatarInputRef.current?.click()} aria-label="Tải ảnh đại diện">
+            <Camera size={15} />
+          </button>
+          <input
+            ref={avatarInputRef}
+            className="profile-avatar-input"
+            type="file"
+            accept="image/*"
+            onChange={(event) => {
+              handleAvatarUpload(event.target.files?.[0]);
+              event.target.value = "";
+            }}
+          />
+        </div>
         <div className="profile-hero-copy">
           <span className="profile-eyebrow">ATI Group · ACCOUNT CENTER</span>
           <h2>{profile.fullName || user?.displayName || "Hồ sơ của tôi"}</h2>
@@ -154,6 +310,32 @@ function Profile({ syncStatus }: ProfileProps) {
             error: "Lỗi đồng bộ",
           }[syncStatus]}</span>
         </div>
+      </section>
+
+      <section className={`profile-cloud-card is-${cloudStatus}`} aria-live="polite">
+        <span className="profile-cloud-icon">
+          {cloudStatus === "synced" ? <CloudCheck size={18} /> : cloudStatus === "error" ? <CloudOff size={18} /> : <Cloud size={18} />}
+        </span>
+        <div><strong>ATI Cloud Profile</strong><p>{cloudMessage}</p></div>
+        <span className={`profile-cloud-pill is-${cloudStatus}`}>
+          {cloudStatus === "loading" ? "Đang tải" : cloudStatus === "saving" ? "Đang lưu" : cloudStatus === "synced" ? "Đã đồng bộ" : cloudStatus === "error" ? "Chưa kết nối" : "Sẵn sàng"}
+        </span>
+      </section>
+
+      <section className="profile-completion-card">
+        <div className="profile-completion-top">
+          <div>
+            <span>PROFILE COMPLETION</span>
+            <strong>Độ hoàn thiện hồ sơ</strong>
+          </div>
+          <b>{completionPercent}%</b>
+        </div>
+        <div className="profile-completion-track"><i style={{ width: `${completionPercent}%` }} /></div>
+        <p>{completionPercent === 100 ? "Hồ sơ của bạn đã đầy đủ thông tin cơ bản." : `Bạn đã hoàn thành ${completedFields}/${completionFields.length} thông tin cơ bản. Bổ sung thêm để hoàn thiện hồ sơ ATI.`}</p>
+        {avatarError && <div className="profile-avatar-error" role="alert">{avatarError}</div>}
+        {profile.avatarData && (
+          <button type="button" className="profile-avatar-remove" onClick={removeAvatar}><X size={13} /> Xóa ảnh đại diện</button>
+        )}
       </section>
 
       <section className="profile-card">
