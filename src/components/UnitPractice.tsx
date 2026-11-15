@@ -81,7 +81,7 @@ function readUnitPracticeProgress(unitNumber: number): Record<number, boolean> {
   } catch { return {}; }
 }
 
-function UnitPractice({ unit, onBack, language = "vi" }: UnitPracticeProps) {
+function UnitPractice({ unit, onBack }: UnitPracticeProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);
