@@ -30,6 +30,7 @@ import PublicHome from "./components/PublicHome";
 
 import Sidebar, { type TabType } from "./components/Sidebar";
 import "./App.css";
+import "./ATIExperience.css";
 
 const VALID_TABS: TabType[] = [
   "dashboard",
@@ -89,6 +90,7 @@ function App() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(() => localStorage.getItem("ati-notifications-enabled") !== "false");
   const [globalSearch, setGlobalSearch] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const globalSearchRef = useRef<HTMLDivElement>(null);
   const [selectedSearchIndex, setSelectedSearchIndex] = useState(0);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const accountMenuRef = useRef<HTMLDivElement>(null);
@@ -186,6 +188,24 @@ function App() {
     window.addEventListener("keydown", handleGlobalShortcut);
     return () => window.removeEventListener("keydown", handleGlobalShortcut);
   }, []);
+
+  useEffect(() => {
+    const closeGlobalSearch = (event: PointerEvent) => {
+      if (
+        globalSearchRef.current &&
+        !globalSearchRef.current.contains(event.target as Node)
+      ) {
+        setSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", closeGlobalSearch);
+    return () => document.removeEventListener("pointerdown", closeGlobalSearch);
+  }, []);
+
+  useEffect(() => {
+    setSearchOpen(false);
+  }, [activeTab]);
 
   useEffect(() => {
     const closeAccountMenu = (event: MouseEvent) => {
@@ -431,6 +451,7 @@ function App() {
           </div>
 
           <div
+            ref={globalSearchRef}
             className={`ati-global-search ${searchOpen ? "is-open" : ""}`}
             onClick={(event) => {
               if ((event.target as HTMLElement).closest(".ati-search-results")) return;

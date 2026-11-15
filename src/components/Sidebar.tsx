@@ -11,8 +11,6 @@ import {
   LayoutDashboard,
   Info,
   Layers,
-  PanelLeftClose,
-  PanelLeftOpen,
   UserRound,
   Settings as SettingsIcon,
 } from "lucide-react";
@@ -158,20 +156,10 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
           {!collapsed && (
             <span className="logo-text">
               <strong>GROUP</strong>
-              <small>TECHNOLOGY · AI · MANUFACTURING</small>
+              <small>TECHNOLOGY · AI</small>
             </span>
           )}
         </button>
-        {!collapsed && (
-          <button className="sidebar-collapse-button" type="button" onClick={onToggle} aria-label="Thu gọn menu">
-            <PanelLeftClose size={17} />
-          </button>
-        )}
-        {collapsed && (
-          <button className="sidebar-expand-button" type="button" onClick={onToggle} aria-label="Mở rộng menu">
-            <PanelLeftOpen size={16} />
-          </button>
-        )}
       </div>
 
       <div className="sidebar-scroll">
@@ -198,7 +186,14 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
           <button
             type="button"
             className={`module-heading ${activeGroup ? "module-active" : ""}`}
-            onClick={() => collapsed ? onToggle() : setLearningOpen((value) => !value)}
+            onClick={() => {
+              if (collapsed) {
+                setLearningOpen(true);
+                onToggle();
+              } else {
+                setLearningOpen((value) => !value);
+              }
+            }}
             title={collapsed ? "English Master" : undefined}
             aria-expanded={learningOpen}
           >
@@ -208,7 +203,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
           </button>
 
           {learningOpen && (
-            <nav className="sidebar-menu learning-groups" aria-label="English Master features">
+            <nav className="sidebar-menu learning-groups" aria-label={isEnglish ? "English Master features" : "Các chức năng học tiếng Anh"}>
             {learningGroups.map((group) => {
               const groupIsActive = group.items.some((item) => item.id === activeTab);
               const groupIsOpen = openGroups[group.id];
@@ -220,13 +215,14 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
                       className="learning-group-toggle"
                       onClick={() => toggleGroup(group.id)}
                       aria-expanded={groupIsOpen}
+                      aria-controls={`learning-group-${group.id}`}
                     >
                       <span>{isEnglish ? ({ overview: "OVERVIEW", practice: "PRACTICE", vocabulary: "VOCABULARY" } as const)[group.id] : group.label}</span>
                       <ChevronDown size={13} className={groupIsOpen ? "group-chevron open" : "group-chevron"} />
                     </button>
                   )}
                   {(collapsed || groupIsOpen) && (
-                    <div className="learning-group-items">
+                    <div className="learning-group-items" id={`learning-group-${group.id}`}>
                       {group.items.map(renderLearningItem)}
                     </div>
                   )}

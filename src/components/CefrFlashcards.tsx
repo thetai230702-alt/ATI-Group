@@ -485,7 +485,7 @@ function CefrFlashcards({ language = "vi" }: { language?: "vi" | "en" }) {
           <div className="cefr-card-actions">
             <button type="button" onClick={speakWord}>
               <Volume2 size={18} />
-              Nghe UK
+              Nghe US
             </button>
 
             <button

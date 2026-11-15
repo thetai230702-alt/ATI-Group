@@ -1,0 +1,425 @@
+/* ATI GROUP — unified learning workspace design, V69 */
+:root {
+  --ati-ui-blue: #0878c9;
+  --ati-ui-blue-deep: #075fa5;
+  --ati-ui-blue-soft: #eaf4fc;
+  --ati-ui-ink: #18324b;
+  --ati-ui-muted: #71869b;
+  --ati-ui-border: #dfe9f3;
+  --ati-ui-surface: #ffffff;
+  --ati-ui-shadow: 0 12px 34px rgba(19, 62, 104, .075);
+  --ati-ui-shadow-hover: 0 18px 42px rgba(19, 62, 104, .12);
+}
+
+.page-content > :is(
+  .checklist-page,
+  .units-page,
+  .listening-page,
+  .practice-page,
+  .flashcards-page,
+  .cefr-container,
+  .cefr-page,
+  .my-vocabulary,
+  .statistics-page,
+  .tenses-page,
+  .ati-dashboard
+) {
+  width: min(100%, 1480px);
+  margin-inline: auto;
+  animation: atiPageEnter .24s ease both;
+}
+
+@keyframes atiPageEnter {
+  from { opacity: .72; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-content :is(
+  .progress-card,
+  .stat-card,
+  .checklist-table-card,
+  .units-overview,
+  .units-summary-card,
+  .unit-card,
+  .listening-main-card,
+  .listening-settings-card,
+  .listening-progress-card,
+  .listening-sentence-card,
+  .listening-player-card,
+  .practice-progress-card,
+  .practice-vietnamese-card,
+  .practice-audio,
+  .flashcard-stat-card,
+  .flashcards-progress,
+  .cefr-intro,
+  .cefr-filter-panel,
+  .cefr-progress-card,
+  .cefr-topic-button,
+  .mv-card,
+  .statistics-panel,
+  .statistics-kpis article,
+  .tense-card
+) {
+  border-color: var(--ati-ui-border);
+  border-radius: 17px;
+  box-shadow: 0 8px 25px rgba(24, 62, 98, .055);
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.page-content :is(
+  .unit-card,
+  .cefr-topic-button,
+  .tense-card,
+  .ati-quick-card,
+  .ati-favorite-card
+):hover {
+  border-color: #bdd9f0;
+  box-shadow: var(--ati-ui-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.page-content :is(
+  .checklist-heading,
+  .units-overview,
+  .listening-heading,
+  .practice-topbar,
+  .flashcards-toolbar,
+  .cefr-intro,
+  .mv-header,
+  .statistics-hero,
+  .tenses-intro
+) {
+  border-radius: 19px;
+}
+
+.page-content :is(input, select, textarea) {
+  border-color: #d8e4ef;
+  border-radius: 10px;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.page-content :is(input, select, textarea):focus {
+  border-color: #69a9dc;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(8, 120, 201, .12);
+}
+
+.page-content button {
+  transition:
+    color .16s ease,
+    background-color .16s ease,
+    border-color .16s ease,
+    box-shadow .16s ease,
+    transform .16s ease;
+}
+
+.page-content button:focus-visible,
+.sidebar button:focus-visible {
+  outline: 3px solid rgba(8, 120, 201, .25);
+  outline-offset: 2px;
+}
+
+.page-content :is(
+  .filter-buttons button,
+  .units-status-filters button,
+  .cefr-level-button,
+  .cefr-topic-button,
+  .tenses-expand-button
+) {
+  border-radius: 10px;
+}
+
+.page-content :is(
+  .checklist-heading h2,
+  .units-overview h2,
+  .listening-heading h2,
+  .practice-unit-title,
+  .cefr-intro h2,
+  .statistics-hero h2,
+  .tenses-intro h2
+) {
+  letter-spacing: -.025em;
+}
+
+.page-content :is(
+  .checklist-heading p,
+  .units-overview p,
+  .listening-heading p,
+  .cefr-intro p,
+  .statistics-hero p,
+  .tenses-intro p
+) {
+  line-height: 1.65;
+}
+
+.page-content :is(
+  .checklist-table-wrapper,
+  .units-grid,
+  .flashcard-area,
+  .cefr-topic-grid,
+  .statistics-content-grid
+) {
+  min-width: 0;
+}
+
+.page-content :is(
+  .checklist-table-card,
+  .statistics-panel,
+  .mv-card
+) {
+  overflow: hidden;
+}
+
+.page-content :is(
+  .checklist-table thead th,
+  .checklist-table th
+) {
+  letter-spacing: .045em;
+}
+
+.page-content :is(
+  .progress-track,
+  .unit-sentence-progress-track,
+  .listening-progress-track,
+  .practice-progress-track,
+  .flashcards-progress-track,
+  .cefr-progress-track
+) {
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+.page-content :is(
+  .progress-track span,
+  .unit-sentence-progress-track span,
+  .listening-progress-fill,
+  .practice-progress-fill,
+  .flashcards-progress-fill,
+  .cefr-progress-fill
+) {
+  border-radius: inherit;
+}
+
+.page-content :is(
+  .checklist-empty,
+  .units-empty-state,
+  .cefr-state,
+  .mv-empty,
+  .statistics-note
+) {
+  border-radius: 15px;
+}
+
+/* Refined left navigation */
+.sidebar {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  border-right-color: #dce7f2;
+  box-shadow: 10px 0 32px rgba(17, 61, 103, .065);
+}
+
+.sidebar-brand-row {
+  min-height: 66px;
+  margin-bottom: 17px;
+}
+
+.sidebar-logo {
+  border-radius: 14px;
+  transition: background .18s ease, transform .18s ease;
+}
+
+.sidebar-logo:hover {
+  background: #f0f7fd;
+  transform: translateY(-1px);
+}
+
+.sidebar-collapse-button,
+.sidebar-expand-button {
+  color: #58748d;
+  background: #f3f8fc;
+  border-color: #e0eaf3;
+  border-radius: 10px;
+}
+
+.sidebar-collapse-button:hover,
+.sidebar-expand-button:hover {
+  color: var(--ati-ui-blue);
+  background: #eaf4fc;
+  border-color: #c8dff1;
+}
+
+.sidebar .menu-heading {
+  color: #8a9db0;
+  font-size: 9px;
+  letter-spacing: 1.2px;
+}
+
+.sidebar .module-heading {
+  min-height: 48px;
+  color: #075fa5;
+  background: linear-gradient(105deg, #eaf4fc 0%, #f2f8fd 100%);
+  border-color: #d4e6f5;
+  border-radius: 13px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.sidebar .module-heading-icon {
+  color: #fff;
+  background: linear-gradient(145deg, #0878c9, #075fa5);
+  border-radius: 9px;
+  box-shadow: 0 4px 10px rgba(8, 120, 201, .2);
+}
+
+.sidebar .learning-nav-group {
+  padding: 7px 0 8px;
+  border-bottom-color: #edf2f7;
+}
+
+.sidebar .learning-group-toggle {
+  min-height: 30px;
+  padding-inline: 10px;
+  color: #8094a8;
+  border-radius: 8px;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.sidebar .learning-group-toggle:hover {
+  color: #075fa5;
+  background: #f0f7fd;
+}
+
+.sidebar .learning-group-items {
+  gap: 4px;
+}
+
+.sidebar .menu-item {
+  min-height: 44px;
+  border-radius: 11px;
+  transition: color .16s ease, background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+.sidebar .menu-item:hover {
+  color: #075fa5;
+  background: #f2f8fd;
+  transform: translateX(2px);
+}
+
+.sidebar .menu-item.active {
+  color: #075fa5;
+  background: linear-gradient(100deg, #e8f3fc 0%, #f3f8fd 100%) !important;
+  border-color: #d3e5f4 !important;
+  box-shadow: inset 3px 0 0 #0878c9;
+}
+
+.sidebar .menu-item.active .menu-icon {
+  color: #fff;
+  background: linear-gradient(145deg, #1688d2, #075fa5);
+  border-color: transparent;
+  box-shadow: 0 4px 10px rgba(8, 120, 201, .17);
+}
+
+.sidebar .menu-icon {
+  border-radius: 10px;
+}
+
+.sidebar .active-indicator {
+  display: none;
+}
+
+.sidebar .sidebar-account-section,
+.sidebar .sidebar-platform-section {
+  border-top-color: #e9f0f6;
+}
+
+.sidebar .sidebar-footer {
+  border-top-color: #e4edf5;
+}
+
+.sidebar .sidebar-footer-text strong {
+  color: #254b6b;
+}
+
+.sidebar .sidebar-footer-text p {
+  color: #879bad;
+}
+
+.sidebar.collapsed .menu-item:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    box-shadow: 14px 0 38px rgba(17, 61, 103, .13);
+  }
+  .sidebar .menu-item {
+    min-height: 45px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-content > :is(
+    .checklist-page, .units-page, .listening-page, .practice-page,
+    .flashcards-page, .cefr-container, .cefr-page, .my-vocabulary,
+    .statistics-page, .tenses-page, .ati-dashboard
+  ) {
+    animation: none;
+  }
+  .page-content *,
+  .sidebar * {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+  }
+}
+
+/* Dark theme keeps the same hierarchy with dark surfaces. */
+.ati-theme-dark .page-content :is(
+  .progress-card, .stat-card, .checklist-table-card, .units-overview,
+  .units-summary-card, .unit-card, .listening-main-card,
+  .listening-settings-card, .listening-progress-card,
+  .listening-sentence-card, .listening-player-card,
+  .practice-progress-card, .practice-vietnamese-card, .practice-audio,
+  .flashcard-stat-card, .flashcards-progress, .cefr-intro,
+  .cefr-filter-panel, .cefr-progress-card, .cefr-topic-button,
+  .mv-card, .statistics-panel, .statistics-kpis article, .tense-card
+) {
+  border-color: #2c455b;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .16);
+}
+
+.ati-theme-dark .sidebar {
+  background: linear-gradient(180deg, #172b3e 0%, #142638 100%);
+  border-right-color: #2b455b;
+}
+
+.ati-theme-dark .sidebar .menu-item:hover {
+  color: #9bd1f5;
+  background: #203b52;
+}
+
+.ati-theme-dark .sidebar .menu-item.active {
+  color: #a8d8f6;
+  background: #203e57 !important;
+  border-color: #315a78 !important;
+  box-shadow: inset 3px 0 0 #2698e3;
+}
+
+.ati-theme-dark .sidebar .module-heading {
+  color: #a9d7f3;
+  background: linear-gradient(105deg, #1e3c55, #1a334a);
+  border-color: #315571;
+}
+
+.ati-theme-dark .sidebar .learning-group-toggle {
+  color: #93abc0;
+}
+
+.ati-theme-dark .sidebar .learning-group-toggle:hover {
+  color: #a9d7f3;
+  background: #203b52;
+}
+
+.ati-theme-dark .sidebar .sidebar-account-section,
+.ati-theme-dark .sidebar .sidebar-platform-section,
+.ati-theme-dark .sidebar .sidebar-footer {
+  border-color: #2b455b;
+}
