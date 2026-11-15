@@ -10,6 +10,7 @@ import "./UnitPractice.css";
 interface UnitPracticeProps {
   unit: Unit;
   onBack: () => void;
+  language?: "vi" | "en";
 }
 
 function normalizeText(value: string) {
@@ -80,7 +81,7 @@ function readUnitPracticeProgress(unitNumber: number): Record<number, boolean> {
   } catch { return {}; }
 }
 
-function UnitPractice({ unit, onBack }: UnitPracticeProps) {
+function UnitPractice({ unit, onBack, language = "vi" }: UnitPracticeProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState("");
   const [showAnswer, setShowAnswer] = useState(false);

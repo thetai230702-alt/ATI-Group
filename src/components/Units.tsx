@@ -108,7 +108,7 @@ function Units({ language = "vi" }: { language?: "vi" | "en" }) {
   }
 
   if (selectedUnit) {
-    return <UnitPractice unit={selectedUnit} onBack={() => {
+    return <UnitPractice unit={selectedUnit} language={language} onBack={() => {
       setSelectedUnit(null);
       setStudyStatuses(readStudyStatuses());
     }} />;
