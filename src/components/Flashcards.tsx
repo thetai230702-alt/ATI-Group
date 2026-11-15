@@ -378,8 +378,8 @@ function Flashcards({ language = "vi" }: { language?: "vi" | "en" }) {
                 setVoiceType(event.target.value as "uk" | "us")
               }
             >
-              <option value="uk">Anh - Anh (UK)</option>
               <option value="us">Anh - Mỹ (US)</option>
+              <option value="uk">Anh - Anh (UK)</option>
             </select>
           </div>
 

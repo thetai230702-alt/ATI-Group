@@ -237,7 +237,7 @@ function CefrFlashcards({ language = "vi" }: { language?: "vi" | "en" }) {
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(currentCard.word);
-    utterance.lang = "en-GB";
+    utterance.lang = "en-US";
     utterance.rate = 0.85;
 
     window.speechSynthesis.speak(utterance);

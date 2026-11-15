@@ -2724,3 +2724,292 @@ body { background: var(--ati-bg); color: var(--ati-ink); }
   .ati-language-switch button {min-width:34px;height:29px;padding:0 5px;gap:0}
   .ati-language-code {display:none}
 }
+
+
+/* =========================================================
+   ATI UI REFRESH — refined surfaces, clearer hierarchy,
+   consistent interaction states and responsive spacing.
+========================================================= */
+:root {
+  --ati-surface: #ffffff;
+  --ati-canvas: #f4f7fb;
+  --ati-line: #e2eaf2;
+  --ati-line-strong: #cbddeb;
+  --ati-text: #1b344b;
+  --ati-text-muted: #71869a;
+  --ati-card-shadow: 0 8px 26px rgba(22, 62, 94, .055);
+  --ati-card-shadow-hover: 0 14px 34px rgba(22, 62, 94, .10);
+  --ati-card-radius: 18px;
+}
+
+.app-container:not(.ati-theme-dark) {
+  background:
+    radial-gradient(ellipse at 92% 5%, rgba(8,120,201,.045), transparent 30%),
+    var(--ati-canvas);
+}
+.app-container:not(.ati-theme-dark) .main-content {
+  background: transparent;
+}
+.page-content {
+  width: 100%;
+  max-width: 1720px;
+  margin-inline: auto;
+  padding: 0 2px clamp(22px, 2.5vw, 38px);
+}
+.page-content > * {
+  animation: ati-page-enter .24s ease-out both;
+}
+@keyframes ati-page-enter {
+  from { opacity: .78; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Navigation and top bar */
+.topbar {
+  border-bottom: 2px solid var(--ati-blue) !important;
+  box-shadow: 0 7px 22px rgba(15, 57, 91, .095) !important;
+}
+.topbar::before {
+  opacity: .45 !important;
+}
+.topbar-tab {
+  min-height: 41px;
+  border-radius: 10px;
+  transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+}
+.topbar-tab.active {
+  box-shadow: 0 5px 14px rgba(8,120,201,.20);
+}
+.sidebar {
+  border-right-color: #e2eaf1;
+  box-shadow: 7px 0 24px rgba(18, 54, 82, .045);
+}
+.sidebar .menu-item {
+  min-height: 44px;
+  border-radius: 11px;
+  transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.sidebar .menu-item:hover {
+  transform: translateX(2px);
+}
+.sidebar .menu-item.active {
+  color: #075f9f;
+  background: linear-gradient(100deg, #eaf5fc 0%, #f7fbff 100%);
+  border-color: #cfe5f5;
+  box-shadow: inset 3px 0 0 #0878c9, 0 4px 12px rgba(8,120,201,.055);
+}
+.sidebar .menu-item.active .menu-icon {
+  background: linear-gradient(145deg, #0878c9, #075b9e);
+  border-color: transparent;
+  box-shadow: 0 4px 9px rgba(8,120,201,.18);
+}
+.sidebar .module-heading {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(8,120,201,.045);
+}
+.sidebar .learning-group-toggle {
+  min-height: 29px;
+  border-radius: 7px;
+  transition: color .16s ease, background .16s ease;
+}
+.sidebar .learning-group-toggle:hover {
+  color: #075f9f;
+  background: #f0f7fc;
+}
+
+/* Consistent surfaces across overview, learning and practice screens */
+.dashboard-kpi-card,
+.dashboard-panel,
+.ati-overview-summary article,
+.ati-overview-section,
+.ati-module-card,
+.ati-quick-card,
+.ati-favorite-card,
+.ati-settings-section,
+.ati-settings-hero,
+.listening-main-card,
+.listening-settings-card,
+.listening-progress-card,
+.listening-player-card,
+.listening-playlist-card,
+.listening-sentence-card,
+.practice-progress-card,
+.practice-question-card,
+.practice-audio,
+.practice-detail-card {
+  border-radius: var(--ati-card-radius);
+  box-shadow: var(--ati-card-shadow);
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.dashboard-panel,
+.ati-overview-section,
+.ati-settings-section,
+.listening-main-card,
+.listening-settings-card,
+.listening-progress-card,
+.listening-player-card,
+.practice-progress-card,
+.practice-question-card,
+.practice-audio,
+.practice-detail-card {
+  border-color: var(--ati-line);
+}
+.ati-module-card.is-active:hover,
+.ati-quick-card:hover,
+.ati-favorite-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ati-card-shadow-hover);
+}
+.dashboard-kpi-card:hover,
+.ati-overview-summary article:hover {
+  border-color: var(--ati-line-strong);
+  box-shadow: var(--ati-card-shadow-hover);
+}
+.listening-heading h2,
+.practice-unit-title h2 {
+  letter-spacing: -.35px;
+}
+.listening-settings-card {
+  gap: 14px;
+}
+.listening-setting label,
+.practice-section-label {
+  letter-spacing: .55px;
+}
+.listening-select-wrap select,
+.practice-select-wrap select,
+.flashcard-settings select,
+.mv-study-settings-row select {
+  min-height: 44px;
+  border-radius: 11px;
+}
+.listening-control-button,
+.listening-outline-button,
+.practice-replay-button {
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.listening-control-button:hover,
+.listening-outline-button:hover,
+.practice-replay-button:hover {
+  transform: translateY(-1px);
+}
+.listening-control-button.primary,
+.practice-play-button {
+  box-shadow: 0 6px 14px rgba(8, 94, 158, .18);
+}
+.practice-vietnamese-card {
+  box-shadow: 0 9px 25px rgba(22, 83, 125, .06);
+}
+
+/* Inputs and keyboard accessibility */
+.page-content input:not([type="checkbox"]):not([type="radio"]),
+.page-content select,
+.page-content textarea {
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.page-content input:focus-visible,
+.page-content select:focus-visible,
+.page-content textarea:focus-visible,
+.page-content button:focus-visible,
+.topbar button:focus-visible,
+.sidebar button:focus-visible {
+  outline: 3px solid rgba(8,120,201,.22);
+  outline-offset: 2px;
+}
+::selection {
+  color: #123b5d;
+  background: #cce9fb;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #c6d8e6 transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: #c6d8e6; border: 2px solid transparent; border-radius: 20px; background-clip: padding-box; }
+*::-webkit-scrollbar-thumb:hover { background: #9ebbd0; border: 2px solid transparent; background-clip: padding-box; }
+
+@media (max-width: 900px) {
+  .page-content { padding-inline: 0; }
+  .dashboard-kpi-card,
+  .dashboard-panel,
+  .ati-overview-section { border-radius: 15px; }
+}
+@media (max-width: 600px) {
+  .page-content { padding-bottom: 20px; }
+  .topbar { box-shadow: 0 5px 16px rgba(15,57,91,.09) !important; }
+  .sidebar .menu-item:hover { transform: none; }
+  .listening-main-card { padding: 15px; }
+  .listening-settings-card { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .practice-progress-card,
+  .practice-question-card,
+  .practice-audio,
+  .practice-detail-card { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-content > * { animation: none; }
+  .sidebar .menu-item,
+  .topbar-tab,
+  .dashboard-kpi-card,
+  .ati-overview-summary article { transition: none; }
+}
+
+/* Dark workspace counterparts */
+.ati-theme-dark .app-container,
+.app-container.ati-theme-dark {
+  background: #101d2a;
+}
+.ati-theme-dark .sidebar {
+  border-right-color: #294257;
+  box-shadow: 7px 0 24px rgba(0,0,0,.13);
+}
+.ati-theme-dark .sidebar .menu-item.active {
+  color: #a7d9f8;
+  background: linear-gradient(100deg, #203d55, #1b3449);
+  border-color: #315b79;
+  box-shadow: inset 3px 0 0 #168bd0;
+}
+.ati-theme-dark .sidebar .learning-group-toggle:hover {
+  color: #a7d9f8;
+  background: #20384d;
+}
+.ati-theme-dark .dashboard-kpi-card,
+.ati-theme-dark .dashboard-panel,
+.ati-theme-dark .ati-overview-summary article,
+.ati-theme-dark .ati-module-card,
+.ati-theme-dark .listening-main-card,
+.ati-theme-dark .listening-settings-card,
+.ati-theme-dark .listening-progress-card,
+.ati-theme-dark .listening-player-card,
+.ati-theme-dark .listening-playlist-card,
+.ati-theme-dark .listening-sentence-card,
+.ati-theme-dark .practice-progress-card,
+.ati-theme-dark .practice-question-card,
+.ati-theme-dark .practice-audio,
+.ati-theme-dark .practice-detail-card {
+  color: #dce8f2;
+  background-color: #1a2d3f;
+  border-color: #30495e;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+.ati-theme-dark .dashboard-kpi-card:hover,
+.ati-theme-dark .ati-overview-summary article:hover {
+  border-color: #4b7798;
+  box-shadow: 0 12px 28px rgba(0,0,0,.2);
+}
+.ati-theme-dark .listening-heading h2,
+.ati-theme-dark .practice-unit-title h2,
+.ati-theme-dark .practice-vietnamese {
+  color: #e5f1f9;
+}
+.ati-theme-dark .listening-settings-card label,
+.ati-theme-dark .listening-heading p,
+.ati-theme-dark .practice-progress-info,
+.ati-theme-dark .practice-hint {
+  color: #9bb0c1;
+}
+.ati-theme-dark .listening-select-wrap select,
+.ati-theme-dark .practice-select-wrap select {
+  color: #dce8f2;
+  background: #20364a;
+  border-color: #35516a;
+}

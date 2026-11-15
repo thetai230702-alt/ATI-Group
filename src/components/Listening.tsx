@@ -778,11 +778,11 @@ function Listening({ language = "vi" }: { language?: "vi" | "en" }) {
                 )
               }
             >
-              <option value="UK">
-                English - United Kingdom
-              </option>
               <option value="US">
                 English - United States
+              </option>
+              <option value="UK">
+                English - United Kingdom
               </option>
             </select>
 

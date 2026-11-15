@@ -87,7 +87,7 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
   const [showAnswer, setShowAnswer] = useState(false);
   const [checked, setChecked] = useState(false);
   const [speed, setSpeed] = useState(1);
-  const [voiceType, setVoiceType] = useState<"US" | "UK">("UK");
+  const [voiceType, setVoiceType] = useState<"US" | "UK">("US");
   const [playing, setPlaying] = useState(false);
   const [paused, setPaused] = useState(false);
   const [audioMessage, setAudioMessage] = useState("");
@@ -349,8 +349,8 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
               stopAudio();
               setVoiceType(event.target.value as "US" | "UK");
             }}>
-              <option value="UK">English (UK)</option>
               <option value="US">English (US)</option>
+              <option value="UK">English (UK)</option>
             </select>
           </label>
           <label className="practice-select-wrap practice-speed-select" aria-label="Tốc độ đọc">
