@@ -1061,3 +1061,215 @@
  .flashcard-stat-card strong{font-size:18px}
  .flashcard-stat-card span{font-size:11px}
 }
+
+
+
+/* =========================================================
+   ATI V70 — FLASHCARDS EXPERIENCE POLISH
+   Visual-only refinement; card state and learning logic stay intact.
+========================================================= */
+.flashcards-page {
+  max-width: 1180px;
+  margin-inline: auto;
+  gap: 22px;
+}
+.flashcards-stats { gap: 14px; }
+.flashcard-stat-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 92px;
+  border-color: #dce8f4;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #fff 0%, #f8fbff 100%);
+  box-shadow: 0 7px 22px rgba(25, 70, 112, .055);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.flashcard-stat-card::after {
+  content: "";
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  right: -34px;
+  bottom: -48px;
+  border-radius: 50%;
+  background: rgba(52, 142, 211, .055);
+}
+.flashcard-stat-card:hover {
+  transform: translateY(-3px);
+  border-color: #c2d9ef;
+  box-shadow: 0 12px 26px rgba(25, 70, 112, .09);
+}
+.flashcard-stat-icon.purple {
+  color: #1768ad;
+  background: #e8f3ff;
+}
+.flashcard-stat-icon.green {
+  color: #16845d;
+  background: #e8f7f0;
+}
+.flashcard-stat-icon.orange {
+  color: #bd7a24;
+  background: #fff4e3;
+}
+.flashcard-stat-card strong { color: #173f66; }
+.flashcards-toolbar {
+  align-items: end;
+  padding: 20px;
+  border-color: #dce8f4;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #fff, #f7fbff);
+  box-shadow: 0 7px 22px rgba(25, 70, 112, .045);
+}
+.flashcards-toolbar select,
+.flashcard-search-input {
+  min-height: 46px;
+  border-color: #d7e5f2;
+  border-radius: 12px;
+  background: #fff;
+}
+.flashcards-toolbar select:focus,
+.flashcard-search-input:focus-within {
+  border-color: #3988ca;
+  box-shadow: 0 0 0 4px rgba(40,123,193,.11);
+}
+.flashcards-progress {
+  border-color: #dce8f4;
+  border-radius: 15px;
+  background: linear-gradient(120deg, #fff, #f6faff);
+}
+.flashcards-progress-heading strong { color: #1768ad; }
+.flashcards-progress-track { height: 10px; background: #e7f0f8; }
+.flashcards-progress-fill {
+  background: linear-gradient(90deg, #55a9e8, #1768ad);
+  box-shadow: 0 0 12px rgba(40,123,193,.18);
+}
+.flashcard-area { max-width: 880px; }
+.flashcard-counter { color: #67819b; }
+.flashcard-status {
+  padding: 7px 12px;
+  border: 1px solid transparent;
+}
+.flashcard-status.remembered {
+  color: #13764f;
+  border-color: #ccebdc;
+  background: #eaf8f1;
+}
+.flashcard-status.learning {
+  color: #9a681c;
+  border-color: #f2dfb9;
+  background: #fff7e8;
+}
+.flashcard {
+  min-height: 390px;
+  border-color: #d5e5f3;
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 18px 48px rgba(22, 68, 111, .11);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.flashcard:hover {
+  transform: translateY(-3px);
+  border-color: #a9cce9;
+  box-shadow: 0 23px 54px rgba(22, 68, 111, .15);
+}
+.flashcard-face { min-height: 390px; padding: clamp(26px, 5vw, 52px) 28px; }
+.flashcard-front {
+  background:
+    radial-gradient(circle at 8% 8%, rgba(77, 159, 224, .17), transparent 34%),
+    radial-gradient(circle at 95% 95%, rgba(27, 103, 173, .09), transparent 38%),
+    linear-gradient(145deg, #fff, #f6fbff);
+}
+.flashcard-back {
+  background:
+    radial-gradient(circle at 8% 8%, rgba(47, 171, 123, .12), transparent 35%),
+    radial-gradient(circle at 95% 95%, rgba(77, 159, 224, .10), transparent 38%),
+    linear-gradient(145deg, #fff, #f6fcf9);
+}
+.flashcard-face-label {
+  color: #397aaE;
+  letter-spacing: 1.7px;
+}
+.flashcard-face h2 {
+  color: #173f66;
+  letter-spacing: -.5px;
+}
+.flashcard-ipa { color: #66819b; }
+.flashcard-speak {
+  color: #155c9f;
+  background: #e8f3ff;
+  border: 1px solid #d2e6f7;
+  box-shadow: 0 4px 12px rgba(25, 91, 151, .06);
+}
+.flashcard-speak:hover {
+  color: #fff;
+  background: linear-gradient(135deg, #3995df, #155c9f);
+}
+.flashcard-example {
+  border-color: #dce9f4;
+  border-radius: 14px;
+  background: rgba(255,255,255,.86);
+}
+.flashcard-pos {
+  color: #13764f;
+  border: 1px solid #ccebdc;
+  background: #eaf8f1;
+}
+.flashcard-navigation button,
+.flashcard-answer-actions button {
+  min-height: 46px;
+  border-radius: 12px;
+}
+.flashcard-nav-button {
+  border-color: #d7e5f2;
+  background: #fff;
+}
+.flashcard-nav-button:hover {
+  color: #155c9f;
+  border-color: #9fc4e5;
+  background: #f4f9ff;
+}
+.flashcard-shuffle-button {
+  border-color: #1768ad;
+  background: linear-gradient(120deg, #3995df, #155c9f);
+  box-shadow: 0 5px 14px rgba(26, 104, 176, .16);
+}
+.flashcard-shuffle-button:hover { background: linear-gradient(120deg, #287fc5, #104d86); }
+.flashcard-remembered-button {
+  background: linear-gradient(120deg, #20a879, #13764f);
+  border-color: #16845d;
+  box-shadow: 0 5px 14px rgba(22, 132, 93, .14);
+}
+.flashcard-learning-button {
+  color: #a34a4a;
+  border-color: #f0d4d4;
+  background: #fff5f5;
+}
+.flashcards-bottom {
+  border-color: #dce8f4;
+  border-radius: 14px;
+  background: linear-gradient(120deg, #fff, #f8fbff);
+}
+@media (max-width: 700px) {
+  .flashcards-page { gap: 16px; }
+  .flashcard-stat-card { min-height: 82px; }
+  .flashcard { min-height: 330px; border-radius: 20px; }
+  .flashcard-face { min-height: 330px; }
+  .flashcard-navigation { flex-wrap: wrap; }
+}
+@media (max-width: 480px) {
+  .flashcards-toolbar { padding: 13px; }
+  .flashcard-area { padding-top: 2px; }
+  .flashcard { min-height: 310px; }
+  .flashcard-face { min-height: 310px; padding: 26px 18px; }
+  .flashcard-face-label { font-size: 10px; }
+  .flashcard-ipa { font-size: 16px; }
+  .flashcard-navigation button,
+  .flashcard-answer-actions button { padding-inline: 12px; font-size: 12px; }
+  .flashcard-answer-actions { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flashcards-page *, .flashcards-page *::before, .flashcards-page *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
