@@ -10,11 +10,12 @@ import "./Auth.css";
 
 interface LoginProps {
   onSwitch: () => void;
+  onBack?: () => void;
 }
 
 const REMEMBERED_EMAIL_KEY = "ati_remembered_email";
 
-function Login({ onSwitch }: LoginProps) {
+function Login({ onSwitch, onBack }: LoginProps) {
   const [email, setEmail] = useState(() => {
     try {
       return localStorage.getItem(REMEMBERED_EMAIL_KEY) || "";
@@ -137,9 +138,10 @@ function Login({ onSwitch }: LoginProps) {
           </div>
 
           <div className="auth-heading">
+            {onBack && <button type="button" className="auth-back-home" onClick={onBack}>← Quay lại trang ATI</button>}
             <span className="auth-heading-kicker">WELCOME BACK</span>
-            <h1>Chào mừng bạn đến với ATI!</h1>
-            <p>Đăng nhập để tiếp tục không gian làm việc của bạn.</p>
+            <h1>Chào mừng trở lại!</h1>
+            <p>Đăng nhập để tiếp tục hành trình cùng hệ sinh thái ATI Group.</p>
           </div>
 
           <form onSubmit={handleLogin} className="auth-form">
@@ -150,7 +152,7 @@ function Login({ onSwitch }: LoginProps) {
                 <input
                   id="login-email"
                   type="email"
-                  placeholder="name@company.com"
+                  placeholder="you@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"

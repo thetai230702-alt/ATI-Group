@@ -126,3 +126,128 @@ a { color:var(--ati-blue); }
 .ati-module-action { background:linear-gradient(100deg,#0878c9,#075fa5);box-shadow:0 5px 12px rgba(8,95,165,.15); }
 .ati-module-action:hover { background:linear-gradient(100deg,#ff8500,#e66f00); }
 .ati-overview-footer strong { color:#0878c9; }
+
+
+/* V46 — Command Center quick actions */
+.ati-hero-primary-action {
+  display:inline-flex;align-items:center;gap:9px;margin-top:20px;padding:10px 14px;
+  color:#fff;background:linear-gradient(110deg,#0878c9,#075fa5);
+  border:0;border-radius:9px;font-size:10px;font-weight:850;
+  box-shadow:0 7px 17px rgba(8,95,165,.16);cursor:pointer;
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+}
+.ati-hero-primary-action:hover {transform:translateY(-2px);box-shadow:0 11px 22px rgba(8,95,165,.22);background:linear-gradient(110deg,#0b86d9,#0868b5)}
+.ati-quick-access {
+  padding:19px 21px;background:#fff;border:1px solid #dce8f1;border-radius:16px;
+  box-shadow:0 8px 24px rgba(8,65,110,.035);
+}
+.ati-quick-access-heading {display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+.ati-quick-access-heading>div>span {color:#8ba2b8;font-size:8px;font-weight:900;letter-spacing:1.2px}
+.ati-quick-access-heading h3 {margin:5px 0 0;color:#18344d;font-size:17px;font-weight:900}
+.ati-quick-access-heading>small {color:#91a3b4;font-size:9px}
+.ati-quick-access-grid {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ati-quick-access-grid button {
+  display:flex;align-items:center;gap:10px;min-width:0;padding:12px;
+  text-align:left;background:linear-gradient(145deg,#fff,#f8fbfe);
+  border:1px solid #e2ebf3;border-radius:11px;cursor:pointer;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.ati-quick-access-grid button:hover {transform:translateY(-2px);border-color:#b9d8ed;box-shadow:0 8px 18px rgba(8,95,165,.08)}
+.ati-quick-icon {width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;color:#0878c9;background:#eaf4fc;border-radius:10px}
+.ati-quick-access-grid button>span:nth-child(2) {display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}
+.ati-quick-access-grid strong {overflow:hidden;color:#25445f;font-size:9px;font-weight:850;text-overflow:ellipsis;white-space:nowrap}
+.ati-quick-access-grid small {overflow:hidden;color:#91a3b4;font-size:8px;text-overflow:ellipsis;white-space:nowrap}
+.ati-quick-access-grid button>svg {flex:0 0 auto;color:#9ab0c1}
+@media(max-width:1050px) {.ati-quick-access-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px) {
+ .ati-quick-access{padding:15px;border-radius:14px}
+ .ati-quick-access-grid{gap:8px}
+ .ati-quick-access-grid button{padding:10px;gap:8px}
+ .ati-quick-icon{width:32px;height:32px;flex-basis:32px}
+ .ati-quick-access-heading h3{font-size:15px}
+}
+@media(max-width:420px) {
+ .ati-quick-access-grid{grid-template-columns:1fr}
+ .ati-quick-access-grid button{min-height:56px}
+ .ati-quick-access-heading>small{display:none}
+}
+
+
+/* V53 — personal favorites and customizable quick access */
+.ati-favorites-section {
+  padding:18px 20px;background:linear-gradient(135deg,#f2f8fd,#fff);
+  border:1px solid #d9e9f5;border-radius:16px;
+  box-shadow:0 8px 22px rgba(8,65,110,.035);
+}
+.ati-favorites-heading {
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:13px;
+}
+.ati-favorites-heading>div>span {
+  color:#d28a2d;font-size:8px;font-weight:900;letter-spacing:1.2px;
+}
+.ati-favorites-heading h3 {
+  margin:5px 0 0;color:#183b5d;font-size:17px;font-weight:900;
+}
+.ati-favorites-heading>span {
+  color:#8499aa;font-size:9px;font-weight:700;
+}
+.ati-favorites-grid { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px; }
+.ati-favorite-card,.ati-quick-card {
+  position:relative;display:flex;align-items:center;min-width:0;
+  background:#fff;border:1px solid #e1eaf2;border-radius:11px;
+  transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.ati-favorite-card:hover,.ati-quick-card:hover {
+  transform:translateY(-2px);border-color:#b9d8ed;
+  box-shadow:0 8px 18px rgba(8,95,165,.075);
+}
+.ati-favorite-open,.ati-quick-open {
+  display:flex;align-items:center;gap:10px;flex:1;min-width:0;
+  min-height:62px;padding:10px;color:#25445f;background:transparent;
+  border:0;border-radius:11px;text-align:left;cursor:pointer;
+}
+.ati-favorite-open>span:nth-child(2),.ati-quick-open>span:nth-child(2) {
+  display:flex;flex:1;flex-direction:column;gap:4px;min-width:0;
+}
+.ati-favorite-open strong,.ati-quick-open strong {
+  overflow:hidden;color:#25445f;font-size:9px;font-weight:850;
+  text-overflow:ellipsis;white-space:nowrap;
+}
+.ati-favorite-open small,.ati-quick-open small {
+  overflow:hidden;color:#91a3b4;font-size:8px;text-overflow:ellipsis;white-space:nowrap;
+}
+.ati-favorite-open>svg:last-child,.ati-quick-open>svg:last-child {
+  flex:0 0 auto;color:#9ab0c1;
+}
+.ati-favorite-remove,.ati-quick-favorite {
+  display:grid;place-items:center;flex:0 0 30px;width:30px;height:30px;
+  margin-right:8px;color:#a4b5c3;background:#f7fafc;
+  border:1px solid #e8eef3;border-radius:8px;cursor:pointer;
+  transition:color .15s ease,background .15s ease,border-color .15s ease,transform .15s ease;
+}
+.ati-favorite-remove { color:#d38a2c;background:#fff8ed;border-color:#f4dfbd; }
+.ati-favorite-remove:hover,.ati-quick-favorite:hover {
+  color:#d38a2c;background:#fff8ed;border-color:#f0d4a6;transform:scale(1.04);
+}
+.ati-quick-access-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+.ati-quick-card .ati-quick-open { padding-right:2px; }
+.ati-quick-favorite.is-favorite {
+  color:#d38a2c;background:#fff8ed;border-color:#f4dfbd;
+}
+.ati-quick-access-heading>small { color:#91a3b4; }
+@media(max-width:1050px) {
+  .ati-favorites-grid,.ati-quick-access-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:600px) {
+  .ati-favorites-section { padding:15px;border-radius:14px; }
+  .ati-favorites-grid,.ati-quick-access-grid { gap:8px; }
+  .ati-favorite-open,.ati-quick-open { gap:8px;padding:9px; }
+  .ati-favorites-heading h3 { font-size:15px; }
+}
+@media(max-width:420px) {
+  .ati-favorites-grid,.ati-quick-access-grid { grid-template-columns:1fr; }
+  .ati-favorites-heading>span { font-size:8px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .ati-favorite-card,.ati-quick-card,.ati-favorite-remove,.ati-quick-favorite { transition:none; }
+}

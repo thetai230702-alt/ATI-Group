@@ -1,5 +1,9 @@
 import {
   ArrowRight,
+  BookOpen,
+  ClipboardCheck,
+  Headphones,
+  Layers,
   Bot,
   Boxes,
   Building2,
@@ -10,8 +14,11 @@ import {
   Network,
   Settings2,
   Sparkles,
+  Star,
   Workflow,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { auth } from "../firebase";
 import type { TabType } from "./Sidebar";
 import "./Dashboard.css";
 
@@ -75,7 +82,47 @@ const modules = [
   },
 ];
 
+const quickLinks: { id: string; title: string; description: string; tab: TabType; icon: typeof BookOpen }[] = [
+  { id: "units", title: "Luyện tập 1.500 câu", description: "Thực hành dịch câu", tab: "units", icon: BookOpen },
+  { id: "listening", title: "Luyện nghe", description: "Nghe và luyện phát âm", tab: "listening", icon: Headphones },
+  { id: "flashcards", title: "Flashcards", description: "Ôn tập từ vựng", tab: "flashcards", icon: Layers },
+  { id: "checklist", title: "Checklist học tập", description: "Theo dõi mục tiêu", tab: "checklist", icon: ClipboardCheck },
+];
+
 function Dashboard({ displayName, onNavigate }: DashboardProps) {
+  const favoriteStorageKey = `ati-favorites-${auth.currentUser?.uid ?? "guest"}`;
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favoritesReady, setFavoritesReady] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(favoriteStorageKey);
+      const parsed = stored ? JSON.parse(stored) : [];
+      setFavorites(Array.isArray(parsed) ? parsed.filter((id): id is string =>
+        quickLinks.some((link) => link.id === id)
+      ) : []);
+    } catch {
+      setFavorites([]);
+    } finally {
+      setFavoritesReady(true);
+    }
+  }, [favoriteStorageKey]);
+
+  useEffect(() => {
+    if (!favoritesReady) return;
+    try {
+      localStorage.setItem(favoriteStorageKey, JSON.stringify(favorites));
+    } catch {
+      // Favorites remain usable for the current session if storage is unavailable.
+    }
+  }, [favorites, favoritesReady, favoriteStorageKey]);
+
+  const toggleFavorite = (id: string) => {
+    setFavorites((current) =>
+      current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
+    );
+  };
+
   const firstName = displayName.trim().split(/\s+/).slice(-1)[0] || "bạn";
   const activeModules = modules.filter((module) => module.active).length;
 
@@ -93,6 +140,13 @@ function Dashboard({ displayName, onNavigate }: DashboardProps) {
             <span><Network size={14} /> Một nền tảng · Nhiều hệ sinh thái</span>
             <span><Layers3 size={14} /> Phát triển theo từng phân hệ</span>
           </div>
+          <button
+            type="button"
+            className="ati-hero-primary-action"
+            onClick={() => onNavigate("learning-dashboard")}
+          >
+            Khám phá không gian học tập <ArrowRight size={15} />
+          </button>
         </div>
         <div className="ati-overview-hero-art" aria-hidden="true">
           <div className="ati-orbit orbit-a" />
@@ -118,6 +172,66 @@ function Dashboard({ displayName, onNavigate }: DashboardProps) {
           <span className="ati-summary-icon"><Settings2 size={19} /></span>
           <div><small>Định hướng</small><strong>Technology · AI</strong><em>Manufacturing · Business</em></div>
         </article>
+      </section>
+
+      {favorites.length > 0 && (
+        <section className="ati-favorites-section" aria-label="Tính năng yêu thích">
+          <div className="ati-favorites-heading">
+            <div><span>YOUR FAVORITES</span><h3>Truy cập yêu thích</h3></div>
+            <span>{favorites.length} mục đã ghim</span>
+          </div>
+          <div className="ati-favorites-grid">
+            {quickLinks.filter((link) => favorites.includes(link.id)).map((link) => {
+              const Icon = link.icon;
+              return (
+                <article className="ati-favorite-card" key={link.id}>
+                  <button type="button" className="ati-favorite-open" onClick={() => onNavigate(link.tab)}>
+                    <span className="ati-quick-icon"><Icon size={19} /></span>
+                    <span><strong>{link.title}</strong><small>{link.description}</small></span>
+                    <ArrowRight size={15} />
+                  </button>
+                  <button
+                    type="button"
+                    className="ati-favorite-remove"
+                    onClick={() => toggleFavorite(link.id)}
+                    aria-label={`Bỏ yêu thích ${link.title}`}
+                    title="Bỏ khỏi yêu thích"
+                  ><Star size={16} fill="currentColor" /></button>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      <section className="ati-quick-access" aria-label="Truy cập nhanh">
+        <div className="ati-quick-access-heading">
+          <div><span>QUICK ACCESS</span><h3>Lối tắt công việc</h3></div>
+          <small>Ghim ngôi sao để tạo danh sách yêu thích</small>
+        </div>
+        <div className="ati-quick-access-grid">
+          {quickLinks.map((link) => {
+            const Icon = link.icon;
+            const isFavorite = favorites.includes(link.id);
+            return (
+              <article className="ati-quick-card" key={link.id}>
+                <button type="button" className="ati-quick-open" onClick={() => onNavigate(link.tab)}>
+                  <span className="ati-quick-icon"><Icon size={19} /></span>
+                  <span><strong>{link.title}</strong><small>{link.description}</small></span>
+                  <ArrowRight size={15} />
+                </button>
+                <button
+                  type="button"
+                  className={`ati-quick-favorite ${isFavorite ? "is-favorite" : ""}`}
+                  onClick={() => toggleFavorite(link.id)}
+                  aria-label={`${isFavorite ? "Bỏ" : "Thêm"} ${link.title} ${isFavorite ? "khỏi" : "vào"} yêu thích`}
+                  aria-pressed={isFavorite}
+                  title={isFavorite ? "Bỏ khỏi yêu thích" : "Thêm vào yêu thích"}
+                ><Star size={15} fill={isFavorite ? "currentColor" : "none"} /></button>
+              </article>
+            );
+          })}
+        </div>
       </section>
 
       <section className="ati-overview-section">

@@ -2254,3 +2254,272 @@ body { background: var(--ati-bg); color: var(--ati-ink); }
   .topbar { height:60px !important; min-height:60px !important; }
   .sidebar { top:60px !important; height:calc(100dvh - 60px) !important; }
 }
+
+/* V49 — loading screen aligned with the signed-in workspace palette */
+.auth-loading {
+  position:relative;isolation:isolate;overflow:hidden;min-height:100svh;
+  display:grid;place-items:center;padding:24px;
+  color:#18344d;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(8,120,201,.075),transparent 43%),
+    linear-gradient(135deg,#f7fbff 0%,#f1f6fb 55%,#ffffff 100%);
+}
+.auth-loading::before,.auth-loading::after {
+  content:"";position:absolute;z-index:-1;border:1px solid rgba(8,120,201,.10);
+  border-radius:50%;width:min(72vw,650px);aspect-ratio:1;
+}
+.auth-loading::before { animation:ati-loading-orbit 24s linear infinite; }
+.auth-loading::after {
+  width:min(54vw,480px);border-style:dashed;
+  border-color:rgba(8,120,201,.08);opacity:.85;
+  animation:ati-loading-orbit 32s linear infinite reverse;
+}
+.auth-loading-card {
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  width:min(350px,90vw);padding:34px 30px;
+  border:1px solid #e0eaf3;border-top:3px solid #0878c9;border-radius:22px;
+  background:rgba(255,255,255,.90);backdrop-filter:blur(18px);
+  box-shadow:0 22px 60px rgba(8,65,110,.09);
+}
+.auth-loading-logo {
+  width:112px;height:78px;object-fit:contain;
+  filter:drop-shadow(0 5px 12px rgba(8,65,110,.08));
+}
+.auth-loading-title { color:#16436a;font-size:13px;font-weight:900;letter-spacing:3px; }
+.auth-loading-caption { color:#71869a;font-size:11px;text-align:center; }
+.auth-loading-progress {
+  width:150px;height:3px;margin-top:12px;overflow:hidden;
+  border-radius:10px;background:#e6eff6;
+}
+.auth-loading-progress i {
+  display:block;width:42%;height:100%;border-radius:10px;
+  background:linear-gradient(90deg,#0878c9,#ff9a32);
+  animation:ati-loading-progress 1.35s ease-in-out infinite;
+}
+.auth-loading-orbit {
+  position:absolute;width:8px;height:8px;border-radius:50%;
+  background:#ff9a32;box-shadow:0 0 16px rgba(255,154,50,.28);
+}
+.auth-loading-orbit-one { top:24%;left:24%; }
+.auth-loading-orbit-two {
+  right:22%;bottom:24%;width:6px;height:6px;
+  background:#0878c9;box-shadow:0 0 16px rgba(8,120,201,.22);
+}
+@keyframes ati-loading-orbit { from{transform:rotate(0)}to{transform:rotate(360deg)} }
+@keyframes ati-loading-progress { 0%{transform:translateX(-110%)}100%{transform:translateX(360%)} }
+@media(prefers-reduced-motion:reduce) {
+ .auth-loading::before,.auth-loading::after,.auth-loading-progress i { animation:none !important; }
+}
+
+
+/* V50 — command search for fast access across ATI modules */
+.topbar { gap:18px; }
+.ati-global-search {
+  position:relative;display:flex;align-items:center;gap:10px;
+  width:min(350px,29vw);height:40px;flex:0 1 350px;
+  padding:0 11px;color:rgba(255,255,255,.82);
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);border-radius:10px;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.ati-global-search:focus-within,.ati-global-search.is-open {
+  background:rgba(255,255,255,.17);border-color:rgba(255,255,255,.42);
+  box-shadow:0 0 0 3px rgba(255,255,255,.07);
+}
+.ati-global-search>svg { flex:0 0 auto;color:#d7ecfc; }
+.ati-global-search input {
+  width:100%;min-width:0;height:100%;padding:0;
+  color:#fff;background:transparent;border:0;outline:0;
+  font-size:11px;font-weight:600;
+}
+.ati-global-search input::placeholder { color:rgba(239,247,255,.72); }
+.ati-global-search input::-webkit-search-cancel-button { cursor:pointer; }
+.ati-global-search kbd {
+  display:inline-flex;align-items:center;gap:3px;flex:0 0 auto;
+  padding:3px 5px;color:rgba(255,255,255,.76);
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);
+  border-radius:5px;font:700 9px 'Be Vietnam Pro',sans-serif;
+}
+.ati-search-results {
+  position:absolute;z-index:1000;top:calc(100% + 10px);left:0;right:0;
+  padding:9px;background:#fff;border:1px solid #e0eaf3;border-radius:13px;
+  box-shadow:0 18px 48px rgba(8,42,72,.20);
+  color:#18344d;
+}
+.ati-search-results-label {
+  padding:7px 9px 8px;color:#91a4b5;font-size:8px;font-weight:900;letter-spacing:1.1px;
+}
+.ati-search-results>button {
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  width:100%;padding:10px 9px;color:#294b67;background:#fff;
+  border:0;border-radius:8px;text-align:left;font-size:11px;font-weight:750;
+  transition:background .15s ease,color .15s ease;
+}
+.ati-search-results>button:hover,.ati-search-results>button:focus-visible {
+  color:#0878c9;background:#eef7fd;outline:0;
+}
+.ati-search-results>button svg { color:#8ba8bd; }
+.ati-search-results>p { margin:5px 9px 10px;color:#7c91a3;font-size:11px; }
+.ati-search-hint {
+  margin-top:5px;padding:9px 8px 4px;color:#9aabba;
+  border-top:1px solid #edf2f6;font-size:8px;
+}
+@media(max-width:900px) {
+  .ati-global-search { width:min(280px,28vw);flex-basis:280px; }
+}
+@media(max-width:650px) {
+  .topbar { gap:7px; }
+  .ati-global-search { width:36px;height:36px;flex:0 0 36px;gap:0;padding:0;justify-content:center; }
+  .ati-global-search input,.ati-global-search kbd { display:none; }
+  .ati-global-search:focus-within,.ati-global-search.is-open {
+    position:absolute;left:82px;right:100px;top:13px;z-index:700;
+    width:auto;height:36px;padding:0 9px;justify-content:flex-start;
+  }
+  .ati-global-search.is-open input { display:block; }
+  .ati-global-search.is-open kbd { display:none; }
+  .ati-search-results { left:-1px;right:-1px; }
+}
+
+
+/* V51 — compact, branded account menu */
+.topbar-right { gap:10px; }
+.ati-account-menu-wrap { position:relative; }
+.ati-account-trigger {
+  display:flex;align-items:center;gap:10px;min-height:46px;padding:5px 10px 5px 6px;
+  color:#fff;background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.22);border-radius:12px;
+  transition:background .18s ease,border-color .18s ease,box-shadow .18s ease;
+}
+.ati-account-trigger:hover,.ati-account-trigger.is-open {
+  background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.38);
+  box-shadow:0 5px 16px rgba(5,35,66,.10);
+}
+.ati-account-avatar {
+  display:grid;place-items:center;overflow:hidden;flex:0 0 34px;width:34px;height:34px;
+  color:#075e9f;background:linear-gradient(145deg,#fff,#e8f4fc);
+  border:2px solid rgba(255,255,255,.78);border-radius:50%;
+  font-size:13px;font-weight:900;
+}
+.ati-account-avatar img { width:100%;height:100%;object-fit:cover; }
+.ati-account-trigger-copy { display:flex;flex-direction:column;gap:3px;min-width:0;text-align:left; }
+.ati-account-trigger-copy strong { max-width:130px;overflow:hidden;color:#fff;font-size:10px;font-weight:850;text-overflow:ellipsis;white-space:nowrap; }
+.ati-account-trigger-copy small { color:rgba(239,247,255,.72);font-size:8px;font-weight:650; }
+.ati-account-chevron { color:rgba(255,255,255,.78);transition:transform .18s ease; }
+.ati-account-trigger.is-open .ati-account-chevron { transform:rotate(180deg); }
+.ati-account-popover {
+  position:absolute;z-index:1200;top:calc(100% + 12px);right:0;
+  width:min(310px,calc(100vw - 24px));padding:10px;
+  color:#18344d;background:#fff;border:1px solid #e1eaf2;border-radius:16px;
+  box-shadow:0 22px 60px rgba(8,42,72,.22);
+  animation:ati-account-in .16s ease-out both;
+}
+.ati-account-popover::before {
+  content:"";position:absolute;top:-6px;right:24px;width:11px;height:11px;
+  background:#fff;border-left:1px solid #e1eaf2;border-top:1px solid #e1eaf2;
+  transform:rotate(45deg);
+}
+.ati-account-popover-head {
+  display:flex;align-items:center;gap:11px;padding:10px 9px 13px;
+}
+.ati-account-avatar-large { width:43px;height:43px;flex-basis:43px;color:#fff;background:linear-gradient(145deg,#087fc9,#07558f);border-color:#e5f1f9;font-size:16px; }
+.ati-account-popover-head>div { display:flex;flex-direction:column;gap:4px;min-width:0; }
+.ati-account-popover-head strong { color:#173b5c;font-size:12px;font-weight:900; }
+.ati-account-popover-head span:not(.ati-account-avatar) { overflow:hidden;color:#8397a9;font-size:9px;text-overflow:ellipsis;white-space:nowrap; }
+.ati-account-status {
+  display:flex;align-items:center;gap:7px;margin:0 5px 8px;padding:8px 9px;
+  color:#168366;background:#eff9f5;border-radius:8px;font-size:9px;font-weight:750;
+}
+.ati-account-divider { height:1px;margin:7px 4px;background:#edf1f5; }
+.ati-account-popover>button {
+  display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:0 10px;
+  color:#526d83;background:#fff;border:0;border-radius:9px;text-align:left;
+  font-size:10px;font-weight:750;transition:background .15s ease,color .15s ease;
+}
+.ati-account-popover>button:hover,.ati-account-popover>button:focus-visible {
+  color:#0878c9;background:#eff7fc;outline:0;
+}
+.ati-account-popover>button>span { flex:1; }
+.ati-account-popover>button>svg:last-child { color:#9ab0c1; }
+.ati-account-popover>button.ati-account-logout { color:#c35443; }
+.ati-account-popover>button.ati-account-logout:hover { color:#b53c2b;background:#fff2ef; }
+.ati-account-popover-foot {
+  padding:9px 7px 3px;color:#a3b1bd;text-align:center;
+  font-size:7px;font-weight:850;letter-spacing:1.1px;
+}
+@keyframes ati-account-in {
+  from { opacity:0;transform:translateY(-5px) scale(.985); }
+  to { opacity:1;transform:translateY(0) scale(1); }
+}
+@media(max-width:600px) {
+  .ati-account-trigger { min-height:36px;padding:2px 5px;gap:0;border-radius:10px; }
+  .ati-account-trigger-copy,.ati-account-chevron { display:none; }
+  .ati-account-avatar { width:30px;height:30px;flex-basis:30px; }
+  .ati-account-popover { top:calc(100% + 10px); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .ati-account-popover { animation:none; }
+  .ati-account-trigger,.ati-account-chevron { transition:none; }
+}
+
+
+/* V52 — restore contrast for the white ATI compact header.
+   The V41 header intentionally uses a white canvas, so V50/V51 controls
+   must use dark-blue foregrounds rather than translucent white text. */
+.topbar {
+  background:rgba(255,255,255,.98) !important;
+  color:#183b5d !important;
+  border-top:0 !important;
+  border-bottom:2px solid #0878c9 !important;
+  box-shadow:0 5px 18px rgba(8,65,110,.07) !important;
+}
+.topbar-page-info h1 {
+  color:#075fa5;
+}
+.ati-global-search {
+  color:#0878c9 !important;
+  background:#f3f8fc !important;
+  border:1px solid #dce8f2 !important;
+  box-shadow:inset 0 1px 2px rgba(8,65,110,.025);
+}
+.ati-global-search:focus-within,.ati-global-search.is-open {
+  background:#fff !important;
+  border-color:#8fc5e8 !important;
+  box-shadow:0 0 0 3px rgba(8,120,201,.09) !important;
+}
+.ati-global-search>svg { color:#0878c9 !important; }
+.ati-global-search input { color:#183b5d !important; }
+.ati-global-search input::placeholder { color:#8ca2b6 !important; }
+.ati-global-search kbd {
+  color:#5d7891 !important;
+  background:#fff !important;
+  border-color:#dce8f2 !important;
+}
+.topbar-right {
+  border-left:1px solid #e2ebf2;
+}
+.ati-account-trigger {
+  color:#183b5d !important;
+  background:#f3f8fc !important;
+  border:1px solid #dce8f2 !important;
+  box-shadow:none !important;
+}
+.ati-account-trigger:hover,.ati-account-trigger.is-open {
+  color:#075fa5 !important;
+  background:#eaf4fb !important;
+  border-color:#b8d7eb !important;
+  box-shadow:0 4px 12px rgba(8,65,110,.07) !important;
+}
+.ati-account-trigger-copy strong { color:#214a6d !important; }
+.ati-account-trigger-copy small { color:#8298ab !important; }
+.ati-account-chevron { color:#7892a8 !important; }
+.ati-account-avatar {
+  color:#fff !important;
+  background:linear-gradient(145deg,#087fc9,#07558f) !important;
+  border-color:#fff !important;
+}
+@media(max-width:650px) {
+  .ati-global-search.is-open {
+    background:#fff !important;
+    border-color:#8fc5e8 !important;
+  }
+}

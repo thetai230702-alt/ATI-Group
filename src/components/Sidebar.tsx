@@ -14,6 +14,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   UserRound,
+  Settings as SettingsIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import "./Sidebar.css";
@@ -30,13 +31,15 @@ export type TabType =
   | "tenses"
   | "my-vocabulary"
   | "information"
-  | "profile";
+  | "profile"
+  | "settings";
 
 interface SidebarProps {
   activeTab: TabType;
   onTabChange: (tab: TabType) => void;
   collapsed: boolean;
   onToggle: () => void;
+  language?: "vi" | "en";
 }
 
 type LearningItem = {
@@ -82,7 +85,8 @@ const learningGroups: LearningGroup[] = [
   },
 ];
 
-function Sidebar({ activeTab, onTabChange, collapsed, onToggle }: SidebarProps) {
+function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" }: SidebarProps) {
+  const isEnglish = language === "en";
   const [learningOpen, setLearningOpen] = useState(true);
   const [openGroups, setOpenGroups] = useState<Record<LearningGroup["id"], boolean>>({
     overview: true,
@@ -238,6 +242,22 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle }: SidebarProps) 
               </span>
             )}
             {activeTab === "profile" && <span className="active-indicator" />}
+          </button>
+          <button
+            type="button"
+            className={`menu-item ${activeTab === "settings" ? "active" : ""}`}
+            onClick={() => onTabChange("settings")}
+            title={collapsed ? (isEnglish ? "Settings" : "Cài đặt") : undefined}
+            aria-current={activeTab === "settings" ? "page" : undefined}
+          >
+            <span className="menu-icon"><SettingsIcon size={18} strokeWidth={2} /></span>
+            {!collapsed && (
+              <span className="menu-item-text">
+                <span>{isEnglish ? "Settings" : "Cài đặt"}</span>
+                <small>{isEnglish ? "Customize your workspace" : "Tùy chỉnh hệ thống"}</small>
+              </span>
+            )}
+            {activeTab === "settings" && <span className="active-indicator" />}
           </button>
         </div>
 

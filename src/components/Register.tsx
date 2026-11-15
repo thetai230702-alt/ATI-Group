@@ -9,9 +9,10 @@ import "./Auth.css";
 
 interface RegisterProps {
   onSwitch: () => void;
+  onBack?: () => void;
 }
 
-function Register({ onSwitch }: RegisterProps) {
+function Register({ onSwitch, onBack }: RegisterProps) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -84,8 +85,10 @@ function Register({ onSwitch }: RegisterProps) {
         </div>
 
         <div className="auth-heading">
+          {onBack && <button type="button" className="auth-back-home" onClick={onBack}>← Quay lại trang ATI</button>}
+          <span className="auth-heading-kicker">JOIN THE ATI ECOSYSTEM</span>
           <h1>Tạo tài khoản</h1>
-          <p>Bắt đầu hành trình chinh phục tiếng Anh cùng chúng mình.</p>
+          <p>Tạo tài khoản để bắt đầu sử dụng các không gian làm việc của ATI Group.</p>
         </div>
 
         <form onSubmit={handleRegister} className="auth-form">
