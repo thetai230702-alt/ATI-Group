@@ -22,6 +22,7 @@ import Dashboard from "./components/Dashboard";
 import LearningDashboard from "./components/LearningDashboard";
 import Statistics from "./components/Statistics";
 import Tenses from "./components/Tenses";
+import IrregularVerbs from "./components/IrregularVerbs";
 import { useLearningProgressSync } from "./services/learningProgressSync";
 
 import Login from "./components/Login";
@@ -40,6 +41,7 @@ const VALID_TABS: TabType[] = [
   "units",
   "listening",
   "tenses",
+  "irregular-verbs",
   "flashcards",
   "cefr",
   "my-vocabulary",
@@ -56,6 +58,7 @@ const TAB_ROUTES: Record<TabType, string> = {
   units: "/hoc-tieng-anh/luyen-tap-1500-cau",
   listening: "/hoc-tieng-anh/luyen-nghe",
   tenses: "/hoc-tieng-anh/12-thi-tieng-anh",
+  "irregular-verbs": "/hoc-tieng-anh/dong-tu-bat-quy-tac",
   flashcards: "/hoc-tieng-anh/flashcard-tu-vung",
   cefr: "/hoc-tieng-anh/tu-vung-cefr",
   "my-vocabulary": "/hoc-tieng-anh/tu-vung-cua-toi",
@@ -337,6 +340,7 @@ function App() {
     units: "Luyện tập 1.500 câu",
     listening: "Luyện nghe",
     tenses: "12 English Tenses",
+    "irregular-verbs": "Động từ bất quy tắc",
     flashcards: "Flashcard từ vựng",
     cefr: "Flashcard CEFR",
     "my-vocabulary": "Từ vựng của tôi",
@@ -662,6 +666,7 @@ function App() {
           {activeTab === "units" && <Units language={language} />}
           {activeTab === "listening" && <Listening language={language} />}
           {activeTab === "tenses" && <Tenses />}
+          {activeTab === "irregular-verbs" && <IrregularVerbs language={language} />}
           {activeTab === "flashcards" && <Flashcards language={language} />}
           {activeTab === "cefr" && <CefrFlashcards language={language} />}
 

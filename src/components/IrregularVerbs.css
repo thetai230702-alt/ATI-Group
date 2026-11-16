@@ -1,0 +1,382 @@
+/* ATI Irregular Verbs — responsive learning interface */
+.irregular-page{--iv-blue:#126bb2;--iv-ink:#173d61;--iv-muted:#71869b;--iv-border:#dce8f4;display:flex;flex-direction:column;gap:20px;max-width:1180px;margin:0 auto;color:var(--iv-ink)}
+.irregular-hero{position:relative;display:flex;align-items:center;gap:18px;overflow:hidden;padding:25px 28px;border:1px solid #d7e8f7;border-radius:22px;background:radial-gradient(circle at 95% 10%,#429de22e,transparent 30%),linear-gradient(120deg,#f2f8ff,#fff 62%,#eef7ff)}.irregular-hero:after{content:"";position:absolute;width:190px;height:190px;right:-55px;bottom:-125px;border:1px solid #1c70b829;border-radius:50%;box-shadow:0 0 0 20px #1c70b809,0 0 0 42px #1c70b806;pointer-events:none}.irregular-hero-icon{display:grid;place-items:center;flex:0 0 58px;width:58px;height:58px;color:white;border-radius:18px;background:linear-gradient(145deg,#43a2e9,#1264a9);box-shadow:0 10px 22px #176bad33}.irregular-hero-copy{min-width:0}.irregular-eyebrow{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#3984bd}.irregular-hero h2{margin:5px 0 6px;font-size:clamp(22px,3vw,30px);letter-spacing:-.7px;color:#123d65}.irregular-hero p{margin:0;color:#6b8298;font-size:13px;line-height:1.6}.irregular-hero-count{margin-left:auto;display:flex;flex-direction:column;align-items:center;min-width:80px;padding:10px 15px;border:1px solid #d8e8f7;border-radius:15px;background:#ffffffbd}.irregular-hero-count strong{font-size:28px;color:#176caf}.irregular-hero-count span{font-size:9px;font-weight:800;letter-spacing:1.2px;color:#7890a6}.irregular-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.irregular-stat{display:flex;flex-direction:column;gap:6px;padding:15px 18px;border:1px solid var(--iv-border);border-radius:16px;background:linear-gradient(145deg,#fff,#f7fbff);box-shadow:0 5px 18px #18466e0a}.irregular-stat span{font-size:12px;color:var(--iv-muted)}.irregular-stat strong{font-size:25px;color:#176caf}.irregular-progress-panel,.irregular-toolbar,.irregular-study-shell,.irregular-table-panel{border:1px solid var(--iv-border);border-radius:18px;background:#fff;box-shadow:0 7px 24px #19466f0a}.irregular-progress-panel{padding:16px 19px}.irregular-progress-label{display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px;color:#657f98}.irregular-progress-label b{color:#176caf}.irregular-progress-track{height:9px;overflow:hidden;border-radius:99px;background:#eaf1f8}.irregular-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#62b5ef,#126bb2);transition:width .25s}.irregular-toolbar{display:flex;align-items:end;gap:11px;flex-wrap:wrap;padding:15px}.irregular-search{display:flex;align-items:center;gap:9px;flex:1 1 290px;min-width:220px;height:45px;padding:0 12px;border:1px solid #d9e6f2;border-radius:12px;color:#6d879e;background:#fbfdff}.irregular-search:focus-within{border-color:#6ba9da;box-shadow:0 0 0 4px #2f8ac51a}.irregular-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#234762;font:inherit;font-size:13px}.irregular-search button{display:grid;place-items:center;border:0;background:transparent;color:#8195a7;cursor:pointer}.irregular-filter{display:flex;flex-direction:column;gap:5px;min-width:125px}.irregular-filter span{font-size:10px;font-weight:700;color:#71879b}.irregular-filter select{height:45px;padding:0 11px;border:1px solid #d9e6f2;border-radius:11px;background:#fff;color:#234762;font:inherit;font-size:12px;outline:0}.irregular-study-shell{overflow:hidden}.irregular-mode-tabs{display:flex;gap:5px;padding:10px 13px;border-bottom:1px solid #e6eef6;background:#f8fbff}.irregular-mode-tabs button{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 15px;border:1px solid transparent;border-radius:11px;background:transparent;color:#6a8298;font:inherit;font-size:12px;font-weight:700;cursor:pointer}.irregular-mode-tabs button.active{border-color:#d8e8f7;background:#fff;color:#176caf;box-shadow:0 3px 10px #1c56810c}.irregular-study-top{display:flex;align-items:center;gap:12px;padding:17px 20px 0;color:#7890a5;font-size:12px}.irregular-level{display:inline-flex;padding:5px 9px;border-radius:99px;font-size:10px;font-weight:800;white-space:nowrap}.irregular-level.easy{color:#14794f;background:#e9f8f0}.irregular-level.medium{color:#a36a16;background:#fff5e4}.irregular-level.hard{color:#a44e56;background:#fff0f1}.irregular-mastered{display:flex;align-items:center;gap:6px;margin-left:auto;padding:7px 10px;border:1px solid #dce8f4;border-radius:10px;background:#fff;color:#698198;font:inherit;font-size:11px;font-weight:700;cursor:pointer}.irregular-mastered.done{border-color:#c9eadb;background:#effaf4;color:#168154}.irregular-card{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:345px;margin:17px 20px 18px;padding:28px 20px;border:1px solid #dceaf6;border-radius:21px;text-align:center;background:radial-gradient(circle at 8% 8%,#5aa8e51c,transparent 32%),radial-gradient(circle at 92% 92%,#1b73b514,transparent 34%),linear-gradient(145deg,#fff,#f7fbff);box-shadow:0 13px 32px #194b7410}.irregular-card-kicker{font-size:10px;font-weight:800;letter-spacing:2px;color:#5791bf}.irregular-base-word{margin:14px 0 4px;font-size:clamp(38px,7vw,58px);font-weight:800;letter-spacing:-2px;color:#153f66}.irregular-form-ipa{display:flex;align-items:center;gap:8px;color:#5c82a2;font-size:16px}.irregular-speak{display:grid;place-items:center;width:34px;height:34px;border:1px solid #d7e9f8;border-radius:50%;background:#eaf5ff;color:#176caf;cursor:pointer}.irregular-card-hint{margin:19px 0 10px;color:#7b90a3;font-size:13px}.irregular-forms-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:min(100%,560px);margin:7px 0 12px}.irregular-forms-grid>div{display:flex;flex-direction:column;align-items:center;gap:7px;padding:15px 10px;border:1px solid #dce9f4;border-radius:14px;background:#ffffffd9}.irregular-forms-grid span{font-size:10px;font-weight:800;color:#7390a8}.irregular-forms-grid strong{font-size:22px;color:#17466f}.irregular-forms-grid small{color:#6886a1;font-size:12px}.irregular-forms-grid button,.irregular-practice-prompt button{display:flex;align-items:center;gap:5px;border:0;background:transparent;color:#176caf;font:inherit;font-size:11px;font-weight:700;cursor:pointer}.irregular-reveal{display:flex;align-items:center;gap:7px;padding:10px 15px;border:1px solid #cfe2f3;border-radius:11px;background:#eaf5ff;color:#176caf;font:inherit;font-size:12px;font-weight:800;cursor:pointer}.irregular-practice-panel{max-width:720px;margin:26px auto;padding:25px 22px 30px}.irregular-practice-prompt{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px;border-radius:16px;background:linear-gradient(140deg,#f4f9ff,#fff)}.irregular-practice-prompt>span{font-size:12px;color:#6f879d}.irregular-practice-prompt strong{font-size:34px;color:#153f66}.irregular-practice-prompt small{font-size:13px;color:#68839b}.irregular-typing-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.irregular-typing-fields label{display:flex;flex-direction:column;gap:7px;color:#5f7890;font-size:11px;font-weight:800}.irregular-typing-fields input{height:46px;padding:0 12px;border:1px solid #d8e5f1;border-radius:11px;outline:0;font:inherit;font-size:14px;color:#1b4264}.irregular-primary-btn{display:flex;align-items:center;justify-content:center;min-height:44px;width:100%;padding:10px 16px;border:0;border-radius:11px;background:linear-gradient(120deg,#3995df,#155c9f);color:#fff;font:inherit;font-size:13px;font-weight:800;cursor:pointer}.irregular-primary-btn:disabled{opacity:.45;cursor:not-allowed}.irregular-feedback{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;padding:12px 14px;border-radius:11px;font-size:12px;font-weight:700}.irregular-feedback p{flex-basis:100%;margin:0 0 0 26px;font-weight:500}.irregular-feedback.correct{color:#16764e;background:#eaf8f1}.irregular-feedback.incorrect{color:#a74b54;background:#fff0f1}.irregular-quiz-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}.irregular-quiz-options button{min-height:48px;border:1px solid #dbe7f2;border-radius:11px;background:#fff;color:#264c6c;font:inherit;font-size:14px;font-weight:700;cursor:pointer}.irregular-quiz-options button.correct{border-color:#9ad6b8;background:#eaf8f1;color:#16764e}.irregular-quiz-options button.wrong{border-color:#e9b5ba;background:#fff0f1;color:#a74b54}.irregular-study-controls{display:flex;justify-content:center;gap:9px;padding:0 16px 20px}.irregular-study-controls button{display:flex;align-items:center;gap:7px;min-height:40px;padding:8px 13px;border:1px solid #d9e6f2;border-radius:10px;background:#fff;color:#426582;font:inherit;font-size:12px;font-weight:700;cursor:pointer}.irregular-empty{display:flex;flex-direction:column;align-items:center;gap:9px;padding:55px 15px;color:#8297aa}.irregular-table-panel{overflow:hidden}.irregular-table-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid #e7eff6}.irregular-table-heading h3{margin:0 0 4px;color:#183f63;font-size:16px}.irregular-table-heading p{margin:0;color:#7b91a5;font-size:11px}.irregular-table-heading>span{padding:6px 10px;border-radius:99px;background:#eef6fd;color:#176caf;font-size:11px;font-weight:800}.irregular-table-wrap{overflow:auto}.irregular-table{width:100%;border-collapse:collapse;min-width:790px}.irregular-table th{padding:12px 13px;background:#f7faff;color:#6c849a;text-align:left;font-size:10px;white-space:nowrap}.irregular-table td{padding:12px 13px;border-top:1px solid #edf2f7;color:#4c6b85;font-size:12px;vertical-align:middle}.irregular-table tbody tr:hover{background:#f9fcff}.irregular-table td strong{display:block;color:#173f63;font-size:13px}.irregular-table td small{display:block;margin-top:3px;color:#8298aa;font-size:10px}.table-level{margin-top:5px}.irregular-table-audio,.irregular-table-status{display:grid;place-items:center;width:31px;height:31px;border:1px solid #d8e8f5;border-radius:9px;background:#f0f7fd;color:#176caf;cursor:pointer}.irregular-table-status{border-color:#dce6ef;background:#fff}.irregular-table-status span{width:10px;height:10px;border:1.5px solid #9aafc0;border-radius:50%}.irregular-table-status.done{border-color:#c9eadb;background:#eaf8f1;color:#168154}.irregular-footnote{margin:0;color:#8396a7;font-size:10px;line-height:1.6}
+html[data-ati-theme="dark"] .irregular-page{color:#e4eff9}html[data-ati-theme="dark"] .irregular-hero,html[data-ati-theme="dark"] .irregular-stat,html[data-ati-theme="dark"] .irregular-progress-panel,html[data-ati-theme="dark"] .irregular-toolbar,html[data-ati-theme="dark"] .irregular-study-shell,html[data-ati-theme="dark"] .irregular-table-panel{background:#14283a;border-color:#29445d}html[data-ati-theme="dark"] .irregular-hero h2,html[data-ati-theme="dark"] .irregular-base-word,html[data-ati-theme="dark"] .irregular-forms-grid strong,html[data-ati-theme="dark"] .irregular-table-heading h3,html[data-ati-theme="dark"] .irregular-table td strong{color:#e4eff9}html[data-ati-theme="dark"] .irregular-card,html[data-ati-theme="dark"] .irregular-forms-grid>div,html[data-ati-theme="dark"] .irregular-practice-prompt,html[data-ati-theme="dark"] .irregular-typing-fields input,html[data-ati-theme="dark"] .irregular-filter select,html[data-ati-theme="dark"] .irregular-search,html[data-ati-theme="dark"] .irregular-study-controls button,html[data-ati-theme="dark"] .irregular-quiz-options button{background:#1b344a;border-color:#34536d;color:#e4eff9}html[data-ati-theme="dark"] .irregular-table th,html[data-ati-theme="dark"] .irregular-mode-tabs{background:#1a3044;color:#b4c7d8}html[data-ati-theme="dark"] .irregular-table td{border-color:#29445d;color:#c2d1de}html[data-ati-theme="dark"] .irregular-search input{color:#e4eff9}
+@media(max-width:760px){.irregular-hero{padding:19px;gap:13px}.irregular-hero-count{min-width:65px;padding:9px}.irregular-toolbar{align-items:stretch}.irregular-search{flex-basis:100%}.irregular-filter{flex:1;min-width:110px}.irregular-practice-panel{padding:18px 15px 22px}.irregular-mode-tabs button{flex:1;padding:10px 7px;font-size:11px}.irregular-study-top{padding-inline:14px}.irregular-card{margin-inline:12px;padding-inline:13px}}
+@media(max-width:480px){.irregular-hero{align-items:flex-start;padding:16px}.irregular-hero-icon{width:46px;height:46px;flex-basis:46px;border-radius:14px}.irregular-hero-count{min-width:54px;padding:8px}.irregular-hero-count strong{font-size:22px}.irregular-hero-count span{font-size:8px}.irregular-eyebrow{font-size:8px;letter-spacing:1px}.irregular-hero p{font-size:11px}.irregular-stats{gap:8px}.irregular-stat{padding:12px 11px}.irregular-stat span{font-size:10px}.irregular-stat strong{font-size:21px}.irregular-forms-grid{gap:7px}.irregular-forms-grid>div{padding:12px 6px}.irregular-forms-grid strong{font-size:17px}.irregular-forms-grid small{font-size:10px}.irregular-typing-fields{grid-template-columns:1fr}.irregular-study-controls{gap:6px;padding-inline:9px}.irregular-study-controls button{padding-inline:9px;font-size:11px}.irregular-mode-tabs button{gap:5px}.irregular-table-heading{padding:14px}}
+
+/* V72: isolated study screen and learned-word review */
+.irregular-back-library{display:inline-flex;align-items:center;gap:8px;border:1px solid #d8e3ee;background:#fff;color:#24527a;border-radius:11px;padding:10px 14px;font-weight:700;cursor:pointer;margin:0 0 14px}
+.irregular-study-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 24px 10px}
+.irregular-study-heading h2{margin:5px 0;font-size:25px;color:#173b5c}
+.irregular-study-heading p{margin:0;color:#6b7f91}
+.irregular-study-settings{display:flex;justify-content:flex-end;gap:12px;padding:0 24px 14px}
+.irregular-study-settings label{display:flex;align-items:center;gap:8px;color:#60758a;font-size:12px;font-weight:700}
+.irregular-study-settings select{border:1px solid #dbe5ef;border-radius:9px;background:#fff;padding:8px;color:#29465f}
+.irregular-library-actions{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:#f3f8fc;border:1px solid #dce8f2;border-radius:14px;padding:16px 18px;margin:16px 0}
+.irregular-library-actions>div:first-child{display:flex;flex-direction:column;gap:4px}
+.irregular-library-actions>div:first-child strong{color:#1d4568}
+.irregular-library-actions>div:first-child span{font-size:12px;color:#6b8093}
+.irregular-library-buttons{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.irregular-secondary-btn,.irregular-primary-btn{border:0;border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}
+.irregular-secondary-btn{background:#fff;border:1px solid #d4e0eb;color:#315978}
+.irregular-primary-btn{background:#1769aa;color:white}
+.irregular-secondary-btn:disabled,.irregular-primary-btn:disabled{opacity:.45;cursor:not-allowed}
+.irregular-study-only .irregular-study-shell{max-width:920px;margin:0 auto}
+.irregular-study-only .irregular-study-controls{margin-bottom:18px}
+.irregular-study-only .irregular-card{cursor:pointer}
+.irregular-table td:first-child input{width:16px;height:16px;accent-color:#1769aa;cursor:pointer}
+.irregular-table td:first-child input:disabled{cursor:not-allowed;opacity:.3}
+@media(max-width:760px){
+ .irregular-study-heading{padding:18px 15px 8px}
+ .irregular-study-settings{padding:0 15px 12px;justify-content:flex-start;flex-wrap:wrap}
+ .irregular-library-actions{align-items:stretch}
+ .irregular-library-buttons{display:grid;grid-template-columns:1fr 1fr}
+ .irregular-library-buttons button{font-size:11px;padding:10px 8px}
+}
+@media(max-width:480px){
+ .irregular-study-heading h2{font-size:20px}
+ .irregular-library-buttons{grid-template-columns:1fr}
+}
+html[data-ati-theme="dark"] .irregular-back-library,html[data-ati-theme="dark"] .irregular-study-settings select,html[data-ati-theme="dark"] .irregular-secondary-btn{background:#1b344a;border-color:#34536d;color:#e4eff9}
+html[data-ati-theme="dark"] .irregular-library-actions{background:#172e42;border-color:#34536d}
+html[data-ati-theme="dark"] .irregular-study-heading h2{color:#e4eff9}
+
+/* V73: immersive, viewport-filling study workspace (matches the supplied reference) */
+.irregular-study-only{
+  position:fixed!important;
+  inset:0!important;
+  z-index:99999!important;
+  width:100vw!important;
+  max-width:none!important;
+  height:100vh!important;
+  height:100dvh!important;
+  margin:0!important;
+  padding:clamp(14px,3vw,54px)!important;
+  box-sizing:border-box!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+  background:#f2f7fc!important;
+  color:#193b59!important;
+}
+.irregular-study-only .irregular-back-library{
+  align-self:flex-start;
+  flex:0 0 auto;
+  margin:0 0 12px;
+}
+.irregular-study-only .irregular-study-shell{
+  display:flex;
+  flex:1 0 auto;
+  flex-direction:column;
+  width:100%;
+  max-width:none!important;
+  min-height:calc(100% - 12px);
+  margin:0!important;
+  padding:clamp(18px,2.8vw,42px)!important;
+  box-sizing:border-box;
+  border:1px solid #e1e9f1;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 18px 55px rgba(35,68,100,.10);
+}
+.irregular-study-only .irregular-study-heading{padding:0 0 18px;}
+.irregular-study-only .irregular-mode-tabs{padding-inline:0;}
+.irregular-study-only .irregular-card{width:100%;max-width:none;min-height:min(34vh,330px);margin:14px 0 18px;display:flex;flex-direction:column;justify-content:center;}
+.irregular-study-only .irregular-practice-panel{width:min(100%,900px);max-width:900px;margin:18px auto;}
+.irregular-study-only .irregular-study-controls{margin-top:auto;padding:20px 0 0;}
+.irregular-study-only .irregular-study-top{padding:12px 0;}
+@media(max-width:760px){
+ .irregular-study-only{padding:10px!important;}
+ .irregular-study-only .irregular-study-shell{padding:16px!important;border-radius:14px;}
+ .irregular-study-only .irregular-study-heading{padding:0 0 12px;}
+ .irregular-study-only .irregular-card{min-height:34vh;margin:12px 0;}
+}
+@media(max-width:480px){
+ .irregular-study-only .irregular-study-shell{padding:12px!important;}
+ .irregular-study-only .irregular-study-heading h2{font-size:19px;}
+ .irregular-study-only .irregular-study-controls{flex-wrap:wrap;}
+}
+html[data-ati-theme="dark"] .irregular-study-only{background:#0d1b29!important;}
+html[data-ati-theme="dark"] .irregular-study-only .irregular-study-shell{background:#14283a;border-color:#29445d;}
+
+/* V74: compact study workspace (~70% desktop scale) to prevent viewport overflow */
+.irregular-study-only{
+  align-items:center!important;
+  padding:2vh 2vw!important;
+  gap:0!important;
+}
+.irregular-study-only .irregular-back-library{
+  width:min(70vw,1250px);
+  align-self:center;
+  margin:0 auto 10px;
+  padding:8px 12px;
+  font-size:12px;
+}
+.irregular-study-only .irregular-study-shell{
+  width:min(70vw,1250px)!important;
+  max-width:1250px!important;
+  height:70vh;
+  min-height:0!important;
+  max-height:88vh;
+  flex:0 1 70vh!important;
+  margin:0 auto!important;
+  padding:clamp(16px,1.7vw,26px)!important;
+  overflow:auto!important;
+  border-radius:16px;
+}
+.irregular-study-only .irregular-study-heading{padding:0 0 12px;}
+.irregular-study-only .irregular-study-heading h2{font-size:20px;}
+.irregular-study-only .irregular-study-heading p{font-size:12px;}
+.irregular-study-only .irregular-study-settings{padding:0 0 10px;}
+.irregular-study-only .irregular-mode-tabs{padding-block:7px;}
+.irregular-study-only .irregular-mode-tabs button{padding:8px 12px;font-size:11px;}
+.irregular-study-only .irregular-study-top{padding:9px 0;font-size:11px;}
+.irregular-study-only .irregular-card{min-height: min(27vh,230px);margin:10px 0 12px;padding:18px 14px;border-radius:16px;}
+.irregular-study-only .irregular-base-word{font-size:clamp(30px,4vw,44px);margin:9px 0 3px;}
+.irregular-study-only .irregular-card-hint{margin:12px 0 7px;font-size:12px;}
+.irregular-study-only .irregular-forms-grid{gap:8px;margin:5px 0 8px;}
+.irregular-study-only .irregular-forms-grid>div{padding:10px 8px;gap:5px;}
+.irregular-study-only .irregular-forms-grid strong{font-size:18px;}
+.irregular-study-only .irregular-practice-panel{margin:10px auto;padding:16px 18px 18px;}
+.irregular-study-only .irregular-practice-prompt{padding:13px;gap:6px;}
+.irregular-study-only .irregular-practice-prompt strong{font-size:27px;}
+.irregular-study-only .irregular-typing-fields{margin:12px 0;}
+.irregular-study-only .irregular-study-controls{padding:12px 0 0;margin:0;}
+.irregular-study-only .irregular-study-controls button{min-height:36px;padding:7px 11px;font-size:11px;}
+@media(max-width:900px){
+ .irregular-study-only .irregular-back-library,.irregular-study-only .irregular-study-shell{width:min(88vw,900px)!important;}
+ .irregular-study-only .irregular-study-shell{height:78vh;flex-basis:78vh!important;}
+}
+@media(max-width:600px){
+ .irregular-study-only{padding:8px!important;}
+ .irregular-study-only .irregular-back-library,.irregular-study-only .irregular-study-shell{width:100%!important;}
+ .irregular-study-only .irregular-study-shell{height:auto;max-height:calc(100dvh - 52px);min-height:0!important;flex:0 1 auto!important;padding:13px!important;}
+ .irregular-study-only .irregular-study-heading h2{font-size:18px;}
+ .irregular-study-only .irregular-card{min-height:220px;}
+ .irregular-study-only .irregular-study-controls{flex-wrap:wrap;}
+}
+
+/* V75: scale the CONTENT, not the workspace. Keep the study frame wide and fit it to the viewport. */
+@media (min-width: 901px){
+  .irregular-study-only{
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    padding:12px 2vw!important;
+    overflow:hidden!important;
+  }
+  .irregular-study-only .irregular-back-library{
+    align-self:flex-start;
+    flex:0 0 auto;
+    margin:0 0 8px;
+    padding:6px 10px;
+    font-size:11px;
+  }
+  .irregular-study-only .irregular-study-shell{
+    width:100%!important;
+    max-width:none!important;
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    flex:1 1 0!important;
+    overflow:hidden!important;
+    padding:18px 24px!important;
+    border-radius:16px;
+  }
+  .irregular-study-only .irregular-study-heading{padding:0 0 8px!important;gap:10px;}
+  .irregular-study-only .irregular-study-heading h2{font-size:18px!important;margin:2px 0!important;}
+  .irregular-study-only .irregular-study-heading p{font-size:10px!important;line-height:1.35;}
+  .irregular-study-only .irregular-hero-count{min-width:56px;padding:6px 10px;}
+  .irregular-study-only .irregular-hero-count strong{font-size:20px;}
+  .irregular-study-only .irregular-hero-count span{font-size:8px;}
+  .irregular-study-only .irregular-study-settings{padding:0 0 7px!important;gap:8px;}
+  .irregular-study-only .irregular-study-settings label{font-size:10px;}
+  .irregular-study-only .irregular-study-settings select{padding:5px 7px;font-size:10px;}
+  .irregular-study-only .irregular-mode-tabs{padding:5px 0!important;gap:4px;}
+  .irregular-study-only .irregular-mode-tabs button{padding:7px 11px!important;font-size:10px!important;gap:6px;}
+  .irregular-study-only .irregular-study-top{padding:6px 0!important;font-size:10px!important;}
+  .irregular-study-only .irregular-mastered{padding:5px 8px;font-size:9px;}
+  .irregular-study-only .irregular-card{min-height:0!important;height:clamp(150px,29vh,250px);margin:7px 0 9px!important;padding:12px!important;border-radius:15px;}
+  .irregular-study-only .irregular-card-kicker{font-size:8px;}
+  .irregular-study-only .irregular-base-word{font-size:clamp(27px,3.3vw,42px)!important;margin:7px 0 2px!important;}
+  .irregular-study-only .irregular-form-ipa{font-size:13px;}
+  .irregular-study-only .irregular-speak{width:29px;height:29px;}
+  .irregular-study-only .irregular-card-hint{font-size:10px;margin:8px 0 5px!important;}
+  .irregular-study-only .irregular-forms-grid{gap:7px;margin:4px 0 6px!important;width:min(100%,480px);}
+  .irregular-study-only .irregular-forms-grid>div{padding:7px 8px!important;gap:3px!important;}
+  .irregular-study-only .irregular-forms-grid span{font-size:8px;}
+  .irregular-study-only .irregular-forms-grid strong{font-size:16px!important;}
+  .irregular-study-only .irregular-forms-grid small{font-size:9px;}
+  .irregular-study-only .irregular-reveal{padding:7px 11px;font-size:10px;}
+  .irregular-study-only .irregular-practice-panel{width:min(100%,760px);max-width:760px;margin:7px auto!important;padding:10px 16px 12px!important;}
+  .irregular-study-only .irregular-practice-prompt{padding:8px!important;gap:4px!important;}
+  .irregular-study-only .irregular-practice-prompt>span{font-size:10px;}
+  .irregular-study-only .irregular-practice-prompt strong{font-size:24px!important;}
+  .irregular-study-only .irregular-practice-prompt small{font-size:10px;}
+  .irregular-study-only .irregular-typing-fields{gap:8px;margin:8px 0!important;}
+  .irregular-study-only .irregular-typing-fields label{font-size:9px;gap:4px;}
+  .irregular-study-only .irregular-typing-fields input{height:36px;font-size:12px;}
+  .irregular-study-only .irregular-primary-btn{min-height:34px;padding:7px 12px;font-size:11px;}
+  .irregular-study-only .irregular-quiz-options{gap:7px;margin:9px 0!important;}
+  .irregular-study-only .irregular-quiz-options button{min-height:36px;font-size:11px;}
+  .irregular-study-only .irregular-feedback{margin-top:7px;padding:8px 10px;font-size:10px;}
+  .irregular-study-only .irregular-study-controls{padding:7px 0 0!important;margin:0!important;gap:7px;}
+  .irregular-study-only .irregular-study-controls button{min-height:32px;padding:5px 10px;font-size:10px;}
+}
+@media (max-height:700px) and (min-width:901px){
+  .irregular-study-only .irregular-study-shell{padding:12px 20px!important;}
+  .irregular-study-only .irregular-card{height:clamp(125px,25vh,190px);}
+  .irregular-study-only .irregular-study-controls{padding-top:4px!important;}
+}
+@media(max-width:900px){
+  .irregular-study-only{overflow-y:auto!important;}
+  .irregular-study-only .irregular-study-shell{overflow:visible!important;}
+}
+
+
+/* V76: prevent flashcard content from overflowing its card */
+.irregular-page,
+.irregular-page * { box-sizing: border-box; }
+
+.irregular-card {
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: visible !important;
+  margin: 12px 20px 14px !important;
+  padding: 18px 16px !important;
+  gap: 4px;
+}
+
+.irregular-card-kicker {
+  margin: 0 !important;
+  line-height: 1.3;
+}
+
+.irregular-base-word {
+  margin: 6px 0 2px !important;
+  font-size: clamp(30px, 4.2vw, 48px) !important;
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+}
+
+.irregular-form-ipa {
+  font-size: 14px !important;
+  line-height: 1.35;
+}
+
+.irregular-card-hint {
+  margin: 10px 0 6px !important;
+}
+
+.irregular-forms-grid {
+  width: min(100%, 520px) !important;
+  gap: 8px !important;
+  margin: 6px 0 2px !important;
+}
+
+.irregular-forms-grid > div {
+  gap: 4px !important;
+  padding: 9px 8px !important;
+  min-width: 0;
+}
+
+.irregular-forms-grid strong {
+  font-size: 18px !important;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.irregular-forms-grid small {
+  font-size: 11px !important;
+}
+
+.irregular-study-controls {
+  flex-wrap: wrap;
+  padding: 0 16px 16px !important;
+}
+
+@media (max-height: 760px) and (min-width: 701px) {
+  .irregular-card {
+    padding: 12px 14px !important;
+    margin-top: 8px !important;
+    margin-bottom: 10px !important;
+  }
+  .irregular-base-word { font-size: 36px !important; }
+  .irregular-card-hint { margin: 6px 0 3px !important; }
+  .irregular-forms-grid > div { padding: 7px !important; }
+  .irregular-study-controls button { min-height: 34px; padding: 6px 10px; }
+}
+
+@media (max-width: 700px) {
+  .irregular-card {
+    margin: 10px 10px 12px !important;
+    padding: 18px 12px !important;
+  }
+  .irregular-base-word { font-size: clamp(30px, 9vw, 42px) !important; }
+  .irregular-forms-grid { grid-template-columns: 1fr !important; }
+}
+
+/* V77: sortable table column headers */
+.irregular-sort-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  padding: 5px 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.irregular-sort-header svg {
+  flex: 0 0 auto;
+  opacity: .62;
+  color: #2877bd;
+}
+.irregular-sort-header:hover { color: #176db4; }
+.irregular-sort-header:hover svg { opacity: 1; }
+.irregular-th-label { display: inline-flex; align-items: center; }
+
+/* V79: move study-content selection into the in-study Settings panel */
+.irregular-study-heading-actions{display:flex;align-items:center;gap:12px;margin-left:auto}
+.irregular-config-trigger{display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border:1px solid #dbe5ef;border-radius:11px;background:#f5f7fa;color:#284d6d;font:inherit;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap}
+.irregular-config-trigger.active{background:#eaf4fd;border-color:#b9d8f1;color:#126bb2}
+.irregular-content-settings{margin:0 20px 14px;padding:15px;border:1px solid #dce8f2;border-radius:14px;background:#f7fbff}
+.irregular-content-settings-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.irregular-content-settings-head>div{display:flex;flex-direction:column;gap:4px}
+.irregular-content-settings-head strong{font-size:14px;color:#1b4568}
+.irregular-content-settings-head span{font-size:11px;color:#71869a}
+.irregular-content-settings-head>button{display:grid;place-items:center;width:30px;height:30px;border:1px solid #dbe6f0;border-radius:8px;background:#fff;color:#58758f;cursor:pointer}
+.irregular-content-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.irregular-content-actions .irregular-primary-btn{width:auto;min-height:36px;padding:8px 13px;font-size:11px}
+.irregular-content-actions .irregular-secondary-btn{font-size:11px;padding:8px 12px}
+.irregular-content-checklist{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:6px;max-height:150px;overflow:auto;padding:2px}
+.irregular-content-checklist label{display:flex;align-items:center;gap:8px;min-width:0;padding:7px 9px;border:1px solid #e1eaf2;border-radius:9px;background:#fff;cursor:pointer}
+.irregular-content-checklist input{accent-color:#1769aa;flex:0 0 auto}
+.irregular-content-checklist label span{display:flex;flex-direction:column;min-width:0;gap:2px}
+.irregular-content-checklist b{font-size:11px;color:#234b6c}
+.irregular-content-checklist small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;color:#8093a4}
+.irregular-content-checklist>p{margin:4px;color:#71869a;font-size:11px}
+html[data-ati-theme="dark"] .irregular-config-trigger,html[data-ati-theme="dark"] .irregular-content-settings,html[data-ati-theme="dark"] .irregular-content-settings-head>button,html[data-ati-theme="dark"] .irregular-content-checklist label{background:#1b344a;border-color:#34536d;color:#e4eff9}
+html[data-ati-theme="dark"] .irregular-content-settings-head strong,html[data-ati-theme="dark"] .irregular-content-checklist b{color:#e4eff9}
+@media(max-width:760px){.irregular-study-heading-actions{gap:7px}.irregular-content-settings{margin:0 12px 12px;padding:11px}.irregular-content-actions{display:grid;grid-template-columns:1fr 1fr}.irregular-content-actions .irregular-primary-btn{grid-column:1/-1;width:100%}}
+@media(max-width:480px){.irregular-study-heading-actions{flex-direction:column-reverse;align-items:flex-end}.irregular-config-trigger{padding:8px 10px;font-size:11px}.irregular-content-checklist{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* V80: clear entry points for starting a lesson or reviewing selected learned verbs */
+.irregular-table-heading{align-items:center;flex-wrap:wrap}
+.irregular-table-heading-copy{min-width:220px;flex:1}
+.irregular-table-count{display:inline-flex;margin-top:8px;padding:4px 9px;border-radius:99px;background:#eef6fd;color:#176caf;font-size:10px;font-weight:800}
+.irregular-library-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.irregular-library-actions button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:9px 15px;border-radius:10px;font:inherit;font-size:12px;font-weight:800;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.irregular-start-study{border:1px solid #1769aa;background:linear-gradient(120deg,#3995df,#155c9f);color:#fff;box-shadow:0 5px 13px #1769aa25}
+.irregular-review-selected{border:1px solid #cfe0ef;background:#f4f9fe;color:#1769aa}
+.irregular-library-actions button:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 5px 14px #174d741c}
+.irregular-library-actions button:disabled{opacity:.42;cursor:not-allowed}
+html[data-ati-theme="dark"] .irregular-table-count{background:#1a3044;color:#9bc9ef}
+html[data-ati-theme="dark"] .irregular-review-selected{background:#1b344a;border-color:#34536d;color:#9bc9ef}
+@media(max-width:600px){.irregular-library-actions{width:100%;display:grid;grid-template-columns:1fr}.irregular-library-actions button{width:100%}}

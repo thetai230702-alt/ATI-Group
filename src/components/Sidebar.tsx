@@ -27,6 +27,7 @@ export type TabType =
   | "flashcards"
   | "cefr"
   | "tenses"
+  | "irregular-verbs"
   | "my-vocabulary"
   | "information"
   | "profile"
@@ -70,6 +71,7 @@ const learningGroups: LearningGroup[] = [
       { id: "units", label: "1,500 Sentences", description: "Practice English by unit", icon: BookOpen },
       { id: "listening", label: "Listening Practice", description: "Listening and pronunciation", icon: Headphones },
       { id: "tenses", label: "12 English Tenses", description: "Grammar rules and examples", icon: BookMarked },
+      { id: "irregular-verbs", label: "Irregular Verbs", description: "Learn V1, V2 and V3 step by step", icon: BookOpen },
     ],
   },
   {
@@ -117,6 +119,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
       units: "Luyện tập 1.500 câu",
       listening: "Luyện nghe",
       tenses: "12 thì tiếng Anh",
+      "irregular-verbs": "Động từ bất quy tắc",
       flashcards: "Flashcard từ vựng",
       cefr: "Từ vựng CEFR",
       "my-vocabulary": "Từ vựng của tôi",
