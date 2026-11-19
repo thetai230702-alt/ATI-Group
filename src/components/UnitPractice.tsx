@@ -234,6 +234,50 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
     else setAudioMessage("Bạn đã đến câu cuối cùng của Unit.");
   }
 
+  // Global shortcuts: Alt+A reveal answer, Alt+R reset, Alt+S skip,
+  // Left/Right navigate when focus is not inside an editable control.
+  useEffect(() => {
+    function handleGlobalShortcuts(event: KeyboardEvent) {
+      if (showSummary) return;
+
+      if (event.altKey && !event.ctrlKey && !event.metaKey) {
+        const key = event.key.toLowerCase();
+        if (key === "a") {
+          event.preventDefault();
+          setShowAnswer(value => !value);
+        } else if (key === "r") {
+          event.preventDefault();
+          resetAnswer();
+        } else if (key === "s") {
+          event.preventDefault();
+          skipQuestion();
+        }
+        return;
+      }
+
+      const target = event.target;
+      const isEditable = target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT");
+
+      if (isEditable || event.altKey || event.ctrlKey || event.metaKey) return;
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goTo(currentIndex - 1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        if (currentIndex === total - 1) setShowSummary(true);
+        else goTo(currentIndex + 1);
+      }
+    }
+
+    window.addEventListener("keydown", handleGlobalShortcuts);
+    return () => window.removeEventListener("keydown", handleGlobalShortcuts);
+  }, [currentIndex, total, showSummary]);
+
   const progress = total > 0 ? ((currentIndex + 1) / total) * 100 : 0;
   const attemptedCount = Object.keys(checkedResults).length;
   const correctCount = Object.values(checkedResults).filter(Boolean).length;
@@ -272,6 +316,8 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
     saveUnitPracticeProgress(unit.unitNumber, {});
     setShowSummary(false);
   }
+
+
 
   return (
     <div className="practice-page">
@@ -387,7 +433,17 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
               }
             }}
             onKeyDown={event => {
-              if ((event.ctrlKey || event.metaKey) && event.key === "Enter") setChecked(true);
+              if (event.key !== "Enter" || event.shiftKey || event.ctrlKey || event.metaKey) return;
+              event.preventDefault();
+
+              // Enter checks the current answer first. Once checked or revealed,
+              // Enter advances to the next sentence.
+              if (checked || showAnswer) {
+                if (currentIndex === total - 1) setShowSummary(true);
+                else goTo(currentIndex + 1);
+              } else {
+                handleCheck();
+              }
             }}
             placeholder="Type your English answer here..." rows={3}
             aria-label="Your English translation"
@@ -425,6 +481,14 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
               {showAnswer ? <EyeOff size={17} /> : <Eye size={17} />}
               {showAnswer ? "Ẩn đáp án" : "Xem đáp án"}
             </button>
+          </div>
+          <div className="practice-shortcut-hints" aria-label="Phím tắt">
+            <span><kbd>Enter</kbd> Kiểm tra / Câu tiếp</span>
+            <span><kbd>Alt</kbd> + <kbd>A</kbd> Xem đáp án</span>
+            <span><kbd>Alt</kbd> + <kbd>R</kbd> Làm lại</span>
+            <span><kbd>Alt</kbd> + <kbd>S</kbd> Bỏ qua</span>
+            <span><kbd>←</kbd> <kbd>→</kbd> Chuyển câu</span>
+            <span><kbd>Shift</kbd> + <kbd>Enter</kbd> Xuống dòng</span>
           </div>
         </div>
 

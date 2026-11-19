@@ -519,3 +519,40 @@
  .practice-summary-actions{flex-direction:column}
  .practice-summary-actions button{width:100%}
 }
+
+
+/* Keyboard shortcut guide */
+.practice-shortcut-hints{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px 14px;
+  padding-top:9px;
+  color:#7b8fa7;
+  font-size:10px;
+  line-height:1.5;
+}
+.practice-shortcut-hints span{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  white-space:nowrap;
+}
+.practice-shortcut-hints kbd{
+  display:inline-grid;
+  place-items:center;
+  min-width:19px;
+  min-height:19px;
+  padding:1px 5px;
+  border:1px solid #d6e1ed;
+  border-bottom-width:2px;
+  border-radius:5px;
+  background:#f7faff;
+  color:#365777;
+  font-family:inherit;
+  font-size:9px;
+  font-weight:850;
+}
+@media(max-width:560px){
+  .practice-shortcut-hints{gap:6px 10px;font-size:9px}
+}
