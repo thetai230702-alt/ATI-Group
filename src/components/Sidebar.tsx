@@ -114,8 +114,6 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
     const Icon = item.icon;
     const isActive = activeTab === item.id;
     const vietnameseLabels: Partial<Record<TabType, string>> = {
-      information: "Giới thiệu",
-      "ati-introduction": "Giới thiệu ATI Learn English",
       checklist: "Danh sách học tập",
       statistics: "Thống kê học tập",
       units: "Luyện tập 1.500 câu",
@@ -125,6 +123,8 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
       flashcards: "Từ vựng",
       cefr: "Từ vựng CEFR",
       "my-vocabulary": "Từ vựng của tôi",
+      information: "Giới thiệu ATI Group",
+      "ati-introduction": "Giới thiệu ATI Learn English",
     };
     const label = isEnglish ? item.label : (vietnameseLabels[item.id] ?? item.label);
     return (

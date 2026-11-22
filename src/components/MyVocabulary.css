@@ -906,3 +906,179 @@
 
 .mv-listening-notice{width:min(100%,760px);margin:4px 0;padding:10px 12px;border:1px solid #f2d49a;border-radius:10px;background:#fff9eb;color:#8a5a13;font-size:12px;line-height:1.5;text-align:left}
 .mv-listening-unit-progress{margin:0;color:#6d8299;font-size:12px;font-weight:750}
+
+/* Listening is a separate workspace from the regular study modes. */
+.mv-listening-fullscreen { z-index: 10020; }
+.mv-listening-stage {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+  padding: clamp(18px, 3vw, 34px);
+  border: 1px solid #e0e8f3;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 18px 55px rgba(31, 61, 94, .12);
+  color: #203c5a;
+}
+.mv-listening-header { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:22px; }
+.mv-listening-header h2 { margin:6px 0 4px; font-size:clamp(22px, 3vw, 30px); color:#193a5d; }
+.mv-listening-header p { margin:0; color:#788ba1; font-size:13px; }
+.mv-listening-header-actions { display:flex; align-items:center; gap:9px; }
+.mv-listening-close { width:40px; height:40px; display:grid; place-items:center; border:0; border-radius:10px; background:#f0f2f6; color:#33465a; }
+.mv-listening-settings { margin:0 0 22px; padding:18px; border:1px solid #dce7f3; border-radius:14px; background:#f7faff; }
+.mv-listening-settings h3 { margin:0 0 14px; font-size:16px; }
+.mv-listening-settings-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.mv-listening-settings-grid label,.mv-listening-word-picker { display:flex; flex-direction:column; gap:7px; min-width:0; color:#647d97; font-size:12px; font-weight:700; }
+.mv-listening-settings-grid select,.mv-listening-word-picker select { width:100%; min-height:42px; padding:9px 11px; border:1px solid #d5e1ef; border-radius:9px; background:#fff; color:#244b72; font:inherit; font-size:13px; }
+.mv-listening-body { display:flex; flex-direction:column; align-items:center; gap:16px; }
+.mv-listening-scope-toggle { display:flex; gap:8px; padding:5px; border-radius:12px; background:#f0f3f8; }
+.mv-listening-scope-toggle button { border:0; border-radius:9px; padding:11px 17px; background:transparent; color:#526b85; font-weight:700; font-size:13px; }
+.mv-listening-scope-toggle button.active { background:#216eae; color:#fff; box-shadow:0 3px 9px rgba(33,110,174,.2); }
+.mv-listening-word-picker { width:min(100%,560px); }
+.mv-listening-word-card { width:100%; min-height:245px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:28px 20px; border:1px solid #e4e4ff; border-radius:17px; background:linear-gradient(135deg,#f5f2ff,#eef5ff); text-align:center; }
+.mv-listening-word-card h2 { margin:9px 0; color:#173b62; font-size:clamp(28px,4vw,44px); font-weight:850; overflow-wrap:anywhere; }
+.mv-listening-word-card .mv-listening-ipa { margin:0; color:#287bc1; font-size:18px; }
+.mv-listening-word-card .mv-listening-meaning { margin:10px 0 0; color:#506985; font-size:18px; font-weight:650; }
+.mv-listening-word-card .mv-listening-status { margin:12px 0 0; color:#8294a9; font-size:12px; }
+.mv-listening-unit-progress { margin:0; color:#6d8299; font-size:13px; font-weight:700; }
+@media(max-width:850px){ .mv-listening-settings-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:560px){ .mv-listening-header { align-items:flex-start; } .mv-listening-settings-grid { grid-template-columns:1fr; } .mv-listening-scope-toggle { width:100%; } .mv-listening-scope-toggle button { flex:1; padding:10px 8px; } .mv-listening-word-card { min-height:210px; } }
+
+
+/* V6 — Fit the standalone Listening workspace naturally in the viewport.
+   Avoid CSS zoom: it scales visual content but can leave a mismatched layout box
+   and cause horizontal overflow / off-center placement. */
+.mv-listening-fullscreen {
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 2.5vw, 30px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.mv-listening-fullscreen,
+.mv-listening-fullscreen * {
+  box-sizing: border-box;
+}
+.mv-listening-fullscreen .mv-study-fullscreen-inner {
+  width: min(100%, 1180px);
+  max-width: 1180px;
+  min-height: 0;
+  height: auto;
+  margin: auto;
+  justify-content: center;
+}
+.mv-listening-fullscreen .mv-listening-stage {
+  width: 100%;
+  max-width: 1180px;
+  margin: auto;
+  padding: clamp(20px, 2.2vw, 28px);
+  border-radius: 18px;
+}
+.mv-listening-fullscreen .mv-listening-header {
+  margin-bottom: 16px;
+}
+.mv-listening-fullscreen .mv-listening-settings {
+  margin-bottom: 16px;
+  padding: 15px;
+}
+.mv-listening-fullscreen .mv-listening-body {
+  gap: 12px;
+}
+.mv-listening-fullscreen .mv-listening-word-card {
+  min-height: clamp(190px, 27vh, 245px);
+  padding: 22px 18px;
+}
+.mv-listening-fullscreen .mv-listening-word-card h2 {
+  font-size: clamp(26px, 3vw, 38px);
+}
+.mv-listening-fullscreen .mv-listening-scope-toggle button {
+  padding: 9px 15px;
+}
+@media (max-height: 760px) and (min-width: 701px) {
+  .mv-listening-fullscreen { padding-block: 14px; }
+  .mv-listening-fullscreen .mv-listening-stage { padding-block: 18px; }
+  .mv-listening-fullscreen .mv-listening-header { margin-bottom: 10px; }
+  .mv-listening-fullscreen .mv-listening-word-card { min-height: 165px; padding-block: 14px; }
+  .mv-listening-fullscreen .mv-listening-word-card h2 { margin: 5px 0; font-size: 30px; }
+  .mv-listening-fullscreen .mv-listening-word-card .mv-listening-meaning { margin-top: 5px; font-size: 15px; }
+  .mv-listening-fullscreen .mv-listening-settings { margin-bottom: 10px; padding: 12px; }
+}
+@media (max-width: 700px) {
+  .mv-listening-fullscreen { align-items: flex-start; padding: 10px; }
+  .mv-listening-fullscreen .mv-study-fullscreen-inner { width: 100%; min-height: 0; padding-top: 8px; }
+  .mv-listening-fullscreen .mv-listening-stage { width: 100%; padding: 16px; }
+}
+
+
+/* Infinite listening loop option */
+.mv-listening-loop-option{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding:12px 14px;border:1px solid #d9e6f4;border-radius:12px;background:#f7fbff;color:#244b72;cursor:pointer}
+.mv-listening-loop-option input{width:17px;height:17px;margin:2px 0 0;accent-color:#216eae;flex:0 0 auto}
+.mv-listening-loop-option span{display:flex;flex-direction:column;gap:3px}
+.mv-listening-loop-option strong{font-size:13px;font-weight:700}
+.mv-listening-loop-option small{font-size:12px;line-height:1.45;color:#71849a}
+
+
+/* V8 — Restore the full Listening design and keep controls styled consistently. */
+.mv-listening-fullscreen {
+  isolation: isolate;
+  color: #203c5a;
+  font-family: inherit;
+}
+.mv-listening-fullscreen .mv-listening-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: min(100%, 1180px);
+  min-width: 0;
+  overflow: hidden;
+}
+.mv-listening-fullscreen .mv-listening-header-actions button:not(.mv-listening-close),
+.mv-listening-fullscreen .mv-listening-controls button {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 15px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.mv-listening-fullscreen .mv-listening-controls button:hover,
+.mv-listening-fullscreen .mv-listening-header-actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(31, 83, 132, .12);
+}
+.mv-listening-fullscreen .mv-listening-scope-toggle {
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.mv-listening-fullscreen .mv-listening-scope-toggle button {
+  min-height: 40px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.mv-listening-fullscreen .mv-listening-word-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.mv-listening-fullscreen .mv-listening-notice {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.mv-listening-fullscreen .mv-listening-controls {
+  width: 100%;
+}
+@media (max-width: 640px) {
+  .mv-listening-fullscreen { padding: 10px; }
+  .mv-listening-fullscreen .mv-listening-stage { padding: 16px; border-radius: 14px; }
+  .mv-listening-fullscreen .mv-listening-header { gap: 10px; }
+  .mv-listening-fullscreen .mv-listening-header-actions { flex-shrink: 0; }
+  .mv-listening-fullscreen .mv-listening-word-card { min-height: 175px; padding: 18px 12px; }
+  .mv-listening-fullscreen .mv-listening-controls button { flex: 1 1 auto; }
+}
