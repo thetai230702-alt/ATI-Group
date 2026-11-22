@@ -137,6 +137,7 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
   const [listeningPaused, setListeningPaused] = useState(false);
   const [listeningActive, setListeningActive] = useState(false);
   const [listeningNotice, setListeningNotice] = useState("");
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [listenRunKey, setListenRunKey] = useState(0);
   const [studyMode, setStudyMode] = useState<StudyMode>("flashcard");
   const [studyIndex, setStudyIndex] = useState(0);
@@ -536,6 +537,16 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
   const listeningWords = words;
   const listeningWord = listeningWords[studyIndex];
 
+  // Nạp danh sách giọng đọc bất đồng bộ: Chrome/Edge thường chỉ trả về đầy đủ sau voiceschanged.
+  useEffect(() => {
+    if (!("speechSynthesis" in window)) return;
+    const synth = window.speechSynthesis;
+    const refreshVoices = () => setAvailableVoices(synth.getVoices());
+    refreshVoices();
+    synth.addEventListener("voiceschanged", refreshVoices);
+    return () => synth.removeEventListener("voiceschanged", refreshVoices);
+  }, []);
+
   // Luyện nghe toàn bộ Unit: mỗi từ được lặp đủ số lần, sau đó tự chuyển sang từ kế tiếp.
   // Nghĩa tiếng Việt dùng voice vi-VN riêng; có khoảng nghỉ giữa hai ngôn ngữ để tránh khựng/nuốt âm.
   useEffect(() => {
@@ -548,15 +559,26 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
     setListeningNotice("");
     synth.cancel();
 
-    const voices = synth.getVoices();
+    const voices = availableVoices.length ? availableVoices : synth.getVoices();
     const englishLocale = voiceType === "UK" ? "en-GB" : "en-US";
     const englishVoices = voices.filter(v => v.lang.toLowerCase() === englishLocale.toLowerCase());
     const englishVoice = englishVoices.find(v => /female|aria|jenny|ava|sara|zira|samantha/i.test(v.name)) || englishVoices[0];
-    const vietnameseVoices = voices.filter(v => v.lang.toLowerCase().startsWith("vi"));
-    const vietnameseVoice = vietnameseVoices.find(v => /female|hoai.?my|an|linh|google.*vi/i.test(v.name)) || vietnameseVoices[0];
+
+    // Ưu tiên giọng tiếng Việt chuẩn vi-VN của Microsoft Neural (HoaiMy nữ),
+    // sau đó Google Vietnamese; tuyệt đối không dùng giọng English để đọc nghĩa tiếng Việt.
+    const vietnameseVoices = voices.filter(v => v.lang.toLowerCase().replace("_", "-").startsWith("vi-vn"));
+    const vietnameseVoice =
+      vietnameseVoices.find(v => /hoaimy.*neural|hoaimy.*natural/i.test(v.name)) ||
+      vietnameseVoices.find(v => /google.*(tiếng việt|vietnamese)|vietnamese.*google/i.test(v.name)) ||
+      vietnameseVoices.find(v => /hoaimy/i.test(v.name)) ||
+      vietnameseVoices.find(v => /namminh.*neural|namminh.*natural/i.test(v.name)) ||
+      vietnameseVoices.find(v => !v.localService) ||
+      vietnameseVoices[0];
 
     if (listeningContent === "both" && !vietnameseVoice) {
-      setListeningNotice("Thiết bị chưa cung cấp giọng đọc tiếng Việt (vi-VN) riêng. Nghĩa tiếng Việt có thể phát âm chưa tự nhiên; hãy cài thêm giọng Vietnamese trong Windows hoặc thử Chrome.");
+      setListeningNotice("Chưa tìm thấy giọng Vietnamese (Vietnam) trên thiết bị. Hãy dùng Microsoft Edge và cài giọng Vietnamese (Vietnam) trong Windows để nghe nghĩa bằng giọng tiếng Việt tự nhiên.");
+    } else if (listeningContent === "both" && vietnameseVoice) {
+      setListeningNotice(`Giọng nghĩa tiếng Việt: ${vietnameseVoice.name} (${vietnameseVoice.lang}).`);
     }
 
     const schedule = (callback: () => void, delay = 320) => {
@@ -587,9 +609,12 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
       }
       const meaningUtterance = new SpeechSynthesisUtterance(listeningWord.meaning);
       meaningUtterance.lang = "vi-VN";
-      meaningUtterance.rate = Math.min(1, Math.max(0.85, speechSpeed));
+      meaningUtterance.rate = Math.min(0.98, Math.max(0.88, speechSpeed));
       meaningUtterance.pitch = 1;
-      if (vietnameseVoice) meaningUtterance.voice = vietnameseVoice;
+      if (vietnameseVoice) {
+        meaningUtterance.voice = vietnameseVoice;
+        meaningUtterance.lang = vietnameseVoice.lang || "vi-VN";
+      }
       meaningUtterance.onend = finishCurrentWord;
       meaningUtterance.onerror = () => {
         if (!cancelled) {
@@ -628,7 +653,7 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
       synth.cancel();
     };
   }, [showStudy, studyMode, listeningActive, studyIndex, listeningWord?.id, listeningWord?.english, listeningWord?.meaning,
-      listeningRepeat, listeningContent, voiceType, speechSpeed, listenRunKey, listeningWords.length]);
+      listeningRepeat, listeningContent, voiceType, speechSpeed, listenRunKey, listeningWords.length, availableVoices]);
 
   useEffect(() => {
     setStudyIndex((index) =>
@@ -1145,6 +1170,14 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
                   <div className="mv-study-settings-row">
                     <span>Tốc độ đọc</span>
                     <select value={speechSpeed} onChange={e => setSpeechSpeed(Number(e.target.value))}>{[0.6,0.8,0.9,1,1.1,1.25,1.5].map(v => <option key={v} value={v}>{v}x</option>)}</select>
+                  </div>
+                  <div className="mv-study-settings-row">
+                    <span>Giọng nghĩa tiếng Việt</span>
+                    <strong style={{ fontSize: 12, color: COLORS.muted, textAlign: "right" }}>
+                      {availableVoices.find(v => v.lang.toLowerCase().replace("_", "-").startsWith("vi-vn") && /hoaimy.*neural|hoaimy.*natural/i.test(v.name))?.name
+                        || availableVoices.find(v => v.lang.toLowerCase().replace("_", "-").startsWith("vi-vn"))?.name
+                        || "Chưa có giọng vi-VN"}
+                    </strong>
                   </div>
                   <div className="mv-study-settings-row">
                     <span>Số lần lặp từ</span>

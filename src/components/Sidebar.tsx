@@ -125,8 +125,6 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
       flashcards: "Từ vựng",
       cefr: "Từ vựng CEFR",
       "my-vocabulary": "Từ vựng của tôi",
-      information: "Giới thiệu ATI Group",
-      "ati-introduction": "Giới thiệu ATI Learn English",
     };
     const label = isEnglish ? item.label : (vietnameseLabels[item.id] ?? item.label);
     return (
