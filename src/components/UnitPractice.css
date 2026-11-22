@@ -556,3 +556,65 @@
 @media(max-width:560px){
   .practice-shortcut-hints{gap:6px 10px;font-size:9px}
 }
+
+
+/* Select a word in the reference answer and save it to My Vocabulary */
+.practice-selectable-answer{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 3px}
+.practice-word-pick{
+  display:inline;
+  padding:1px 2px;
+  border:0;
+  border-radius:5px;
+  background:transparent;
+  color:inherit;
+  font:inherit;
+  font-weight:inherit;
+  cursor:pointer;
+  text-decoration:underline;
+  text-decoration-color:#9fc5e8;
+  text-decoration-thickness:1px;
+  text-underline-offset:4px;
+  transition:background .15s,color .15s;
+}
+.practice-word-pick:hover,.practice-word-pick:focus-visible{
+  outline:none;
+  background:#e8f3ff;
+  color:#1768ad;
+}
+.practice-word-pick-hint{margin:5px 0 10px;color:#8294a9;font-size:10px}
+.practice-vocabulary-backdrop{
+  position:fixed;inset:0;z-index:10000;display:grid;place-items:center;
+  padding:18px;background:rgba(16,35,58,.48);backdrop-filter:blur(5px)
+}
+.practice-vocabulary-modal{
+  width:min(100%,470px);max-height:min(90vh,760px);overflow:auto;
+  padding:24px;background:#fff;border:1px solid #e0eaf4;border-radius:20px;
+  box-shadow:0 24px 80px rgba(20,48,78,.24)
+}
+.practice-vocabulary-modal-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:20px}
+.practice-vocabulary-eyebrow{color:#2677b8;font-size:9px;font-weight:900;letter-spacing:1.3px}
+.practice-vocabulary-modal-head h2{margin:6px 0;color:#1d3d60;font-size:20px;font-weight:900}
+.practice-vocabulary-modal-head p{margin:0;color:#8091a5;font-size:12px}
+.practice-vocabulary-close{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border:0;border-radius:9px;background:#f1f5fa;color:#536b83;cursor:pointer}
+.practice-vocabulary-field{display:flex;flex-direction:column;gap:7px;margin:13px 0;color:#4d6680;font-size:11px;font-weight:800}
+.practice-vocabulary-field input,.practice-vocabulary-field select{
+  width:100%;min-height:42px;padding:10px 12px;border:1px solid #dce6f0;border-radius:10px;
+  background:#fbfdff;color:#243e5a;font:inherit;font-size:13px;box-sizing:border-box
+}
+.practice-vocabulary-field input:focus,.practice-vocabulary-field select:focus{
+  outline:2px solid #c6e2fb;border-color:#6da9d8
+}
+.practice-vocabulary-message{margin:12px 0;color:#bd4651;font-size:12px;font-weight:750}
+.practice-vocabulary-message.success{color:#16865d}
+.practice-vocabulary-empty{padding:11px;border-radius:9px;background:#fff8e9;color:#916b27;font-size:11px;line-height:1.5}
+.practice-vocabulary-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px;padding-top:15px;border-top:1px solid #edf2f7}
+.practice-vocabulary-actions button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:9px 14px;border-radius:10px;font-size:12px;font-weight:850;cursor:pointer}
+.practice-vocabulary-cancel{border:1px solid #dce6f0;background:#fff;color:#5b7188}
+.practice-vocabulary-save{border:1px solid #216eae;background:linear-gradient(110deg,#155b9d,#287bc1);color:#fff}
+.practice-vocabulary-save:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:560px){
+  .practice-vocabulary-modal{padding:18px;border-radius:16px}
+  .practice-vocabulary-modal-head h2{font-size:17px}
+  .practice-vocabulary-actions{flex-direction:column-reverse}
+  .practice-vocabulary-actions button{width:100%}
+}

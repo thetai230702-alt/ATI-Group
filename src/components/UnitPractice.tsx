@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowLeft, ArrowRight, Volume2, Pause, Play, Eye, EyeOff,
-  CheckCircle2, XCircle, RotateCcw, SkipForward,
+  CheckCircle2, XCircle, RotateCcw, SkipForward, BookmarkPlus, X,
 } from "lucide-react";
 import type { Unit } from "../types/unit";
+import { auth, db } from "../firebase";
+import { addDoc, collection, getDocs, serverTimestamp } from "firebase/firestore";
 import { recordCheckedSentence as recordStudyAttempt } from "../services/studyGoals";
 import "./UnitPractice.css";
 
@@ -81,6 +83,11 @@ function readUnitPracticeProgress(unitNumber: number): Record<number, boolean> {
   } catch { return {}; }
 }
 
+interface VocabularyTopicOption {
+  id: string;
+  name: string;
+}
+
 function UnitPractice({ unit, onBack }: UnitPracticeProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answer, setAnswer] = useState("");
@@ -93,6 +100,15 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
   const [audioMessage, setAudioMessage] = useState("");
   const [checkedResults, setCheckedResults] = useState<Record<number, boolean>>(() => readUnitPracticeProgress(unit.unitNumber));
   const [showSummary, setShowSummary] = useState(false);
+  const [selectedWord, setSelectedWord] = useState("");
+  const [showVocabularyModal, setShowVocabularyModal] = useState(false);
+  const [vocabularyTopics, setVocabularyTopics] = useState<VocabularyTopicOption[]>([]);
+  const [targetTopicId, setTargetTopicId] = useState("");
+  const [newWordIpa, setNewWordIpa] = useState("");
+  const [newWordMeaning, setNewWordMeaning] = useState("");
+  const [savingVocabularyWord, setSavingVocabularyWord] = useState(false);
+  const [vocabularySaveMessage, setVocabularySaveMessage] = useState("");
+
 
   const runIdRef = useRef(0);
   const delayTimerRef = useRef<number | null>(null);
@@ -234,7 +250,70 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
     else setAudioMessage("Bạn đã đến câu cuối cùng của Unit.");
   }
 
-  // Global shortcuts: Alt+A reveal answer, Alt+R reset, Alt+S skip,
+  async function openVocabularyPicker(word: string) {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      setVocabularySaveMessage("Vui lòng đăng nhập để lưu từ vựng.");
+      return;
+    }
+    setSelectedWord(word);
+    setNewWordIpa("");
+    setNewWordMeaning("");
+    setVocabularySaveMessage("");
+    try {
+      const topicsSnapshot = await getDocs(
+        collection(db, "users", currentUser.uid, "vocabularyTopics")
+      );
+      const options = topicsSnapshot.docs.map(item => ({
+        id: item.id,
+        name: String(item.data().name ?? "Chủ đề chưa đặt tên"),
+      }));
+      setVocabularyTopics(options);
+      setTargetTopicId(options[0]?.id ?? "");
+      setShowVocabularyModal(true);
+    } catch (error) {
+      console.error("Không thể tải danh sách từ vựng:", error);
+      setVocabularySaveMessage("Không thể tải danh sách từ vựng. Vui lòng thử lại.");
+    }
+  }
+
+  async function saveSelectedWordToVocabulary() {
+    const currentUser = auth.currentUser;
+    if (!currentUser || !targetTopicId || !selectedWord.trim()) return;
+    setSavingVocabularyWord(true);
+    setVocabularySaveMessage("");
+    try {
+      const wordsRef = collection(
+        db, "users", currentUser.uid, "vocabularyTopics", targetTopicId, "words"
+      );
+      const existing = await getDocs(wordsRef);
+      const duplicate = existing.docs.some(item =>
+        String(item.data().english ?? "").trim().toLocaleLowerCase() === selectedWord.trim().toLocaleLowerCase()
+      );
+      if (duplicate) {
+        setVocabularySaveMessage("Từ này đã có trong danh sách được chọn.");
+        return;
+      }
+      await addDoc(wordsRef, {
+        english: selectedWord.trim(),
+        ipa: newWordIpa.trim(),
+        meaning: newWordMeaning.trim(),
+        remembered: false,
+        createdAt: serverTimestamp(),
+        source: "unit-practice",
+        sourceUnit: unit.unitNumber,
+      });
+      setVocabularySaveMessage("Đã thêm từ vào danh sách từ vựng!");
+      window.setTimeout(() => setShowVocabularyModal(false), 900);
+    } catch (error) {
+      console.error("Không thể lưu từ vựng:", error);
+      setVocabularySaveMessage("Lưu từ thất bại. Vui lòng kiểm tra kết nối và quyền Firestore.");
+    } finally {
+      setSavingVocabularyWord(false);
+    }
+  }
+
+  // Global shortcuts: Alt+L play sentence, Alt+A reveal answer, Alt+R reset, Alt+S skip,
   // Left/Right navigate when focus is not inside an editable control.
   useEffect(() => {
     function handleGlobalShortcuts(event: KeyboardEvent) {
@@ -242,7 +321,11 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
 
       if (event.altKey && !event.ctrlKey && !event.metaKey) {
         const key = event.key.toLowerCase();
-        if (key === "a") {
+        if (key === "l") {
+          event.preventDefault();
+          if (playing) pauseAudio();
+          else playAnswer();
+        } else if (key === "a") {
           event.preventDefault();
           setShowAnswer(value => !value);
         } else if (key === "r") {
@@ -483,6 +566,7 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
             </button>
           </div>
           <div className="practice-shortcut-hints" aria-label="Phím tắt">
+            <span><kbd>Alt</kbd> + <kbd>L</kbd> Nghe câu mẫu</span>
             <span><kbd>Enter</kbd> Kiểm tra / Câu tiếp</span>
             <span><kbd>Alt</kbd> + <kbd>A</kbd> Xem đáp án</span>
             <span><kbd>Alt</kbd> + <kbd>R</kbd> Làm lại</span>
@@ -495,7 +579,27 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
         {showAnswer && (
           <div className="practice-inline-answer">
             <span>ĐÁP ÁN TIẾNG ANH THAM KHẢO</span>
-            <h3>{sentence.english}</h3>
+            <h3 className="practice-selectable-answer">
+              {sentence.english.split(/(\s+)/).map((part, index) => {
+                if (!part.trim()) return <span key={index}>{part}</span>;
+                const cleanWord = part.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, "");
+                if (!cleanWord) return <span key={index}>{part}</span>;
+                const punctuationStart = part.match(/^[^A-Za-z]+/)?.[0] ?? "";
+                const punctuationEnd = part.match(/[^A-Za-z]+$/)?.[0] ?? "";
+                return (
+                  <span key={index}>
+                    {punctuationStart}
+                    <button type="button" className="practice-word-pick"
+                      onClick={() => openVocabularyPicker(cleanWord)}
+                      title={`Thêm "${cleanWord}" vào Từ vựng của tôi`}>
+                      {cleanWord}
+                    </button>
+                    {punctuationEnd}
+                  </span>
+                );
+              })}
+            </h3>
+            <p className="practice-word-pick-hint">Nhấn vào từ bạn chưa biết để thêm vào Từ vựng của tôi.</p>
             {sentence.ipa && <p><strong>IPA:</strong> {sentence.ipa}</p>}
             {sentence.vocabulary && <p><strong>Từ vựng:</strong> {sentence.vocabulary}</p>}
           </div>
@@ -514,6 +618,66 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
           {currentIndex === total - 1 ? <CheckCircle2 size={18} /> : <ArrowRight size={18} />}
         </button>
       </div>
+
+      {showVocabularyModal && (
+        <div className="practice-vocabulary-backdrop" role="presentation"
+          onMouseDown={event => {
+            if (event.target === event.currentTarget) setShowVocabularyModal(false);
+          }}>
+          <section className="practice-vocabulary-modal" role="dialog" aria-modal="true"
+            aria-labelledby="practice-vocabulary-title">
+            <div className="practice-vocabulary-modal-head">
+              <div>
+                <span className="practice-vocabulary-eyebrow">MY VOCABULARY</span>
+                <h2 id="practice-vocabulary-title">Thêm vào Từ vựng của tôi</h2>
+                <p>Chọn danh sách muốn lưu từ này.</p>
+              </div>
+              <button type="button" className="practice-vocabulary-close"
+                onClick={() => setShowVocabularyModal(false)} aria-label="Đóng">
+                <X size={19}/>
+              </button>
+            </div>
+            <label className="practice-vocabulary-field">
+              <span>Từ tiếng Anh</span>
+              <input value={selectedWord} readOnly />
+            </label>
+            <label className="practice-vocabulary-field">
+              <span>Chọn danh sách từ vựng *</span>
+              <select value={targetTopicId} onChange={event => setTargetTopicId(event.target.value)}>
+                {vocabularyTopics.length === 0 && <option value="">Chưa có danh sách</option>}
+                {vocabularyTopics.map(topic => <option key={topic.id} value={topic.id}>{topic.name}</option>)}
+              </select>
+            </label>
+            <label className="practice-vocabulary-field">
+              <span>Phiên âm IPA (có thể bổ sung sau)</span>
+              <input value={newWordIpa} onChange={event => setNewWordIpa(event.target.value)}
+                placeholder="/.../" />
+            </label>
+            <label className="practice-vocabulary-field">
+              <span>Nghĩa tiếng Việt (có thể bổ sung sau)</span>
+              <input value={newWordMeaning} onChange={event => setNewWordMeaning(event.target.value)}
+                placeholder="Nhập nghĩa tiếng Việt..." />
+            </label>
+            {vocabularySaveMessage && (
+              <p className={`practice-vocabulary-message ${vocabularySaveMessage.startsWith("Đã thêm") ? "success" : ""}`}>
+                {vocabularySaveMessage}
+              </p>
+            )}
+            {vocabularyTopics.length === 0 && (
+              <p className="practice-vocabulary-empty">Bạn chưa tạo danh sách từ vựng nào. Hãy tạo một Unit trong mục Từ vựng của tôi trước nhé.</p>
+            )}
+            <div className="practice-vocabulary-actions">
+              <button type="button" className="practice-vocabulary-cancel"
+                onClick={() => setShowVocabularyModal(false)}>Hủy</button>
+              <button type="button" className="practice-vocabulary-save"
+                disabled={!targetTopicId || savingVocabularyWord}
+                onClick={saveSelectedWordToVocabulary}>
+                <BookmarkPlus size={17}/>{savingVocabularyWord ? "Đang lưu..." : "Thêm vào danh sách"}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
 
       {showSummary && (
         <div className="practice-summary-backdrop" role="presentation">
