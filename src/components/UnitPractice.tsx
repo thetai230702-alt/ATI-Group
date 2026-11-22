@@ -639,7 +639,15 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
             </div>
             <label className="practice-vocabulary-field">
               <span>Từ tiếng Anh</span>
-              <input value={selectedWord} readOnly />
+              <input
+                value={selectedWord}
+                onChange={event => {
+                  setSelectedWord(event.target.value);
+                  setVocabularySaveMessage("");
+                }}
+                placeholder="Nhập từ tiếng Anh..."
+                autoFocus
+              />
             </label>
             <label className="practice-vocabulary-field">
               <span>Chọn danh sách từ vựng *</span>
@@ -670,7 +678,7 @@ function UnitPractice({ unit, onBack }: UnitPracticeProps) {
               <button type="button" className="practice-vocabulary-cancel"
                 onClick={() => setShowVocabularyModal(false)}>Hủy</button>
               <button type="button" className="practice-vocabulary-save"
-                disabled={!targetTopicId || savingVocabularyWord}
+                disabled={!targetTopicId || !selectedWord.trim() || savingVocabularyWord}
                 onClick={saveSelectedWordToVocabulary}>
                 <BookmarkPlus size={17}/>{savingVocabularyWord ? "Đang lưu..." : "Thêm vào danh sách"}
               </button>
