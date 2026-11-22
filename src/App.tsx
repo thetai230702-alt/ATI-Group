@@ -16,6 +16,7 @@ import Flashcards from "./components/Flashcards";
 import CefrFlashcards from "./components/CefrFlashcards";
 import MyVocabulary from "./components/MyVocabulary";
 import Information from "./components/Information";
+import AtiLearnEnglishIntro from "./components/AtiLearnEnglishIntro";
 import Profile from "./components/Profile";
 import Settings, { type AtiTheme } from "./components/Settings";
 import Dashboard from "./components/Dashboard";
@@ -46,6 +47,7 @@ const VALID_TABS: TabType[] = [
   "cefr",
   "my-vocabulary",
   "information",
+  "ati-introduction",
   "profile",
   "settings",
 ];
@@ -64,6 +66,7 @@ const TAB_ROUTES: Record<TabType, string> = {
   "my-vocabulary": "/hoc-tieng-anh/tu-vung-cua-toi",
   profile: "/tai-khoan/ho-so-ca-nhan",
   information: "/gioi-thieu-t-ai-group",
+  "ati-introduction": "/ati-learn-english/gioi-thieu",
   settings: "/tai-khoan/cai-dat",
 };
 
@@ -336,7 +339,7 @@ function App() {
     dashboard: "Tổng quan ATI Group",
     "learning-dashboard": "Tổng quan Học tiếng Anh",
     checklist: "Tổng quan học tập",
-    statistics: "Báo cáo học tập",
+    statistics: "Thống kê 1.500 câu",
     units: "Luyện tập 1.500 câu",
     listening: "Luyện nghe",
     tenses: "12 English Tenses",
@@ -344,7 +347,8 @@ function App() {
     flashcards: "Flashcard từ vựng",
     cefr: "Flashcard CEFR",
     "my-vocabulary": "Từ vựng của tôi",
-    information: "Thông tin ứng dụng",
+    information: "Giới thiệu",
+    "ati-introduction": "Giới thiệu ATI Learn English",
     profile: "Hồ sơ tài khoản",
     settings: "Cài đặt ATI",
   };
@@ -356,7 +360,7 @@ function App() {
       (Object.entries(pageTitles) as [TabType, string][])
         .filter(([tab, title]) => {
           const query = globalSearch.trim().toLocaleLowerCase("vi");
-          if (!query) return tab !== "information" && tab !== "profile";
+          if (!query) return tab !== "information" && tab !== "ati-introduction" && tab !== "profile";
           return title.toLocaleLowerCase("vi").includes(query) ||
             tab.toLocaleLowerCase("vi").includes(query);
         })
@@ -673,6 +677,7 @@ function App() {
           {activeTab === "my-vocabulary" && <MyVocabulary language={language} />}
 
           {activeTab === "information" && <Information language={language} />}
+          {activeTab === "ati-introduction" && <AtiLearnEnglishIntro language={language} onNavigate={setActiveTab} />}
           {activeTab === "profile" && <Profile syncStatus={learningSyncStatus} />}
           {activeTab === "settings" && (
             <Settings

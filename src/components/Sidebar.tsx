@@ -3,14 +3,13 @@ import {
   BookOpen,
   BookPlus,
   BookMarked,
-  ChevronDown,
   ClipboardCheck,
+  ChevronDown,
   ChartNoAxesCombined,
   GraduationCap,
   Headphones,
   LayoutDashboard,
   Info,
-  Layers,
   UserRound,
   Settings as SettingsIcon,
 } from "lucide-react";
@@ -30,6 +29,7 @@ export type TabType =
   | "irregular-verbs"
   | "my-vocabulary"
   | "information"
+  | "ati-introduction"
   | "profile"
   | "settings";
 
@@ -49,38 +49,39 @@ type LearningItem = {
 };
 
 type LearningGroup = {
-  id: "overview" | "practice" | "vocabulary";
+  id: "intro" | "theory" | "sentences";
   label: string;
   items: LearningItem[];
 };
 
+// Keep navigation data-driven so future learning tracks (TOEIC, IELTS, etc.)
+// can be added as new groups without restructuring the sidebar.
 const learningGroups: LearningGroup[] = [
   {
-    id: "overview",
-    label: "TỔNG QUAN",
+    id: "intro",
+    label: "GIỚI THIỆU",
     items: [
-      { id: "learning-dashboard", label: "Learning Overview", description: "Your learning dashboard", icon: GraduationCap },
-      { id: "checklist", label: "Learning Checklist", description: "Progress and daily goals", icon: ClipboardCheck },
-      { id: "statistics", label: "Learning Statistics", description: "Track your results", icon: ChartNoAxesCombined },
+      { id: "ati-introduction", label: "Giới thiệu ATI Learn English", description: "Giới thiệu nền tảng học tiếng Anh ATI", icon: Info },
     ],
   },
   {
-    id: "practice",
-    label: "LUYỆN TẬP",
+    id: "theory",
+    label: "LÝ THUYẾT",
     items: [
-      { id: "units", label: "1,500 Sentences", description: "Practice English by unit", icon: BookOpen },
-      { id: "listening", label: "Listening Practice", description: "Listening and pronunciation", icon: Headphones },
-      { id: "tenses", label: "12 English Tenses", description: "Grammar rules and examples", icon: BookMarked },
-      { id: "irregular-verbs", label: "Irregular Verbs", description: "Learn V1, V2 and V3 step by step", icon: BookOpen },
+      { id: "tenses", label: "12 thì tiếng Anh", description: "Ngữ pháp và ví dụ", icon: BookMarked },
+      { id: "cefr", label: "Từ vựng CEFR", description: "Từ vựng theo cấp độ A1–C2", icon: Award },
+      { id: "irregular-verbs", label: "Động từ bất quy tắc", description: "Học V1, V2 và V3", icon: BookOpen },
     ],
   },
   {
-    id: "vocabulary",
-    label: "TỪ VỰNG",
+    id: "sentences",
+    label: "1500 CÂU PHẢN XẠ TIẾNG ANH",
     items: [
-      { id: "flashcards", label: "Vocabulary Flashcards", description: "Learn words by topic", icon: Layers },
-      { id: "cefr", label: "CEFR Vocabulary", description: "Build A1–C2 vocabulary", icon: Award },
-      { id: "my-vocabulary", label: "My Vocabulary", description: "Your saved words", icon: BookPlus },
+      { id: "checklist", label: "Danh sách học tập", description: "Checklist tiến độ từng Unit", icon: ClipboardCheck },
+      { id: "my-vocabulary", label: "Từ vựng của tôi", description: "Từ vựng lưu từ chương trình 1.500 câu", icon: BookPlus },
+      { id: "units", label: "Luyện tập 1.500 câu", description: "Luyện phản xạ theo Unit", icon: BookOpen },
+      { id: "listening", label: "Luyện nghe", description: "Nghe và luyện phát âm 1.500 câu", icon: Headphones },
+      { id: "statistics", label: "Thống kê học tập", description: "Tiến độ riêng của 1.500 câu", icon: ChartNoAxesCombined },
     ],
   },
 ];
@@ -89,9 +90,9 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
   const isEnglish = language === "en";
   const [learningOpen, setLearningOpen] = useState(true);
   const [openGroups, setOpenGroups] = useState<Record<LearningGroup["id"], boolean>>({
-    overview: true,
-    practice: true,
-    vocabulary: true,
+    intro: true,
+    theory: true,
+    sentences: true,
   });
 
   const activeGroup = learningGroups.find((group) =>
@@ -113,16 +114,19 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
     const Icon = item.icon;
     const isActive = activeTab === item.id;
     const vietnameseLabels: Partial<Record<TabType, string>> = {
-      "learning-dashboard": "Tổng quan học tập",
+      information: "Giới thiệu",
+      "ati-introduction": "Giới thiệu ATI Learn English",
       checklist: "Danh sách học tập",
       statistics: "Thống kê học tập",
       units: "Luyện tập 1.500 câu",
       listening: "Luyện nghe",
       tenses: "12 thì tiếng Anh",
       "irregular-verbs": "Động từ bất quy tắc",
-      flashcards: "Flashcard từ vựng",
+      flashcards: "Từ vựng",
       cefr: "Từ vựng CEFR",
       "my-vocabulary": "Từ vựng của tôi",
+      information: "Giới thiệu ATI Group",
+      "ati-introduction": "Giới thiệu ATI Learn English",
     };
     const label = isEnglish ? item.label : (vietnameseLabels[item.id] ?? item.label);
     return (
@@ -184,6 +188,8 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
           {activeTab === "dashboard" && <span className="active-indicator" />}
         </button>
 
+
+
         {!collapsed && <p className="menu-heading module-menu-heading">{isEnglish ? "MODULES" : "PHÂN HỆ"}</p>}
         <div className={`module-tree ${learningOpen ? "module-tree-open" : ""}`}>
           <button
@@ -220,7 +226,7 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
                       aria-expanded={groupIsOpen}
                       aria-controls={`learning-group-${group.id}`}
                     >
-                      <span>{isEnglish ? ({ overview: "OVERVIEW", practice: "PRACTICE", vocabulary: "VOCABULARY" } as const)[group.id] : group.label}</span>
+                      <span>{isEnglish ? ({ intro: "INTRODUCTION", theory: "THEORY", sentences: "1,500 ENGLISH RESPONSE SENTENCES" } as const)[group.id] : group.label}</span>
                       <ChevronDown size={13} className={groupIsOpen ? "group-chevron open" : "group-chevron"} />
                     </button>
                   )}
@@ -272,26 +278,24 @@ function Sidebar({ activeTab, onTabChange, collapsed, onToggle, language = "vi" 
           </button>
         </div>
 
-        <div className="sidebar-platform-section">
-          {!collapsed && <p className="menu-heading platform-heading">ATI GROUP</p>}
+        <div className="sidebar-about-footer">
           <button
             type="button"
             className={`menu-item ${activeTab === "information" ? "active" : ""}`}
             onClick={() => onTabChange("information")}
-            title={collapsed ? "Về ATI Group" : undefined}
+            title={collapsed ? "Giới thiệu ATI Group" : undefined}
             aria-current={activeTab === "information" ? "page" : undefined}
           >
             <span className="menu-icon"><Info size={18} strokeWidth={2} /></span>
             {!collapsed && (
               <span className="menu-item-text">
                 <span>{isEnglish ? "About ATI Group" : "Giới thiệu ATI Group"}</span>
-                <small>{isEnglish ? "Ecosystem information" : "Thông tin hệ sinh thái"}</small>
+                <small>{isEnglish ? "About the ATI Group ecosystem" : "Thông tin chung về ATI Group"}</small>
               </span>
             )}
             {activeTab === "information" && <span className="active-indicator" />}
           </button>
         </div>
-
 
       </div>
 

@@ -6,7 +6,6 @@ type ChecklistItem = { id: number; topic?: string; status?: string; date?: strin
 type PracticeMap = Record<string, Record<string, boolean>>;
 const CHECKLIST_KEY = "english-master-checklist";
 const PRACTICE_KEY = "ntt-unit-practice-progress-v1";
-const FLASHCARD_KEY = "english-master-flashcard-progress";
 
 function readJson<T,>(key: string, fallback: T): T {
   try {
@@ -46,23 +45,21 @@ export default function Statistics({ language = "vi" }: { language?: "vi" | "en"
 
   const checklist = useMemo(() => readJson<ChecklistItem[]>(CHECKLIST_KEY, []), [refresh]);
   const practice = useMemo(() => readJson<PracticeMap>(PRACTICE_KEY, {}), [refresh]);
-  const flashcards = useMemo(() => readJson<Record<string, unknown>>(FLASHCARD_KEY, {}), [refresh]);
   const completed = checklist.filter(item => item.status === "Đã học").length;
   const studying = checklist.filter(item => item.status === "Đang học").length;
   const attempted = Object.values(practice).reduce((sum, unit) => sum + Object.keys(unit).length, 0);
   const correct = Object.values(practice).reduce((sum, unit) => sum + Object.values(unit).filter(Boolean).length, 0);
   const accuracy = attempted ? Math.round(correct / attempted * 100) : 0;
   const reviewed = checklist.filter(item => item.review).length;
-  const flashcardCount = Object.keys(flashcards).length;
   const daily = getLastSevenDays(checklist);
   const maxDaily = Math.max(1, ...daily.map(day => day.count));
 
   return (
     <div className="statistics-page">
       <section className="statistics-hero">
-        <div><span className="statistics-eyebrow"><Activity size={14}/> ATI LEARNING · PERFORMANCE</span>
+        <div><span className="statistics-eyebrow"><Activity size={14}/> 1,500 SENTENCES · PERFORMANCE</span>
           <h2>{language === "en" ? 'Learning Report' : 'Báo cáo học tập'}</h2>
-          <p>{language === "en" ? 'A summary of checklist progress and sentence-practice results. Data is saved on this device and synced to your account when signed in.' : 'Tổng hợp tiến độ Checklist và kết quả luyện câu; dữ liệu được lưu trên thiết bị và đồng bộ theo tài khoản khi đăng nhập.'}</p>
+          <p>{language === "en" ? 'A focused report for the 1,500-sentence practice track. Progress is saved on this device and synced to your account when signed in.' : 'Theo dõi riêng tiến độ Checklist và kết quả luyện tập trong lộ trình 1.500 câu; dữ liệu được lưu trên thiết bị và đồng bộ theo tài khoản khi đăng nhập.'}</p>
         </div>
         <div className="statistics-hero-mark"><TrendingUp size={28}/><strong>{accuracy}%</strong><small>Độ chính xác</small></div>
       </section>
@@ -71,7 +68,7 @@ export default function Statistics({ language = "vi" }: { language?: "vi" | "en"
         <article><span className="statistics-kpi-icon blue"><BookOpen size={19}/></span><div><small>Unit hoàn thành</small><strong>{completed}<em>/ 50</em></strong><span>{studying} Unit đang học</span></div></article>
         <article><span className="statistics-kpi-icon cyan"><Target size={19}/></span><div><small>Câu đã kiểm tra</small><strong>{attempted.toLocaleString("vi-VN")}</strong><span>{correct} câu trả lời đúng</span></div></article>
         <article><span className="statistics-kpi-icon green"><CheckCircle2 size={19}/></span><div><small>Độ chính xác</small><strong>{accuracy}%</strong><span>{attempted - correct} câu cần ôn lại</span></div></article>
-        <article><span className="statistics-kpi-icon amber"><RotateCcw size={19}/></span><div><small>Unit đánh dấu ôn tập</small><strong>{reviewed}</strong><span>{flashcardCount} mục dữ liệu flashcard</span></div></article>
+        <article><span className="statistics-kpi-icon amber"><RotateCcw size={19}/></span><div><small>Unit đánh dấu ôn tập</small><strong>{reviewed}</strong><span>Trong lộ trình 1.500 câu</span></div></article>
       </section>
 
       <div className="statistics-content-grid">

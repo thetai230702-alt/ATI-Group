@@ -31,11 +31,14 @@ import {
   ArrowLeft,
   Search,
   Settings,
+  Headphones,
+  Play,
+  Pause,
 } from "lucide-react";
 
 import { auth, db } from "../firebase";
 
-type StudyMode = "flashcard" | "typing" | "quiz";
+type StudyMode = "flashcard" | "typing" | "quiz" | "listening";
 
 interface VocabularyTopic {
   id: string;
@@ -129,6 +132,12 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
   const [statusFilter, setStatusFilter] = useState<"all" | "learning" | "remembered">("all");
   const [voiceType, setVoiceType] = useState<"US" | "UK">("US");
   const [speechSpeed, setSpeechSpeed] = useState(0.9);
+  const [listeningRepeat, setListeningRepeat] = useState(3);
+  const [listeningContent, setListeningContent] = useState<"english" | "both">("both");
+  const [listeningPaused, setListeningPaused] = useState(false);
+  const [listeningActive, setListeningActive] = useState(false);
+  const [listeningNotice, setListeningNotice] = useState("");
+  const [listenRunKey, setListenRunKey] = useState(0);
   const [studyMode, setStudyMode] = useState<StudyMode>("flashcard");
   const [studyIndex, setStudyIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
@@ -523,6 +532,103 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
   // Chế độ học sử dụng đúng danh sách đang lọc để người học có thể ôn riêng từ chưa nhớ.
   const studyWords = filteredWords;
   const currentWord = studyWords[studyIndex];
+  // Luyện nghe luôn chạy toàn bộ từ trong Unit hiện tại, không bị giới hạn bởi bộ lọc tìm kiếm.
+  const listeningWords = words;
+  const listeningWord = listeningWords[studyIndex];
+
+  // Luyện nghe toàn bộ Unit: mỗi từ được lặp đủ số lần, sau đó tự chuyển sang từ kế tiếp.
+  // Nghĩa tiếng Việt dùng voice vi-VN riêng; có khoảng nghỉ giữa hai ngôn ngữ để tránh khựng/nuốt âm.
+  useEffect(() => {
+    if (!showStudy || studyMode !== "listening" || !listeningActive || !listeningWord || !("speechSynthesis" in window)) return;
+
+    const synth = window.speechSynthesis;
+    let cancelled = false;
+    let cycle = 0;
+    let gapTimer: ReturnType<typeof setTimeout> | undefined;
+    setListeningNotice("");
+    synth.cancel();
+
+    const voices = synth.getVoices();
+    const englishLocale = voiceType === "UK" ? "en-GB" : "en-US";
+    const englishVoices = voices.filter(v => v.lang.toLowerCase() === englishLocale.toLowerCase());
+    const englishVoice = englishVoices.find(v => /female|aria|jenny|ava|sara|zira|samantha/i.test(v.name)) || englishVoices[0];
+    const vietnameseVoices = voices.filter(v => v.lang.toLowerCase().startsWith("vi"));
+    const vietnameseVoice = vietnameseVoices.find(v => /female|hoai.?my|an|linh|google.*vi/i.test(v.name)) || vietnameseVoices[0];
+
+    if (listeningContent === "both" && !vietnameseVoice) {
+      setListeningNotice("Thiết bị chưa cung cấp giọng đọc tiếng Việt (vi-VN) riêng. Nghĩa tiếng Việt có thể phát âm chưa tự nhiên; hãy cài thêm giọng Vietnamese trong Windows hoặc thử Chrome.");
+    }
+
+    const schedule = (callback: () => void, delay = 320) => {
+      gapTimer = setTimeout(() => {
+        if (!cancelled) callback();
+      }, delay);
+    };
+
+    const finishCurrentWord = () => {
+      if (cancelled) return;
+      if (cycle < listeningRepeat) {
+        schedule(runCycle, 420);
+        return;
+      }
+      const nextIndex = studyIndex + 1;
+      if (nextIndex < listeningWords.length) {
+        schedule(() => setStudyIndex(nextIndex), 550);
+      } else {
+        setListeningActive(false);
+        setListeningPaused(false);
+      }
+    };
+
+    const speakMeaning = () => {
+      if (cancelled || listeningContent !== "both") {
+        finishCurrentWord();
+        return;
+      }
+      const meaningUtterance = new SpeechSynthesisUtterance(listeningWord.meaning);
+      meaningUtterance.lang = "vi-VN";
+      meaningUtterance.rate = Math.min(1, Math.max(0.85, speechSpeed));
+      meaningUtterance.pitch = 1;
+      if (vietnameseVoice) meaningUtterance.voice = vietnameseVoice;
+      meaningUtterance.onend = finishCurrentWord;
+      meaningUtterance.onerror = () => {
+        if (!cancelled) {
+          setListeningNotice("Giọng tiếng Việt trên thiết bị không phát được đoạn nghĩa. Hãy kiểm tra giọng Vietnamese trong cài đặt hệ điều hành.");
+          finishCurrentWord();
+        }
+      };
+      synth.speak(meaningUtterance);
+    };
+
+    const runCycle = () => {
+      if (cancelled || cycle >= listeningRepeat) return;
+      const englishUtterance = new SpeechSynthesisUtterance(listeningWord.english);
+      englishUtterance.lang = englishLocale;
+      englishUtterance.rate = speechSpeed;
+      englishUtterance.pitch = 1;
+      if (englishVoice) englishUtterance.voice = englishVoice;
+      englishUtterance.onend = () => schedule(speakMeaning, 280);
+      englishUtterance.onerror = () => {
+        if (!cancelled) {
+          setListeningNotice("Không phát được từ tiếng Anh. Bạn thử đổi giọng US/UK hoặc tải lại trang nhé.");
+          schedule(speakMeaning, 280);
+        }
+      };
+      synth.speak(englishUtterance);
+      cycle += 1;
+      if (listeningContent === "english") {
+        englishUtterance.onend = finishCurrentWord;
+      }
+    };
+
+    runCycle();
+    return () => {
+      cancelled = true;
+      if (gapTimer) clearTimeout(gapTimer);
+      synth.cancel();
+    };
+  }, [showStudy, studyMode, listeningActive, studyIndex, listeningWord?.id, listeningWord?.english, listeningWord?.meaning,
+      listeningRepeat, listeningContent, voiceType, speechSpeed, listenRunKey, listeningWords.length]);
 
   useEffect(() => {
     setStudyIndex((index) =>
@@ -966,6 +1072,23 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
             </button>
 
             <button
+              style={buttonStyle("#e8f4ff", COLORS.primary)}
+              onClick={() => {
+                setStudyMode("listening");
+                setStudyIndex(0);
+                setListeningActive(true);
+                setListeningPaused(false);
+                setShowStudy(true);
+                setShowStudySettings(false);
+                setListenRunKey(value => value + 1);
+              }}
+              disabled={filteredWords.length === 0}
+            >
+              <Headphones size={16} />
+              Luyện nghe
+            </button>
+
+            <button
               style={buttonStyle("#eeeaff", COLORS.primary)}
               onClick={() => setShowBulkForm(!showBulkForm)}
             >
@@ -1023,6 +1146,19 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
                     <span>Tốc độ đọc</span>
                     <select value={speechSpeed} onChange={e => setSpeechSpeed(Number(e.target.value))}>{[0.6,0.8,0.9,1,1.1,1.25,1.5].map(v => <option key={v} value={v}>{v}x</option>)}</select>
                   </div>
+                  <div className="mv-study-settings-row">
+                    <span>Số lần lặp từ</span>
+                    <select value={listeningRepeat} onChange={e => setListeningRepeat(Number(e.target.value))}>
+                      {[1, 2, 3, 5, 10].map(value => <option key={value} value={value}>{value} lần</option>)}
+                    </select>
+                  </div>
+                  <div className="mv-study-settings-row">
+                    <span>Nội dung luyện nghe</span>
+                    <select value={listeningContent} onChange={e => setListeningContent(e.target.value as "english" | "both")}>
+                      <option value="english">Chỉ tiếng Anh</option>
+                      <option value="both">Tiếng Anh → nghĩa tiếng Việt</option>
+                    </select>
+                  </div>
                 </section>
               )}
 
@@ -1079,6 +1215,23 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
                 >
                   <ListChecks size={16} />
                   Trắc nghiệm
+                </button>
+
+                <button
+                  style={buttonStyle(
+                    studyMode === "listening" ? COLORS.primary : "#f0f1f6",
+                    studyMode === "listening" ? "#fff" : COLORS.text
+                  )}
+                  onClick={() => {
+                    setStudyMode("listening");
+                    setStudyIndex(0);
+                    setListeningActive(true);
+                    setListeningPaused(false);
+                    setListenRunKey(value => value + 1);
+                  }}
+                >
+                  <Headphones size={16} />
+                  Luyện nghe
                 </button>
               </div>
 
@@ -1211,6 +1364,72 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
                           </div>
                         )}
                       </>
+                    )}
+
+                    {studyMode === "listening" && (
+                      <div className="mv-listening-content">
+                        <span className="mv-listening-eyebrow">LISTENING PRACTICE</span>
+                        <h2>{(listeningWord || currentWord).english}</h2>
+                        {(listeningWord || currentWord).ipa && <p className="mv-listening-ipa">{(listeningWord || currentWord).ipa}</p>}
+                        {listeningContent === "both" && <p className="mv-listening-meaning">{(listeningWord || currentWord).meaning}</p>}
+                        <p className="mv-listening-status">
+                          Từ {Math.min(studyIndex + 1, listeningWords.length)}/{listeningWords.length} · Lặp {listeningRepeat} lần
+                        </p>
+                        <div className="mv-listening-options">
+                          <label>
+                            <span>Số lần lặp</span>
+                            <select value={listeningRepeat} onChange={e => setListeningRepeat(Number(e.target.value))}>
+                              {[1, 2, 3, 5, 10].map(value => <option key={value} value={value}>{value} lần</option>)}
+                            </select>
+                          </label>
+                          <label>
+                            <span>Nội dung nghe</span>
+                            <select value={listeningContent} onChange={e => setListeningContent(e.target.value as "english" | "both")}>
+                              <option value="english">Chỉ tiếng Anh</option>
+                              <option value="both">Tiếng Anh → nghĩa tiếng Việt</option>
+                            </select>
+                          </label>
+                        </div>
+                        {listeningNotice && <p className="mv-listening-notice" role="status">{listeningNotice}</p>}
+                        <p className="mv-listening-unit-progress">Đang luyện toàn bộ Unit · {listeningWords.length} từ</p>
+                        <div className="mv-listening-controls">
+                          <button type="button" style={buttonStyle(COLORS.primary)} onClick={() => {
+                            if (!("speechSynthesis" in window)) return;
+                            if (listeningPaused) {
+                              window.speechSynthesis.resume();
+                              setListeningPaused(false);
+                              setListeningActive(true);
+                            } else if (listeningActive) {
+                              window.speechSynthesis.pause();
+                              setListeningPaused(true);
+                            } else {
+                              if (studyIndex >= listeningWords.length - 1) setStudyIndex(0);
+                              setListeningActive(true);
+                              setListeningPaused(false);
+                              setListenRunKey(value => value + 1);
+                            }
+                          }}>
+                            {listeningPaused ? <Play size={17} /> : listeningActive ? <Pause size={17} /> : <Play size={17} />}
+                            {listeningPaused ? "Tiếp tục" : listeningActive ? "Tạm dừng" : "Phát toàn Unit"}
+                          </button>
+                          <button type="button" style={buttonStyle("#e8f4ff", COLORS.primary)} onClick={() => {
+                            if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+                            setStudyIndex(0);
+                            setListeningPaused(false);
+                            setListeningActive(true);
+                            setListenRunKey(value => value + 1);
+                          }}>
+                            <RotateCcw size={16} /> Nghe lại từ đầu
+                          </button>
+                          <button type="button" style={buttonStyle("#f0f1f6", COLORS.text)} onClick={() => {
+                            if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+                            setListeningActive(false);
+                            setListeningPaused(false);
+                          }}>
+                            Dừng
+                          </button>
+                        </div>
+                      </div>
                     )}
 
                     {studyMode === "quiz" && (
