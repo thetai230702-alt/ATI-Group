@@ -25,6 +25,7 @@ import Statistics from "./components/Statistics";
 import Tenses from "./components/Tenses";
 import IrregularVerbs from "./components/IrregularVerbs";
 import { useLearningProgressSync } from "./services/learningProgressSync";
+import { flushPendingLearningActivities } from "./services/learningActivity";
 
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -33,6 +34,7 @@ import PublicHome from "./components/PublicHome";
 import Sidebar, { type TabType } from "./components/Sidebar";
 import "./App.css";
 import "./ATIExperience.css";
+import "./ATIUnifiedSystem.css";
 
 const VALID_TABS: TabType[] = [
   "dashboard",
@@ -128,6 +130,14 @@ function App() {
   const skipNotificationPersist = useRef(false);
   const learningSyncStatus = useLearningProgressSync(user);
   const previousSyncStatus = useRef(learningSyncStatus);
+
+  useEffect(() => {
+    if (!user) return;
+    void flushPendingLearningActivities(user.uid);
+    const handleOnline = () => { void flushPendingLearningActivities(user.uid); };
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, [user?.uid]);
 
   useEffect(() => {
     localStorage.setItem("ati-theme", theme);
@@ -663,7 +673,7 @@ function App() {
             />
           )}
           {activeTab === "learning-dashboard" && (
-            <LearningDashboard displayName={user.displayName || "bạn"} onNavigate={setActiveTab} language={language} />
+            <LearningDashboard displayName={user.displayName || "bạn"} userId={user.uid} onNavigate={setActiveTab} language={language} />
           )}
           {activeTab === "checklist" && <Checklist onNavigate={setActiveTab} language={language} />}
           {activeTab === "statistics" && <Statistics language={language} />}

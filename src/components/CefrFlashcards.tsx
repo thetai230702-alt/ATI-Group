@@ -12,6 +12,7 @@ import {
   Layers,
 } from "lucide-react";
 import "./CefrFlashcards.css";
+import { recordLearningActivity } from "../services/learningActivity";
 
 type LevelName = "A1" | "A2" | "B1";
 
@@ -219,11 +220,16 @@ function CefrFlashcards({ language = "vi" }: { language?: "vi" | "en" }) {
   function toggleRemembered() {
     if (!currentCard) return;
 
+    const isRemembered = remembered.includes(currentCard.id);
     setRemembered((previous) =>
-      previous.includes(currentCard.id)
+      isRemembered
         ? previous.filter((id) => id !== currentCard.id)
         : [...previous, currentCard.id]
     );
+    recordLearningActivity("cefr", isRemembered ? "needs-practice" : "remembered", {
+      itemId: currentCard.id,
+      itemLabel: currentCard.word,
+    });
   }
 
   function speakWord() {

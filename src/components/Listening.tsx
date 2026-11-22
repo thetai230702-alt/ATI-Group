@@ -21,6 +21,7 @@ import {
 import { getUnits } from "../services/unitService";
 import type { Unit } from "../types/unit";
 import "./Listening.css";
+import { recordLearningActivity } from "../services/learningActivity";
 
 type RepeatMode = "1" | "2" | "3" | "infinite";
 type VoiceType = "US" | "UK";
@@ -422,6 +423,11 @@ function Listening({ language = "vi" }: { language?: "vi" | "en" }) {
     resetRounds = false
   ) => {
     if (!selectedUnitRef.current) return;
+    recordLearningActivity("listening", "listening-started", {
+      itemId: String(selectedUnitRef.current.unitNumber),
+      itemLabel: `Unit ${selectedUnitRef.current.unitNumber}`,
+      unitNumber: selectedUnitRef.current.unitNumber,
+    });
 
     const queue = getPlaybackQueue();
     if (queue.length === 0) return;

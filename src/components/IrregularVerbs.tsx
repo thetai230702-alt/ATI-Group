@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpDown, ArrowUp, ArrowDown, BookOpen, Check, CheckCircle2, CircleHelp, Layers3, Search, Shuffle, Volume2, X, Keyboard, Settings2, Play } from "lucide-react";
 import "./IrregularVerbs.css";
+import { recordLearningActivity } from "../services/learningActivity";
 
 type Level = "easy" | "medium" | "hard";
 type Verb = { id:number; base:string; past:string; participle:string; ipa:[string,string,string]; meaning:string; level:Level };
@@ -168,9 +169,9 @@ export default function IrregularVerbs({language="vi"}:{language?:"vi"|"en"}) {
  const current=pool.length?pool[Math.min(index,pool.length-1)]:null;
  const reset=()=>{setRevealed(false);setTypedPast("");setTypedParticiple("");setFeedback("");setChoice("");setChecked(false);};
  const speak=(text:string)=>{if(!("speechSynthesis" in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=voice==="US"?"en-US":"en-GB";u.rate=speed;const v=window.speechSynthesis.getVoices().find(x=>x.lang.toLowerCase()=== (voice==="US"?"en-us":"en-gb"));if(v)u.voice=v;window.speechSynthesis.speak(u);};
- const toggle=(id:number)=>setMastered(old=>old.includes(id)?old.filter(x=>x!==id):[...old,id]);
- const markCorrect=(id:number)=>{setMastered(old=>old.includes(id)?old:[...old,id]);setNeedsReview(old=>old.filter(x=>x!==id));};
- const markWrong=(id:number)=>setNeedsReview(old=>old.includes(id)?old:[...old,id]);
+ const toggle=(id:number)=>{const wasLearned=mastered.includes(id);const verb=VERBS.find(v=>v.id===id);setMastered(old=>wasLearned?old.filter(x=>x!==id):[...old,id]);recordLearningActivity("irregular-verbs",wasLearned?"needs-practice":"remembered",{itemId:String(id),itemLabel:verb?.base??String(id)});};
+ const markCorrect=(id:number)=>{const verb=VERBS.find(v=>v.id===id);setMastered(old=>old.includes(id)?old:[...old,id]);setNeedsReview(old=>old.filter(x=>x!==id));recordLearningActivity("irregular-verbs","remembered",{itemId:String(id),itemLabel:verb?.base??String(id)});};
+ const markWrong=(id:number)=>{const verb=VERBS.find(v=>v.id===id);setNeedsReview(old=>old.includes(id)?old:[...old,id]);recordLearningActivity("irregular-verbs","needs-practice",{itemId:String(id),itemLabel:verb?.base??String(id)});};
  const start=(ids:number[])=>{if(!ids.length)return;setStudyIds(ids);setIndex(0);setMode("cards");reset();setStudySettingsOpen(false);setScreen("study");};
  const updateStudySelection=(ids:number[])=>{setSelected(ids);};
  const applyStudySelection=()=>{if(!selectedLearned.length)return;setStudyIds(selectedLearned);setIndex(0);setMode("cards");reset();setStudySettingsOpen(false);};

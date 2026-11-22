@@ -1,0 +1,90 @@
+/* ATI English Master — shared visual language, phase 1.
+   Intentionally additive: feature-specific layouts and Firebase logic remain intact. */
+:root {
+  --ati-blue-950: #123b67;
+  --ati-blue-800: #155b98;
+  --ati-blue-700: #1769aa;
+  --ati-blue-600: #237fc2;
+  --ati-blue-100: #eaf4fc;
+  --ati-blue-50: #f4f9fe;
+  --ati-ink: #193653;
+  --ati-muted: #72869b;
+  --ati-line: #dce7f2;
+  --ati-panel: #ffffff;
+  --ati-page: #f3f7fb;
+  --ati-radius-lg: 18px;
+  --ati-radius-md: 12px;
+  --ati-shadow-soft: 0 10px 30px rgba(24, 67, 108, .065);
+  --ati-shadow-hover: 0 15px 36px rgba(24, 67, 108, .11);
+}
+
+html { scroll-behavior: smooth; }
+body { color: var(--ati-ink); background: var(--ati-page); }
+.app-container { background: var(--ati-page); }
+.main-content { min-width: 0; }
+.page-content {
+  width: 100%;
+  max-width: 1680px;
+  margin-inline: auto;
+  padding-inline: clamp(12px, 1.35vw, 24px);
+}
+.page-content > * { min-width: 0; }
+
+/* Consistent surfaces across modules */
+.page-content :is(
+  .checklist-heading, .checklist-table-card, .units-overview, .units-summary-card,
+  .unit-card, .listening-main-card, .listening-settings-card, .listening-progress-card,
+  .listening-sentence-card, .listening-player-card, .practice-progress-card,
+  .practice-question-map, .practice-vietnamese-card, .practice-audio,
+  .flashcard-stat-card, .flashcards-progress, .cefr-intro, .cefr-filter-panel,
+  .cefr-progress-card, .mv-card, .statistics-hero, .statistics-panel,
+  .statistics-kpis article, .tense-card, .dashboard-panel, .dashboard-kpi-card
+) {
+  border-color: var(--ati-line);
+  border-radius: var(--ati-radius-lg);
+  box-shadow: var(--ati-shadow-soft);
+}
+
+.page-content :is(h1, h2, h3, h4) { color: var(--ati-ink); letter-spacing: -.025em; }
+.page-content :is(p, .muted, small) { line-height: 1.6; }
+.page-content :is(input, select, textarea) {
+  border-color: var(--ati-line);
+  border-radius: 10px;
+  color: var(--ati-ink);
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+.page-content :is(input, select, textarea):focus {
+  border-color: #78b2df;
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(35, 127, 194, .13);
+}
+.page-content button, .sidebar button, .topbar button {
+  -webkit-tap-highlight-color: transparent;
+}
+.page-content button:focus-visible, .sidebar button:focus-visible, .topbar button:focus-visible {
+  outline: 3px solid rgba(35, 127, 194, .25);
+  outline-offset: 2px;
+}
+
+/* Refined shell: blue-white ATI identity, without changing navigation structure. */
+.topbar {
+  background: linear-gradient(108deg, #123b67 0%, #1769aa 60%, #3285c5 100%);
+  box-shadow: 0 7px 24px rgba(18, 59, 103, .16);
+}
+.sidebar {
+  background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
+  border-right-color: #dfe9f3;
+}
+.sidebar :is(button, a) { transition: background .16s ease, color .16s ease, border-color .16s ease; }
+
+/* Motion respects reduced-motion preferences. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-content > * { animation: atiContentEnter .2s ease both; }
+  @keyframes atiContentEnter { from { opacity: .82; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+}
+@media (max-width: 900px) {
+  .page-content { padding-inline: 10px; }
+}
+@media (max-width: 600px) {
+  .page-content { padding-inline: 4px; }
+}

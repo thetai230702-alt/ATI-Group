@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BookOpen, ChevronDown, Clock3, Lightbulb } from "lucide-react";
 import "./Tenses.css";
+import { recordLearningActivity } from "../services/learningActivity";
 
 type Tense = {
   name: string;
@@ -160,9 +161,11 @@ export default function Tenses() {
     : tenses.filter((tense) => tense.group === activeGroup);
 
   const toggleTense = (name: string) => {
+    const isOpening = !openTenses.includes(name);
     setOpenTenses((current) => current.includes(name)
       ? current.filter((item) => item !== name)
       : [...current, name]);
+    if (isOpening) recordLearningActivity("grammar", "lesson-opened", { itemId: name, itemLabel: name });
   };
 
   const expandAll = () => {

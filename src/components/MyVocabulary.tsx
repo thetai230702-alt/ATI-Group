@@ -38,6 +38,7 @@ import {
 } from "lucide-react";
 
 import { auth, db } from "../firebase";
+import { recordLearningActivity } from "../services/learningActivity";
 
 type StudyMode = "flashcard" | "typing" | "quiz";
 
@@ -398,6 +399,10 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
         });
       }
 
+      recordLearningActivity("my-vocabulary", editingWordId ? "word-reviewed" : "word-added", {
+        itemId: editingWordId ?? data.english.toLocaleLowerCase(),
+        itemLabel: data.english,
+      });
       resetWordForm();
     } catch (err) {
       console.error(err);
@@ -490,6 +495,10 @@ function MyVocabulary({ language = "vi" }: { language?: "vi" | "en" }) {
     try {
       await updateDoc(doc(wordsRef, word.id), {
         remembered: !word.remembered,
+      });
+      recordLearningActivity("my-vocabulary", word.remembered ? "needs-practice" : "remembered", {
+        itemId: word.id,
+        itemLabel: word.english,
       });
     } catch (err) {
       console.error(err);

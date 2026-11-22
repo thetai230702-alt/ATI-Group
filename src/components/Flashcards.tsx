@@ -13,6 +13,7 @@ import {
   Search,
 } from "lucide-react";
 import "./Flashcards.css";
+import { recordLearningActivity } from "../services/learningActivity";
 
 interface Flashcard {
   id: string;
@@ -230,6 +231,10 @@ function Flashcards({ language = "vi" }: { language?: "vi" | "en" }) {
       ...previous,
       [currentCard.id]: "remembered",
     }));
+    recordLearningActivity("flashcards", "remembered", {
+      itemId: currentCard.id,
+      itemLabel: currentCard.word,
+    });
 
     goToCard(currentIndex + 1);
   }
@@ -241,6 +246,10 @@ function Flashcards({ language = "vi" }: { language?: "vi" | "en" }) {
       ...previous,
       [currentCard.id]: "learning",
     }));
+    recordLearningActivity("flashcards", "needs-practice", {
+      itemId: currentCard.id,
+      itemLabel: currentCard.word,
+    });
 
     goToCard(currentIndex + 1);
   }

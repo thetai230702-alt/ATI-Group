@@ -24,11 +24,15 @@ import {
   ChartNoAxesCombined,
 } from "lucide-react";
 import type { TabType } from "./Sidebar";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { getLocalLearningActivities, type LearningModule } from "../services/learningActivity";
 import { getDailyGoal, getLastSevenDays, getStudyActivity, getStudyStreak, localDay, setDailyGoal, STUDY_ACTIVITY_EVENT } from "../services/studyGoals";
 import "./LearningDashboard.css";
 
 type DashboardProps = {
   displayName: string;
+  userId: string;
   onNavigate: (tab: TabType) => void;
   language?: "vi" | "en";
 };
@@ -73,25 +77,57 @@ function readJson<T,>(key: string, fallback: T): T {
   }
 }
 
-function LearningDashboard({ displayName, onNavigate, language = "vi" }: DashboardProps) {
+function LearningDashboard({ displayName, userId, onNavigate, language = "vi" }: DashboardProps) {
   const firstName = displayName.trim().split(/\s+/).slice(-1)[0] || "bạn";
   const [moduleSearch, setModuleSearch] = useState("");
   const [refresh, setRefresh] = useState(0);
   const [dailyGoal, setGoal] = useState(() => getDailyGoal());
   const [goalInput, setGoalInput] = useState(() => String(getDailyGoal()));
   const [showGoalEditor, setShowGoalEditor] = useState(false);
+  const [cloudActivityTotals, setCloudActivityTotals] = useState<Partial<Record<LearningModule, number>>>({});
+
+  useEffect(() => {
+    let active = true;
+    const loadCloudActivity = async () => {
+      try {
+        const snapshot = await getDoc(doc(db, "users", userId, "learningProgress", "main"));
+        if (!active || !snapshot.exists()) return;
+        const totals = snapshot.data().activityTotals;
+        if (totals && typeof totals === "object") {
+          const safeTotals: Partial<Record<LearningModule, number>> = {};
+          for (const [key, value] of Object.entries(totals)) {
+            if (typeof value === "number" && Number.isFinite(value)) {
+              safeTotals[key as LearningModule] = value;
+            }
+          }
+          setCloudActivityTotals(safeTotals);
+        }
+      } catch (error) {
+        console.warn("Không thể tải thống kê hoạt động ATI từ Firestore:", error);
+      }
+    };
+    void loadCloudActivity();
+    const refreshCloud = () => { void loadCloudActivity(); };
+    window.addEventListener("ati-learning-activity-updated", refreshCloud);
+    return () => {
+      active = false;
+      window.removeEventListener("ati-learning-activity-updated", refreshCloud);
+    };
+  }, [userId]);
 
   useEffect(() => {
     const update = () => setRefresh((value) => value + 1);
     window.addEventListener("storage", update);
     window.addEventListener("ntt-learning-progress-local-updated", update);
     window.addEventListener("ntt-unit-progress-updated", update);
+    window.addEventListener("ati-learning-activity-updated", update);
     window.addEventListener("focus", update);
     window.addEventListener(STUDY_ACTIVITY_EVENT, update);
     return () => {
       window.removeEventListener("storage", update);
       window.removeEventListener("ntt-learning-progress-local-updated", update);
       window.removeEventListener("ntt-unit-progress-updated", update);
+      window.removeEventListener("ati-learning-activity-updated", update);
       window.removeEventListener("focus", update);
       window.removeEventListener(STUDY_ACTIVITY_EVENT, update);
     };
@@ -122,6 +158,22 @@ function LearningDashboard({ displayName, onNavigate, language = "vi" }: Dashboa
     0,
   );
   const accuracy = attempted ? Math.round((correct / attempted) * 100) : 0;
+  const localActivities = useMemo(() => getLocalLearningActivities(userId), [refresh, userId]);
+  const localActivityTotals = useMemo(() => localActivities.reduce((totals, event) => {
+    totals[event.module] = (totals[event.module] ?? 0) + 1;
+    return totals;
+  }, {} as Partial<Record<LearningModule, number>>), [localActivities]);
+  const moduleActivitySummary: { id: LearningModule; label: string; count: number; tab: TabType; icon: typeof BookOpen }[] = [
+    { id: "sentences", label: "Luyện tập 1.500 câu", count: Math.max(cloudActivityTotals.sentences ?? 0, localActivityTotals.sentences ?? 0), tab: "units", icon: BookOpen },
+    { id: "listening", label: "Luyện nghe", count: Math.max(cloudActivityTotals.listening ?? 0, localActivityTotals.listening ?? 0), tab: "listening", icon: Headphones },
+    { id: "flashcards", label: "Flashcard", count: Math.max(cloudActivityTotals.flashcards ?? 0, localActivityTotals.flashcards ?? 0), tab: "flashcards", icon: Layers },
+    { id: "cefr", label: "Từ vựng CEFR", count: Math.max(cloudActivityTotals.cefr ?? 0, localActivityTotals.cefr ?? 0), tab: "cefr", icon: Award },
+    { id: "my-vocabulary", label: "Từ vựng của tôi", count: Math.max(cloudActivityTotals["my-vocabulary"] ?? 0, localActivityTotals["my-vocabulary"] ?? 0), tab: "my-vocabulary", icon: BookPlus },
+    { id: "irregular-verbs", label: "Động từ bất quy tắc", count: Math.max(cloudActivityTotals["irregular-verbs"] ?? 0, localActivityTotals["irregular-verbs"] ?? 0), tab: "irregular-verbs", icon: BookMarked },
+    { id: "grammar", label: "12 thì tiếng Anh", count: Math.max(cloudActivityTotals.grammar ?? 0, localActivityTotals.grammar ?? 0), tab: "tenses", icon: GraduationCap },
+  ];
+  const allModuleActivity = moduleActivitySummary.reduce((sum, module) => sum + module.count, 0);
+  const recentLearningActivities = localActivities.slice(0, 4);
   const activeUnit = checklist.find((item) => item.status === "Đang học");
   const nextUnit = activeUnit ?? checklist.find((item) => item.status !== "Đã học");
   const activeUnitAttempted = nextUnit ? Object.keys(practice[String(nextUnit.id)] ?? {}).length : 0;
@@ -224,6 +276,25 @@ function LearningDashboard({ displayName, onNavigate, language = "vi" }: Dashboa
           <span className="dashboard-kpi-icon kpi-orange"><Flame size={22} /></span>
           <div><small>Chuỗi ngày học</small><strong>{streak} ngày</strong><span>{todayCount} câu mới hôm nay · chính xác {accuracy}%</span></div>
         </article>
+      </section>
+
+      <section className="dashboard-panel ati-connected-learning-panel">
+        <div className="dashboard-panel-heading">
+          <div><span className="dashboard-panel-kicker">CONNECTED LEARNING</span><h3><Layers size={18} /> Hoạt động trên toàn ATI</h3></div>
+          <span className="ati-connected-total">{allModuleActivity.toLocaleString("vi-VN")} lượt ghi nhận</span>
+        </div>
+        <p className="ati-connected-caption">Các thao tác học, ghi nhớ và luyện tập từ những module được gom về cùng một hồ sơ học tập. Dữ liệu mới được lưu trên thiết bị và đồng bộ vào hồ sơ Firebase của bạn.</p>
+        <div className="ati-connected-module-grid">
+          {moduleActivitySummary.map((module) => {
+            const Icon = module.icon;
+            return <button type="button" key={module.id} className="ati-connected-module" onClick={() => onNavigate(module.tab)}>
+              <span className="ati-connected-module-icon"><Icon size={17} /></span>
+              <span className="ati-connected-module-copy"><strong>{module.label}</strong><small>{module.count.toLocaleString("vi-VN")} lượt học đã ghi nhận</small></span>
+              <ArrowRight size={15} />
+            </button>;
+          })}
+        </div>
+        {recentLearningActivities.length > 0 && <div className="ati-connected-recent"><strong>Hoạt động gần đây trên thiết bị này</strong><div>{recentLearningActivities.map((event) => <span key={event.id}>{event.itemLabel || event.module} · {new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit" }).format(event.createdAt)}</span>)}</div></div>}
       </section>
 
       <section className="dashboard-focus-grid">
